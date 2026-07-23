@@ -78,6 +78,34 @@ Four process-chapter images on the homepage are still placeholders (concept diag
 anatomy, material philosophy, lamp functionality). Candidate source files exist in
 `Documents/mir break/New folder/` (formation studies) but were not matched automatically.
 
+## SEO
+
+Every indexable page carries:
+
+- a unique `<title>` (46–55 chars) and `<meta name="description">` (134–162 chars)
+- `<link rel="canonical">` pointing at `https://soboof.com/…` — matching `sitemap.xml`
+- Open Graph and Twitter card tags, with a real artwork photo as `og:image`
+- JSON-LD structured data in a `@graph`:
+
+| Page | Schema types |
+|---|---|
+| `index.html` | `WebSite`, `Organization` |
+| `gallery.html` | `CollectionPage`, `BreadcrumbList` |
+| `about.html` | `AboutPage` (with `Person`), `BreadcrumbList` |
+| `journal.html` | `Blog`, `BreadcrumbList` |
+| `workshop.html` | `Course` (with `CourseInstance`), `BreadcrumbList` |
+| artwork pages | `VisualArtwork`, `BreadcrumbList` |
+
+`404.html` is `noindex` and deliberately has no canonical or social tags.
+
+The artwork pages used to set `document.title` from JavaScript, overwriting the static
+title; that line was removed, and the `<h1>` and subtitle are now in the raw HTML rather
+than injected at runtime. The rest of the page still builds from the `PRODUCT` object.
+
+Two known gaps: `og:image` uses portrait photographs, where social previews prefer a
+1200×630 landscape crop, and there is no `article:published_time` on journal entries
+because the journal has no individual post pages yet.
+
 ## Still to do
 
 - **Journal posts** — three articles still link to `https://www.soboof.com/philosophizing/...`
