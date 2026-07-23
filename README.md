@@ -90,6 +90,10 @@ anatomy, material philosophy, lamp functionality). Candidate source files exist 
 
 - This is a **portfolio**, not a shop: no prices, cart, or checkout. Artwork pages invite an
   enquiry by email (`mirbreak@soboof.com`).
+- The official Soboof owl mark lives at `assets/img/soboof-logo.svg`. It is also inlined into
+  every page's header, hero and footer, and encoded into the favicon. The inline copies use
+  `fill="currentColor"` so the mark follows the theme — gold at night, purple by day. If the
+  logo ever changes, update the `.svg` and re-inline it; the standalone file is the master.
 - Night/day theme is remembered in `localStorage` under `soboof.theme`.
 - Fonts load from Google Fonts; three.js loads from cdnjs. Both are external CDNs — the site
   degrades gracefully if they are blocked.
