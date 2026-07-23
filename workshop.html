@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Soboof · Creatieve Workshop — Make Your Own Agalma</title>
+<meta name="description" content="A two-level creative workshop with Soboof. Learn the Persian Ayeneh-Kari mirror craft and build your own MirBreak Agalma sculpture. Netherlands · English · 6–8 participants.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 62.27 53.93'%3E%3Crect width='62.27' height='53.93' fill='%231a1814'/%3E%3Cpath d='M31.13,0L0,53.93H62.27ZM15.62,44.55h-1V39.4h1Zm6-10h-1V29.4h1Zm5,10h-1V39.4h1Zm1-20h-1V19.39h1Zm4,10h-1V29.4h1Zm0-20h-1V9.38h1Zm4,4.86h1v5.14h-1Zm2,25.16h-1V39.4h1Zm4-10h-1V29.4h1Zm5,10V39.4h1v5.15Z' fill='%23e8c547'/%3E%3C/svg%3E">
+<meta name="darkreader-lock">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  color-scheme:dark;
+  --bg:#15140f;--panel:#0e0d0a;--border:#2e2b28;
+  --text:#ebe6dc;--muted:#7a7368;--surface:#1c1a16;--surface2:#23211c;
+  --accent:#e8c547;--mirror:#cfd6dc;--green:#4caf7d;
+  --ff-h:'Syne',sans-serif;--ff-m:'DM Mono',monospace;
+  --glass:rgba(12,10,8,.78);--manifest-bg:#070503;--scan:rgba(0,0,0,.045);
+  --card-inner:rgba(10,8,5,.5);
+}
+body.day{
+  color-scheme:light;
+  --bg:#ece9e1;--panel:#dad6cc;--border:#a8a294;
+  --text:#0a0908;--muted:#3c3a34;--surface:#dcd7ca;--surface2:#cac4b8;
+  --accent:#6b4ea3;
+  --mirror:#1e7a45;
+  --glass:rgba(236,233,225,.86);--manifest-bg:#f2eee5;--scan:rgba(0,0,0,.04);
+  --card-inner:rgba(236,233,225,.5);
+}
+html,body{background:var(--bg);color:var(--text);font-family:var(--ff-m);font-size:14px;line-height:1.6;forced-color-adjust:none}
+body{min-height:100vh;overflow-x:hidden}
+
+/* Scanlines */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 3px);
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* Day/night toggle */
+#theme-toggle{
+  position:fixed;bottom:14px;right:14px;z-index:9001;width:36px;height:36px;border-radius:8px;
+  background:var(--glass);border:1px solid var(--border);color:var(--accent);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:all .2s;
+}
+#theme-toggle:hover{border-color:var(--accent);transform:translateY(-1px)}
+#theme-toggle svg{width:18px;height:18px;display:block}
+#theme-toggle .sun{display:none}#theme-toggle .moon{display:block}
+body.day #theme-toggle .sun{display:block}body.day #theme-toggle .moon{display:none}
+
+#sys-state{
+  position:fixed;bottom:14px;left:14px;z-index:9000;
+  font-family:var(--ff-m);font-size:9px;letter-spacing:.18em;
+  color:rgba(232,197,71,.55);text-transform:uppercase;
+  background:var(--card-inner);border:1px solid var(--border);
+  padding:5px 10px;border-radius:4px;backdrop-filter:blur(6px);
+  display:flex;align-items:center;gap:8px;
+}
+#sys-state .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+
+/* Header */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:var(--glass);border-bottom:1px solid var(--border);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.nav{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:13px 28px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:26px;height:22px;color:var(--accent);filter:drop-shadow(0 1px 6px rgba(232,197,71,.4))}
+.brand-name{font-family:var(--ff-h);font-weight:800;font-size:15px;letter-spacing:.22em;color:var(--accent);line-height:1}
+.brand-sub{font-family:var(--ff-m);font-size:9px;letter-spacing:.22em;color:rgba(232,197,71,.4);line-height:1;margin-top:3px;text-transform:uppercase}
+.brand-stack{display:flex;flex-direction:column}
+.nav-spacer{flex:1}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-link{
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);padding:7px 12px;border:1px solid transparent;border-radius:5px;transition:all .14s;
+}
+.nav-link:hover{color:var(--accent);border-color:var(--border);text-decoration:none}
+.nav-link.cta{border-color:var(--accent);color:var(--accent);background:rgba(232,197,71,.05)}
+.nav-link.cta:hover{background:rgba(232,197,71,.13);text-decoration:none}
+.nav-link.current{color:var(--accent);background:rgba(232,197,71,.06);border-color:var(--border)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(76,175,125,.7);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+/* Breadcrumb */
+.breadcrumb{
+  max-width:1280px;margin:0 auto;padding:88px 28px 0;
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;
+}
+.breadcrumb a{color:var(--muted)}
+.breadcrumb a:hover{color:var(--accent);text-decoration:none}
+.breadcrumb .sep{color:rgba(232,197,71,.35)}
+.breadcrumb .here{color:var(--accent)}
+
+/* Hero */
+.hero{
+  position:relative;max-width:1280px;margin:0 auto;padding:32px 28px 56px;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr);gap:48px;align-items:center;
+}
+.hero-tag{
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.24em;
+  color:rgba(232,197,71,.6);text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;margin-bottom:22px;
+}
+.hero-tag::before{content:'';width:24px;height:1px;background:rgba(232,197,71,.5)}
+.hero-headline{display:flex;align-items:flex-start;gap:22px;margin-bottom:6px}
+.hero-logo-bg{flex:0 0 auto;width:clamp(64px,7vw,96px);height:auto;filter:drop-shadow(0 4px 24px rgba(232,197,71,.32))}
+.hero-logo-bg path{fill:var(--accent)}
+.hero h1{
+  font-family:var(--ff-h);font-weight:800;
+  font-size:clamp(38px,5.2vw,72px);line-height:.92;letter-spacing:-.015em;
+  color:var(--accent);text-shadow:0 0 50px rgba(232,197,71,.16);
+}
+.hero h1 .sub-line{color:var(--text);display:block;font-weight:700}
+.hero h1 .mirror{color:var(--mirror);display:block;font-weight:600;font-style:italic;font-size:.42em;letter-spacing:.04em;margin-top:14px}
+.hero-divider{width:100%;height:1px;margin:26px 0;background:linear-gradient(90deg,rgba(232,197,71,.36),rgba(232,197,71,.02))}
+.hero-desc{font-family:var(--ff-m);font-size:14px;line-height:1.8;color:var(--text);max-width:540px}
+.hero-desc strong{color:var(--accent);font-weight:500}
+.hero-desc em{color:var(--mirror);font-style:normal}
+.hero-actions{display:flex;gap:8px;margin-top:28px;flex-wrap:wrap}
+.btn{
+  font-family:var(--ff-h);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  padding:13px 22px;border-radius:7px;border:1px solid var(--border);
+  background:transparent;color:var(--text);cursor:pointer;
+  transition:all .15s;display:inline-flex;align-items:center;gap:8px;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.btn.primary{background:var(--accent);color:#15140f;border-color:var(--accent);box-shadow:0 2px 18px rgba(232,197,71,.22)}
+.btn.primary:hover{background:#f0d060;color:#15140f}
+
+/* Hero visual — Agalma poster */
+.agalma-poster{
+  position:relative;background:var(--manifest-bg);
+  border:1px solid rgba(232,197,71,.4);border-radius:3px;
+  padding:30px 28px;overflow:hidden;aspect-ratio:1/1.1;
+  box-shadow:0 0 0 1px rgba(232,197,71,.06),0 0 60px rgba(232,197,71,.04),0 24px 60px rgba(0,0,0,.7);
+  display:flex;flex-direction:column;
+}
+.agalma-poster::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 3px);
+}
+.agalma-poster::after{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(232,197,71,.7),transparent);
+}
+.eq-corner{position:absolute;width:14px;height:14px;border-color:rgba(232,197,71,.55);z-index:1}
+.eq-corner.tl{top:7px;left:7px;border-top:1px solid;border-left:1px solid}
+.eq-corner.tr{top:7px;right:7px;border-top:1px solid;border-right:1px solid}
+.eq-corner.bl{bottom:7px;left:7px;border-bottom:1px solid;border-left:1px solid}
+.eq-corner.br{bottom:7px;right:7px;border-bottom:1px solid;border-right:1px solid}
+.poster-head{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;font-family:var(--ff-m);font-size:9px;letter-spacing:.22em;color:rgba(232,197,71,.5);text-transform:uppercase}
+.poster-greek{
+  position:relative;z-index:2;flex:1;display:flex;align-items:center;justify-content:center;
+  padding:8px 0;
+}
+.poster-greek svg{width:100%;max-height:100%;display:block}
+.greek-glyph{
+  font-family:var(--ff-h);font-weight:800;font-size:148px;letter-spacing:-.02em;
+  fill:var(--accent);text-shadow:0 0 40px rgba(232,197,71,.5);
+}
+.poster-foot{position:relative;z-index:2;display:flex;justify-content:space-between;font-family:var(--ff-m);font-size:9px;letter-spacing:.18em;color:rgba(232,197,71,.4);text-transform:uppercase;border-top:1px solid rgba(232,197,71,.18);padding-top:14px;margin-top:14px}
+.poster-meta{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;
+  margin-top:14px;
+}
+.poster-kv{display:flex;flex-direction:column;gap:3px}
+.poster-kv .k{font-family:var(--ff-m);font-size:8px;letter-spacing:.2em;color:rgba(232,197,71,.4);text-transform:uppercase}
+.poster-kv .v{font-family:var(--ff-h);font-weight:600;font-size:13px;color:var(--accent);letter-spacing:.04em}
+
+/* Manifest strip */
+.manifest-wrap{max-width:1280px;margin:0 auto;padding:8px 28px 24px}
+.manifest{
+  position:relative;background:var(--manifest-bg);border:1px solid rgba(232,197,71,.4);border-radius:3px;
+  padding:22px 26px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(232,197,71,.06),0 0 40px rgba(232,197,71,.04),0 12px 36px rgba(0,0,0,.5);
+  display:grid;grid-template-columns:auto 1fr auto;gap:30px;align-items:center;
+}
+.manifest::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 3px)}
+.manifest::after{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(232,197,71,.7),transparent)}
+.manifest .eq-corner{width:12px;height:12px}
+.manifest-id{font-family:var(--ff-m);font-size:9px;letter-spacing:.22em;color:rgba(232,197,71,.45);text-transform:uppercase;line-height:1.3;position:relative;z-index:1}
+.manifest-id b{color:var(--accent);font-weight:600}
+.manifest-eqs{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative;z-index:1}
+.manifest-eq{display:flex;flex-direction:column;gap:5px;border-left:1px solid rgba(232,197,71,.15);padding-left:16px}
+.manifest-eq:first-child{border-left:none;padding-left:0}
+.manifest-eq-k{font-family:var(--ff-m);font-size:8px;letter-spacing:.2em;color:rgba(232,197,71,.4);text-transform:uppercase}
+.manifest-eq-v{font-family:var(--ff-m);font-weight:500;font-size:15px;letter-spacing:.04em;color:var(--accent);text-shadow:0 0 14px rgba(232,197,71,.25);line-height:1.15}
+.manifest-foot{font-family:var(--ff-m);font-size:9px;letter-spacing:.16em;color:rgba(232,197,71,.35);text-transform:uppercase;position:relative;z-index:1;text-align:right;line-height:1.4}
+
+/* Section scaffold */
+section{max-width:1280px;margin:0 auto;padding:80px 28px;position:relative}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;gap:24px;flex-wrap:wrap}
+.sec-num{font-family:var(--ff-m);font-size:10px;letter-spacing:.22em;color:rgba(232,197,71,.5);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sec-num::before{content:'';width:24px;height:1px;background:rgba(232,197,71,.5)}
+.sec-title{font-family:var(--ff-h);font-weight:700;font-size:clamp(34px,5vw,56px);line-height:1;letter-spacing:-.01em;color:var(--text)}
+.sec-title .accent{color:var(--accent)}
+.sec-title .mirror{color:var(--mirror)}
+.sec-sub{font-family:var(--ff-m);font-size:13px;line-height:1.7;color:var(--muted);max-width:420px}
+
+/* Agalma definition block */
+.def{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:32px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.def::before{
+  content:'';position:absolute;top:0;left:8%;right:8%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(232,197,71,.4),transparent);
+}
+.def-glyph{
+  font-family:var(--ff-h);font-weight:800;font-size:120px;line-height:.85;
+  color:var(--accent);text-shadow:0 0 40px rgba(232,197,71,.35);letter-spacing:-.02em;
+}
+.def-body{display:flex;flex-direction:column;gap:8px}
+.def-word{font-family:var(--ff-h);font-size:24px;font-weight:700;color:var(--text);letter-spacing:-.005em}
+.def-word .greek{color:var(--accent);font-weight:600;font-style:italic;margin-left:6px}
+.def-pos{font-family:var(--ff-m);font-size:9px;letter-spacing:.22em;color:rgba(232,197,71,.5);text-transform:uppercase}
+.def-mean{font-family:var(--ff-m);font-size:14px;line-height:1.7;color:var(--text);max-width:60ch}
+.def-mean strong{color:var(--accent);font-weight:500}
+@media(max-width:680px){
+  .def{grid-template-columns:1fr;padding:24px;gap:16px}
+  .def-glyph{font-size:84px}
+}
+
+/* Levels — two side-by-side cards */
+.levels{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(max-width:900px){.levels{grid-template-columns:1fr}}
+.level{
+  position:relative;background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:28px;display:flex;flex-direction:column;gap:14px;overflow:hidden;
+}
+.level::after{
+  content:'';position:absolute;top:0;left:6%;right:6%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(232,197,71,.45),transparent);
+}
+.level.advanced{border-color:rgba(232,197,71,.35);background:linear-gradient(180deg,var(--surface) 0%,var(--manifest-bg) 100%)}
+.level-top{display:flex;align-items:center;justify-content:space-between;font-family:var(--ff-m);font-size:9px;letter-spacing:.22em;color:rgba(232,197,71,.5);text-transform:uppercase}
+.level-top .day{color:var(--accent)}
+.level-top .fee{font-family:var(--ff-h);font-weight:700;font-size:14px;color:var(--accent);letter-spacing:.04em}
+.level-title{font-family:var(--ff-h);font-weight:700;font-size:32px;line-height:1.05;letter-spacing:-.005em;color:var(--text)}
+.level-title .accent{color:var(--accent)}
+.level-sub{font-family:var(--ff-h);font-style:italic;font-weight:400;font-size:16px;color:var(--mirror);line-height:1.4;letter-spacing:.01em}
+
+/* Output illustration */
+.level-visual{
+  position:relative;width:100%;aspect-ratio:16/9;
+  background:#0a0807;border:1px solid var(--border);border-radius:6px;
+  overflow:hidden;margin:4px 0;
+}
+.level-visual svg{width:100%;height:100%;display:block}
+.level-visual::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 3px);
+}
+.level-visual .vtag{
+  position:absolute;left:10px;top:10px;
+  font-family:var(--ff-m);font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(232,197,71,.85);background:rgba(7,5,3,.7);
+  border:1px solid rgba(232,197,71,.3);padding:3px 7px;border-radius:3px;backdrop-filter:blur(4px);
+}
+
+/* Steps list */
+.steps{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.step{
+  display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:flex-start;
+  padding:10px 0;border-top:1px solid var(--border);
+}
+.step:first-child{border-top:none;padding-top:4px}
+.step-n{
+  font-family:var(--ff-m);font-weight:500;font-size:11px;color:var(--accent);
+  letter-spacing:.16em;border:1px solid rgba(232,197,71,.45);
+  border-radius:4px;padding:5px 0;text-align:center;background:rgba(232,197,71,.05);
+}
+.step-body{font-family:var(--ff-m);font-size:13px;line-height:1.65;color:var(--text)}
+.step-body strong{color:var(--accent);font-weight:500}
+.step-body em{color:var(--mirror);font-style:normal}
+.step-body a{color:var(--accent);text-decoration:underline;text-decoration-color:rgba(232,197,71,.4);text-underline-offset:3px}
+
+.takeaway{
+  margin-top:auto;padding:12px 14px;border:1px dashed rgba(232,197,71,.4);border-radius:6px;
+  font-family:var(--ff-m);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  display:flex;align-items:center;gap:10px;background:rgba(232,197,71,.04);
+}
+.takeaway::before{content:'◇';font-size:14px}
+
+/* Details panel */
+.details{
+  background:var(--manifest-bg);border:1px solid rgba(232,197,71,.4);border-radius:3px;
+  padding:32px 30px;position:relative;overflow:hidden;
+}
+.details::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 3px)}
+.details::after{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(232,197,71,.7),transparent)}
+.details .eq-corner{width:12px;height:12px}
+.details-grid{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:repeat(6,1fr);gap:22px 18px;
+}
+@media(max-width:880px){.details-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.details-grid{grid-template-columns:repeat(2,1fr)}}
+.det{display:flex;flex-direction:column;gap:5px}
+.det .k{font-family:var(--ff-m);font-size:8px;letter-spacing:.2em;color:rgba(232,197,71,.4);text-transform:uppercase}
+.det .v{font-family:var(--ff-h);font-weight:600;font-size:16px;color:var(--accent);letter-spacing:.02em;line-height:1.15}
+.det .v.sm{font-size:13px;font-family:var(--ff-m);font-weight:500}
+.det .v.mirror{color:var(--mirror)}
+.det-foot{
+  margin-top:22px;padding-top:14px;border-top:1px solid rgba(232,197,71,.18);
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.16em;color:rgba(232,197,71,.55);text-transform:uppercase;
+  position:relative;z-index:2;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+
+/* Booking form */
+.booking{
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:32px;
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:36px;position:relative;overflow:hidden;
+}
+.booking::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(232,197,71,.5),transparent)}
+@media(max-width:820px){.booking{grid-template-columns:1fr;padding:26px}}
+.booking-intro h2{font-family:var(--ff-h);font-weight:700;font-size:34px;line-height:1.05;color:var(--text);margin-bottom:14px;letter-spacing:-.005em}
+.booking-intro h2 .accent{color:var(--accent)}
+.booking-intro p{font-size:13px;color:var(--muted);line-height:1.7;max-width:42ch;margin-bottom:10px}
+.booking-intro .channels{margin-top:20px;display:flex;flex-direction:column;gap:6px}
+.channel{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--card-inner);border:1px solid var(--border);border-radius:6px;font-family:var(--ff-m);text-decoration:none;color:var(--text);transition:all .15s}
+.channel:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.channel-key{font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.channel-val{font-size:12px}
+.channel:hover .channel-val{color:var(--accent)}
+
+form.bk{display:flex;flex-direction:column;gap:12px}
+.bk-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:540px){.bk-row{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-family:var(--ff-m);font-size:9px;letter-spacing:.22em;color:rgba(232,197,71,.55);text-transform:uppercase}
+.field input,.field select,.field textarea{
+  font-family:var(--ff-m);font-size:13px;color:var(--text);
+  background:var(--manifest-bg);border:1px solid var(--border);border-radius:5px;
+  padding:11px 13px;letter-spacing:.02em;outline:none;transition:border-color .15s;
+  width:100%;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{resize:vertical;min-height:96px;font-family:var(--ff-m)}
+.field select{appearance:none;background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23e8c547' stroke-width='1.4'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;background-size:11px;padding-right:32px}
+.choice-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.choice-row label{cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;border:1px solid var(--border);border-radius:5px;background:var(--manifest-bg);font-family:var(--ff-m);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:all .14s;text-align:center}
+.choice-row label:hover{color:var(--accent);border-color:rgba(232,197,71,.4)}
+.choice-row input[type=radio]{position:absolute;opacity:0;pointer-events:none}
+.choice-row input[type=radio]:checked + label{color:var(--accent);border-color:var(--accent);background:rgba(232,197,71,.06)}
+.bk-submit{display:flex;align-items:center;justify-content:space-between;margin-top:6px;flex-wrap:wrap;gap:12px}
+.bk-note{font-family:var(--ff-m);font-size:9px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+.bk-confirm{display:none;padding:14px;background:rgba(76,175,125,.08);border:1px solid rgba(76,175,125,.45);border-radius:6px;font-family:var(--ff-m);font-size:12px;color:#7cc89c;letter-spacing:.04em}
+.bk-confirm.on{display:block}
+
+/* Footer */
+footer{border-top:1px solid var(--border);margin-top:48px;background:var(--glass)}
+.foot{max-width:1280px;margin:0 auto;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:var(--ff-m);font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;flex-wrap:wrap}
+.foot-build{display:flex;align-items:center;gap:10px}
+.foot-build svg{width:14px;height:12px;opacity:.7}
+.foot .nav-status{display:flex;align-items:center;gap:6px}
+.foot-link{color:var(--muted);text-decoration:none;font-family:var(--ff-m);font-size:9px;letter-spacing:.18em;text-transform:uppercase;transition:opacity .15s}.foot-link:hover{opacity:.85}
+
+/* Responsive */
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;gap:32px;padding:24px 22px 40px}
+  .agalma-poster{max-width:520px;margin-left:auto;margin-right:auto;aspect-ratio:1/1}
+  .manifest{grid-template-columns:1fr;gap:18px}
+  .manifest-eqs{grid-template-columns:repeat(2,1fr);gap:14px}
+  .manifest-eq{padding-left:12px}
+  .manifest-foot{text-align:left}
+  .nav-links{display:none}
+  section{padding:56px 22px}
+  .breadcrumb{padding:84px 22px 0}
+}
+@media(max-width:560px){
+  .hero-headline{flex-direction:column;gap:14px}
+  .hero h1{font-size:clamp(30px,9vw,46px)}
+  .manifest-eqs{grid-template-columns:1fr}
+  .manifest-eq{border-left:none;border-top:1px solid rgba(232,197,71,.15);padding-left:0;padding-top:8px}
+  .manifest-eq:first-child{border-top:none;padding-top:0}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .btn{width:100%;justify-content:center}
+  .foot{flex-direction:column;align-items:flex-start;gap:8px}
+}
+
+/* === DAY-MODE PURPLE OVERRIDE === */
+body.day svg [fill="#e8c547"]{fill:#6b4ea3 !important}
+body.day svg [stroke="#e8c547"]{stroke:#6b4ea3 !important}
+body.day #sys-state{color:rgba(107,78,163,.55) !important}
+body.day .brand svg{filter:drop-shadow(0 1px 6px rgba(107,78,163,.4)) !important}
+body.day .brand-sub{color:rgba(107,78,163,.4) !important}
+body.day .nav-link.cta{background:rgba(107,78,163,.05) !important}
+body.day .nav-link.cta:hover{background:rgba(107,78,163,.13) !important}
+body.day .nav-link.current{background:rgba(107,78,163,.06) !important}
+body.day .breadcrumb .sep{color:rgba(107,78,163,.35) !important}
+body.day .hero-tag{color:rgba(107,78,163,.6) !important}
+body.day .hero-tag::before{background:rgba(107,78,163,.5) !important}
+body.day .hero-logo-bg{filter:drop-shadow(0 4px 24px rgba(107,78,163,.32)) !important}
+body.day .hero h1{text-shadow:0 0 50px rgba(107,78,163,.16) !important}
+body.day .hero-divider{background:linear-gradient(90deg,rgba(107,78,163,.36),rgba(107,78,163,.02)) !important}
+body.day .btn.primary{box-shadow:0 2px 18px rgba(107,78,163,.22) !important}
+body.day .btn.primary:hover{background:#7a5cb3 !important}
+body.day .agalma-poster{border:1px solid rgba(107,78,163,.4) !important;box-shadow:0 0 0 1px rgba(107,78,163,.06),0 0 60px rgba(107,78,163,.04),0 24px 60px rgba(0,0,0,.7) !important}
+body.day .agalma-poster::after{background:linear-gradient(90deg,transparent,rgba(107,78,163,.7),transparent) !important}
+body.day .eq-corner{border-color:rgba(107,78,163,.55) !important}
+body.day .poster-head{color:rgba(107,78,163,.5) !important}
+body.day .poster-foot{color:rgba(107,78,163,.4) !important;border-top:1px solid rgba(107,78,163,.18) !important}
+body.day .poster-kv .k{color:rgba(107,78,163,.4) !important}
+body.day .manifest{border:1px solid rgba(107,78,163,.4) !important;box-shadow:0 0 0 1px rgba(107,78,163,.06),0 0 40px rgba(107,78,163,.04),0 12px 36px rgba(0,0,0,.5) !important}
+body.day .manifest::after{background:linear-gradient(90deg,transparent,rgba(107,78,163,.7),transparent) !important}
+body.day .manifest-id{color:rgba(107,78,163,.45) !important}
+body.day .manifest-eq{border-left:1px solid rgba(107,78,163,.15) !important;border-top:1px solid rgba(107,78,163,.15) !important}
+body.day .manifest-eq-k{color:rgba(107,78,163,.4) !important}
+body.day .manifest-eq-v{text-shadow:0 0 14px rgba(107,78,163,.25) !important}
+body.day .manifest-foot{color:rgba(107,78,163,.35) !important}
+body.day .sec-num{color:rgba(107,78,163,.5) !important}
+body.day .sec-num::before{background:rgba(107,78,163,.5) !important}
+body.day .def::before{background:linear-gradient(90deg,transparent,rgba(107,78,163,.4),transparent) !important}
+body.day .def-glyph{text-shadow:0 0 40px rgba(107,78,163,.35) !important}
+body.day .def-pos{color:rgba(107,78,163,.5) !important}
+body.day .level::after{background:linear-gradient(90deg,transparent,rgba(107,78,163,.45),transparent) !important}
+body.day .level.advanced{border-color:rgba(107,78,163,.35) !important}
+body.day .level-top{color:rgba(107,78,163,.5) !important}
+body.day .level-visual .vtag{color:rgba(107,78,163,.85) !important;border-color:rgba(107,78,163,.3) !important}
+body.day .step-n{border:1px solid rgba(107,78,163,.45) !important;background:rgba(107,78,163,.05) !important}
+body.day .step-body a{text-decoration-color:rgba(107,78,163,.4) !important}
+body.day .takeaway{border:1px dashed rgba(107,78,163,.4) !important;background:rgba(107,78,163,.04) !important}
+body.day .details{border:1px solid rgba(107,78,163,.4) !important}
+body.day .details::after{background:linear-gradient(90deg,transparent,rgba(107,78,163,.7),transparent) !important}
+body.day .det .k{color:rgba(107,78,163,.4) !important}
+body.day .det-foot{border-top:1px solid rgba(107,78,163,.18) !important;color:rgba(107,78,163,.55) !important}
+body.day .booking::before{background:linear-gradient(90deg,transparent,rgba(107,78,163,.5),transparent) !important}
+body.day .field label{color:rgba(107,78,163,.55) !important}
+body.day .choice-row label:hover{border-color:rgba(107,78,163,.4) !important}
+body.day .choice-row input[type=radio]:checked + label{border-color:var(--accent) !important;background:rgba(107,78,163,.06) !important}
+</style>
+</head>
+<body>
+
+<div id="sys-state"><span class="dot"></span>WORKSHOP · BOOKINGS OPEN</div>
+<button id="theme-toggle" type="button" aria-label="Toggle day/night theme" title="Toggle day/night theme">
+  <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  <svg class="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.6" y1="4.6" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="19.4" y2="19.4"/><line x1="4.6" y1="19.4" x2="6.7" y2="17.3"/><line x1="17.3" y1="6.7" x2="19.4" y2="4.6"/></svg>
+</button>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="brand">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62.27 53.93"><path d="M31.13,0L0,53.93H62.27ZM15.62,44.55h-1V39.4h1Zm6-10h-1V29.4h1Zm5,10h-1V39.4h1Zm1-20h-1V19.39h1Zm4,10h-1V29.4h1Zm0-20h-1V9.38h1Zm4,4.86h1v5.14h-1Zm2,25.16h-1V39.4h1Zm4-10h-1V29.4h1Zm5,10V39.4h1v5.15Z" fill="#e8c547"/></svg>
+      <div class="brand-stack">
+        <span class="brand-name">SOBOOF</span>
+        <span class="brand-sub">Mirbreak · Mirrored Sculpture</span>
+      </div>
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-links">
+      <a href="gallery.html" class="nav-link">Gallery</a>
+      <a href="workshop.html" class="nav-link current">Workshop</a>
+      <a href="journal.html" class="nav-link">Journal</a>
+      <a href="#book" class="nav-link cta">Book a slot</a>
+    </div>
+  </div>
+</header>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a href="index.html">Soboof</a>
+  <span class="sep">›</span>
+  <span class="here">Creatieve Workshop</span>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">SOBOOF · CREATIEVE WORKSHOP · NL</div>
+    <div class="hero-headline">
+      <svg class="hero-logo-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62.27 53.93" aria-hidden="true">
+        <path d="M31.13,0L0,53.93H62.27ZM15.62,44.55h-1V39.4h1Zm6-10h-1V29.4h1Zm5,10h-1V39.4h1Zm1-20h-1V19.39h1Zm4,10h-1V29.4h1Zm0-20h-1V9.38h1Zm4,4.86h1v5.14h-1Zm2,25.16h-1V39.4h1Zm4-10h-1V29.4h1Zm5,10V39.4h1v5.15Z"/>
+      </svg>
+      <div class="hero-text">
+        <h1>
+          Make your<br>own <span style="color:var(--mirror)">Agalma</span>.
+          <span class="mirror">A two-level Ayeneh-Kari workshop.</span>
+        </h1>
+      </div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-desc">
+      Over a two-level <strong>creatieve workshop</strong>, learn the ancient Persian craft of <strong>Ayeneh-Kari</strong> (mirror mosaic) and apply it to both a <em>traditional framed mirror</em> and a <em>modern sculptural form</em> built from <strong>MirBreak</strong> modular blocks.
+      <br><br>
+      Leave with <strong>two creations</strong> — a wall-hanging mirror and your own mirror-tiled Agalma sculpture. No skills needed.
+    </div>
+    <div class="hero-actions">
+      <a href="#book" class="btn primary">Book a slot →</a>
+      <a href="#levels" class="btn">See the two levels</a>
+    </div>
+  </div>
+
+  <!-- Agalma poster -->
+  <div class="agalma-poster">
+    <div class="eq-corner tl"></div><div class="eq-corner tr"></div>
+    <div class="eq-corner bl"></div><div class="eq-corner br"></div>
+    <div class="poster-head">
+      <span>SBF · WORKSHOP · 2025</span>
+      <span>v01 · ACTIVE</span>
+    </div>
+    <div class="poster-greek">
+      <svg viewBox="0 0 280 180" preserveAspectRatio="xMidYMid meet">
+        <text x="140" y="118" text-anchor="middle" class="greek-glyph">ἄγαλμα</text>
+        <!-- triangle mirror tessellation underline -->
+        <g transform="translate(70,142)" stroke="#e8c547" stroke-opacity=".4" fill="none" stroke-width=".7">
+          <polygon points="0,0 70,0 35,30"/>
+          <polygon points="70,0 140,0 105,30"/>
+          <polygon points="35,30 105,30 70,60"/>
+          <polygon points="0,0 35,30 -35,30" opacity=".5"/>
+          <polygon points="140,0 105,30 175,30" opacity=".5"/>
+        </g>
+      </svg>
+    </div>
+    <div class="poster-meta">
+      <div class="poster-kv"><div class="k">Pronunciation</div><div class="v">/ˈæɡ.əl.mə/</div></div>
+      <div class="poster-kv"><div class="k">Origin</div><div class="v">Ancient Greek</div></div>
+      <div class="poster-kv"><div class="k">Levels</div><div class="v">02 · STARTER / ADVANCED</div></div>
+      <div class="poster-kv"><div class="k">Capacity</div><div class="v">6 — 8 PARTICIPANTS</div></div>
+    </div>
+    <div class="poster-foot">
+      <span>MIRBREAK ⟶ AGALMA</span>
+      <span>HAND-CUT · MIRROR · MODULAR</span>
+    </div>
+  </div>
+</div>
+
+<!-- Manifest strip -->
+<div class="manifest-wrap">
+  <div class="manifest">
+    <div class="eq-corner tl"></div><div class="eq-corner tr"></div>
+    <div class="eq-corner bl"></div><div class="eq-corner br"></div>
+    <div class="manifest-id"><b>SYS::WORKSHOP</b><br>2025 · BOOKINGS OPEN</div>
+    <div class="manifest-eqs">
+      <div class="manifest-eq"><div class="manifest-eq-k">Duration</div><div class="manifest-eq-v">6–7 h / day</div></div>
+      <div class="manifest-eq"><div class="manifest-eq-k">Capacity</div><div class="manifest-eq-v">6–8 people</div></div>
+      <div class="manifest-eq"><div class="manifest-eq-k">Language</div><div class="manifest-eq-v">English</div></div>
+      <div class="manifest-eq"><div class="manifest-eq-k">Location</div><div class="manifest-eq-v">Netherlands</div></div>
+    </div>
+    <div class="manifest-foot">NO SKILLS<br>NEEDED · ALL TOOLS INCLUDED</div>
+  </div>
+</div>
+
+<!-- Agalma definition -->
+<section id="agalma">
+  <div class="sec-head">
+    <div>
+      <div class="sec-num">01 · The word</div>
+      <h2 class="sec-title">What is an <span class="accent">Agalma</span>?</h2>
+    </div>
+    <div class="sec-sub">
+      Every workshop ends with one. It's worth knowing what the word means before you build one.
+    </div>
+  </div>
+  <div class="def">
+    <div class="def-glyph">ἄ</div>
+    <div class="def-body">
+      <div class="def-pos">NOUN · ANCIENT GREEK</div>
+      <div class="def-word">Agalma <span class="greek">(ἄγαλμα)</span></div>
+      <div class="def-mean">
+        A <strong>sacred or treasured object</strong>, created with care and devotion. In Mirbreak, the agalma is your final form — a small mirror-tiled body whose <em style="color:var(--mirror);font-style:normal">surface quirks mask deeper insights</em>. Each face captures a triangular fragment of the room, of the light, of you.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Levels -->
+<section id="levels">
+  <div class="sec-head">
+    <div>
+      <div class="sec-num">02 · What you'll do</div>
+      <h2 class="sec-title">Two <span class="accent">levels</span>,<br>two <span class="mirror">things to take home</span>.</h2>
+    </div>
+    <div class="sec-sub">
+      Take the levels separately or together. Day one is the technique. Day two is the sculpture.
+    </div>
+  </div>
+
+  <div class="levels">
+
+    <!-- Starter -->
+    <div class="level">
+      <div class="level-top">
+        <span class="day">DAY 01 · STARTER</span>
+        <span class="fee">£ 45</span>
+      </div>
+      <div class="level-title">Hanging <span class="accent">mirror</span>.</div>
+      <div class="level-sub">Make a 15×20 cm framed mirror — hands-on Persian mirror-cutting from zero.</div>
+
+      <div class="level-visual">
+        <span class="vtag">OUTPUT · 15×20 CM FRAMED MIRROR</span>
+        <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="trA" width="32" height="27.71" patternUnits="userSpaceOnUse">
+              <polygon points="16,0 32,27.71 0,27.71" fill="none" stroke="rgba(232,197,71,.16)" stroke-width=".5"/>
+              <polygon points="0,0 32,0 16,27.71" fill="none" stroke="rgba(232,197,71,.08)" stroke-width=".5"/>
+            </pattern>
+          </defs>
+          <rect width="320" height="180" fill="#0d0a07"/>
+          <rect width="320" height="180" fill="url(#trA)"/>
+          <!-- framed mirror -->
+          <g transform="translate(160,90)">
+            <rect x="-44" y="-58" width="88" height="116" fill="rgba(207,214,220,.08)" stroke="#e8c547" stroke-width="1.2"/>
+            <rect x="-38" y="-52" width="76" height="104" fill="none" stroke="rgba(232,197,71,.4)" stroke-width=".7"/>
+            <!-- mirror tessellation inside -->
+            <g stroke="#cfd6dc" stroke-opacity=".55" fill="none" stroke-width=".5">
+              <polygon points="-38,-52 0,-32 -38,-12"/>
+              <polygon points="38,-52 0,-32 38,-12"/>
+              <polygon points="-38,-12 0,-32 38,-12"/>
+              <polygon points="-38,-12 0,8 -38,28"/>
+              <polygon points="38,-12 0,8 38,28"/>
+              <polygon points="-38,28 0,8 38,28"/>
+              <polygon points="-38,28 0,48 -38,52" />
+              <polygon points="38,28 0,48 38,52"/>
+              <polygon points="-38,52 0,48 38,52"/>
+            </g>
+            <!-- nail/hook -->
+            <circle cx="0" cy="-66" r="2" fill="#e8c547"/>
+            <path d="M-3 -64 L0 -58 L3 -64" stroke="#e8c547" stroke-width=".8" fill="none"/>
+          </g>
+          <text x="14" y="22" font-family="DM Mono, monospace" font-size="9" fill="rgba(232,197,71,.55)" letter-spacing="2">FRAMED MIRROR · 15×20</text>
+          <text x="14" y="164" font-family="DM Mono, monospace" font-size="7" fill="rgba(232,197,71,.3)" letter-spacing="1.4">AYENEH-KARI · ENTRY LEVEL</text>
+        </svg>
+      </div>
+
+      <div class="steps">
+        <div class="step"><span class="step-n">01</span><div class="step-body">Hands-on <strong>Persian mirror-cutting</strong> techniques — score, snap, shape.</div></div>
+        <div class="step"><span class="step-n">02</span><div class="step-body">Make a <strong>15 × 20 cm framed hanging mirror</strong> to take home.</div></div>
+        <div class="step"><span class="step-n">03</span><div class="step-body">Introduction to <em>geometric patterns</em> and the <a href="https://www.britannica.com/art/ayeneh-kari" target="_blank" rel="noopener">history of Ayeneh-Kari</a>.</div></div>
+        <div class="step"><span class="step-n">04</span><div class="step-body">Explore <strong>3D shape-making</strong> with <strong>MirBreak</strong> blocks — experiment with shapes you'd like to tile next.</div></div>
+      </div>
+      <div class="takeaway">Take home · 1× framed mirror, 15×20 cm</div>
+    </div>
+
+    <!-- Advanced -->
+    <div class="level advanced">
+      <div class="level-top">
+        <span class="day">DAY 02 · ADVANCED</span>
+        <span class="fee">£ 85</span>
+      </div>
+      <div class="level-title">Crystalize your <span class="accent">Agalma</span>.</div>
+      <div class="level-sub">Build and tile a full 3D Mirbreak sculpture — your own modular relic.</div>
+
+      <div class="level-visual">
+        <span class="vtag">OUTPUT · 3D AGALMA SCULPTURE</span>
+        <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="trB" width="32" height="27.71" patternUnits="userSpaceOnUse">
+              <polygon points="16,0 32,27.71 0,27.71" fill="none" stroke="rgba(232,197,71,.16)" stroke-width=".5"/>
+              <polygon points="0,0 32,0 16,27.71" fill="none" stroke="rgba(232,197,71,.08)" stroke-width=".5"/>
+            </pattern>
+          </defs>
+          <rect width="320" height="180" fill="#0d0a07"/>
+          <rect width="320" height="180" fill="url(#trB)"/>
+          <!-- Agalma sculpture: stacked polyhedra -->
+          <g transform="translate(160,100)" stroke="#e8c547" fill="none" stroke-width="1.1" stroke-linejoin="round">
+            <!-- base -->
+            <polygon points="-52,40 52,40 0,60" fill="rgba(232,197,71,.08)"/>
+            <!-- lower mass -->
+            <polygon points="-48,20 48,20 0,40 -48,40"/>
+            <polygon points="48,20 0,40 48,40"/>
+            <polygon points="-48,20 0,40 0,20"/>
+            <polygon points="48,20 0,20 0,40"/>
+            <!-- mid -->
+            <polygon points="-32,-6 32,-6 0,20 -32,20"/>
+            <polygon points="32,-6 0,20 32,20"/>
+            <!-- top crown -->
+            <polygon points="-22,-30 22,-30 0,-6"/>
+            <polygon points="-22,-30 22,-30 0,-50" opacity=".75"/>
+            <polygon points="-22,-30 0,-50 0,-6" opacity=".5"/>
+            <polygon points="22,-30 0,-50 0,-6" opacity=".5"/>
+            <!-- mirror glint highlights -->
+            <g stroke="#cfd6dc" stroke-opacity=".65" stroke-width=".6">
+              <polygon points="-22,-30 0,-50 -11,-40" fill="rgba(207,214,220,.16)"/>
+              <polygon points="0,-50 22,-30 11,-40" fill="rgba(207,214,220,.1)"/>
+              <polygon points="-32,-6 0,20 -16,10" fill="rgba(207,214,220,.08)"/>
+              <polygon points="-48,20 0,40 -24,30" fill="rgba(207,214,220,.06)"/>
+            </g>
+          </g>
+          <text x="14" y="22" font-family="DM Mono, monospace" font-size="9" fill="rgba(232,197,71,.55)" letter-spacing="2">AGALMA · MIRROR-TILED</text>
+          <text x="14" y="164" font-family="DM Mono, monospace" font-size="7" fill="rgba(232,197,71,.3)" letter-spacing="1.4">MIRBREAK · MODULAR · ADVANCED</text>
+        </svg>
+      </div>
+
+      <div class="steps">
+        <div class="step"><span class="step-n">01</span><div class="step-body">Build the base of your Agalma using <strong>interlocking <a href="https://en.wikipedia.org/wiki/Modular_building" target="_blank" rel="noopener">modular</a> blocks</strong>.</div></div>
+        <div class="step"><span class="step-n">02</span><div class="step-body">Cut <strong>triangular mirror tiles</strong> and begin applying them to your 3D base — face by face.</div></div>
+        <div class="step"><span class="step-n">03</span><div class="step-body">Take home <em>your trophy</em>: a one-of-a-kind mirrored Agalma sculpture.</div></div>
+      </div>
+      <div class="takeaway">Take home · 1× Mirbreak Agalma sculpture</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Details panel -->
+<section id="details">
+  <div class="sec-head">
+    <div>
+      <div class="sec-num">03 · The details</div>
+      <h2 class="sec-title">Workshop <span class="accent">specs</span></h2>
+    </div>
+    <div class="sec-sub">
+      All tools, materials, and refreshments included. Dates are adjustable — propose a window in the booking form.
+    </div>
+  </div>
+
+  <div class="details">
+    <div class="eq-corner tl"></div><div class="eq-corner tr"></div>
+    <div class="eq-corner bl"></div><div class="eq-corner br"></div>
+    <div class="details-grid">
+      <div class="det"><div class="k">Duration</div><div class="v">6–7 H</div><div class="v sm" style="color:var(--text);opacity:.7">per day</div></div>
+      <div class="det"><div class="k">Location</div><div class="v">Netherlands</div><div class="v sm mirror">Leeuwarden</div></div>
+      <div class="det"><div class="k">Dates</div><div class="v">Adjustable</div><div class="v sm" style="color:var(--text);opacity:.7">on request</div></div>
+      <div class="det"><div class="k">Language</div><div class="v">English</div></div>
+      <div class="det"><div class="k">Capacity</div><div class="v">6–8</div><div class="v sm" style="color:var(--text);opacity:.7">participants</div></div>
+      <div class="det"><div class="k">Skills</div><div class="v mirror">None</div><div class="v sm" style="color:var(--text);opacity:.7">no prior craft needed</div></div>
+      <div class="det"><div class="k">Fee · Basic</div><div class="v">£ 45</div><div class="v sm" style="color:var(--text);opacity:.7">Day 01</div></div>
+      <div class="det"><div class="k">Fee · Advanced</div><div class="v">£ 85</div><div class="v sm" style="color:var(--text);opacity:.7">Day 02</div></div>
+      <div class="det"><div class="k">Both days</div><div class="v">£ 120</div><div class="v sm" style="color:var(--text);opacity:.7">bundle saving</div></div>
+      <div class="det"><div class="k">Includes</div><div class="v sm mirror">Tools · Materials · Refreshments</div></div>
+      <div class="det"><div class="k">Format</div><div class="v sm mirror">In-studio · Small group</div></div>
+      <div class="det"><div class="k">Status</div><div class="v">OPEN</div><div class="v sm" style="color:var(--green)">accepting bookings</div></div>
+    </div>
+    <div class="det-foot">
+      <span>SBF · WORKSHOP · 2025 · NETHERLANDS</span>
+      <span>NO SKILLS NEEDED · ALL TOOLS PROVIDED</span>
+    </div>
+  </div>
+</section>
+
+<!-- Booking -->
+<section id="book">
+  <div class="sec-head">
+    <div>
+      <div class="sec-num">04 · Reserve your seat</div>
+      <h2 class="sec-title">Book a <span class="accent">slot</span></h2>
+    </div>
+    <div class="sec-sub">
+      Send your details. Soboof will reply within a few days with confirmed dates and where to find the studio.
+    </div>
+  </div>
+
+  <div class="booking">
+    <div class="booking-intro">
+      <h2>Come build<br>your <span class="accent">Agalma</span>.</h2>
+      <p>Pick a level — or both. Tell us roughly when you'd like to come, and Soboof will write back with confirmed dates and a small group to join.</p>
+      <p style="color:rgba(232,197,71,.55);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-top:18px">Or reach out directly:</p>
+      <div class="channels">
+        <a href="mailto:mirbreak@soboof.com" class="channel">
+          <span class="channel-key">Email</span><span class="channel-val">mirbreak@soboof.com</span>
+        </a>
+        <a href="https://www.instagram.com/soboof/" target="_blank" rel="noopener" class="channel">
+          <span class="channel-key">Instagram</span><span class="channel-val">@soboof</span>
+        </a>
+      </div>
+    </div>
+
+    <form class="bk" id="bookingForm" onsubmit="return false">
+      <div class="bk-row">
+        <div class="field">
+          <label for="bk-name">Your name</label>
+          <input id="bk-name" name="name" type="text" required autocomplete="name" placeholder="—">
+        </div>
+        <div class="field">
+          <label for="bk-email">Your email</label>
+          <input id="bk-email" name="email" type="email" required autocomplete="email" placeholder="—">
+        </div>
+      </div>
+      <div class="field">
+        <label for="bk-phone">Your number <span style="opacity:.5">(optional)</span></label>
+        <input id="bk-phone" name="phone" type="tel" autocomplete="tel" placeholder="—">
+      </div>
+      <div class="field">
+        <label>Select your workshop</label>
+        <div class="choice-row">
+          <span><input type="radio" id="opt-d1" name="workshop" value="day1"><label for="opt-d1">Day 1 · Basic</label></span>
+          <span><input type="radio" id="opt-d2" name="workshop" value="day2"><label for="opt-d2">Day 2 · Advanced</label></span>
+          <span><input type="radio" id="opt-both" name="workshop" value="both" checked><label for="opt-both">Both</label></span>
+        </div>
+      </div>
+      <div class="bk-row">
+        <div class="field">
+          <label for="bk-date">Preferred dates <span style="opacity:.5">(optional)</span></label>
+          <input id="bk-date" name="dates" type="text" placeholder="e.g. mid-March, any weekend">
+        </div>
+        <div class="field">
+          <label for="bk-source">How did you hear about us?</label>
+          <select id="bk-source" name="source">
+            <option value="">—</option>
+            <option>Instagram</option>
+            <option>Gallery</option>
+            <option>A friend</option>
+            <option>Google / search</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="bk-msg">Your message <span style="opacity:.5">(optional)</span></label>
+        <textarea id="bk-msg" name="message" placeholder="Anything else we should know — allergies, accessibility, what shape you'd like to make…"></textarea>
+      </div>
+      <div class="bk-submit">
+        <div class="bk-note">◇ NO PAYMENT NOW · CONFIRMATION BY EMAIL</div>
+        <button class="btn primary" type="submit" id="bk-go">Send request →</button>
+      </div>
+      <div class="bk-confirm" id="bk-confirm">
+        ✓ Got it. Soboof will reply within a few days with confirmed dates and studio address. Refresh to send another.
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="foot">
+    <div class="foot-build">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62.27 53.93"><path d="M31.13,0L0,53.93H62.27ZM15.62,44.55h-1V39.4h1Zm6-10h-1V29.4h1Zm5,10h-1V39.4h1Zm1-20h-1V19.39h1Zm4,10h-1V29.4h1Zm0-20h-1V9.38h1Zm4,4.86h1v5.14h-1Zm2,25.16h-1V39.4h1Zm4-10h-1V29.4h1Zm5,10V39.4h1v5.15Z" fill="#e8c547"/></svg>
+      <span>SOBOOF · WORKSHOP · © 2025 · LEEUWARDEN</span>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot"></span>
+      Bookings open
+    </div>
+  </div>
+</footer>
+
+<script>
+// Theme toggle
+(function(){
+  const KEY='soboof.theme';
+  const btn=document.getElementById('theme-toggle');
+  function apply(t){if(t==='day')document.body.classList.add('day');else document.body.classList.remove('day');}
+  apply(localStorage.getItem(KEY)||'night');
+  btn.addEventListener('click',()=>{
+    const next=document.body.classList.contains('day')?'night':'day';
+    apply(next);localStorage.setItem(KEY,next);
+  });
+})();
+
+// Booking form — local UX only (no backend). Stores last submission in localStorage.
+(function(){
+  const form=document.getElementById('bookingForm');
+  const confirm=document.getElementById('bk-confirm');
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const data=Object.fromEntries(new FormData(form).entries());
+    if(!data.name || !data.email){return;}
+    try{ localStorage.setItem('soboof.lastBooking', JSON.stringify({...data,at:new Date().toISOString()})); }catch(_){}
+    confirm.classList.add('on');
+    form.querySelector('button[type=submit]').disabled=true;
+    confirm.scrollIntoView=undefined; // no scrollIntoView per guidelines
+    window.scrollBy({top: confirm.getBoundingClientRect().top - 200, behavior:'smooth'});
+  });
+})();
+</script>
+
+</body>
+</html>
