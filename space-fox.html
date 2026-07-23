@@ -666,7 +666,15 @@ const PRODUCT = {
   modelPath: 'assets/models/pythagoras.obj',
 
   /* photos: null = SVG placeholder only; array of relative paths for real photos */
-  photos: null,
+  photos: [
+    'assets/img/space-fox-01.jpg',
+    'assets/img/space-fox-02.jpg',
+    'assets/img/space-fox-03.jpg',
+    'assets/img/space-fox-04.jpg',
+    'assets/img/space-fox-05.jpg',
+    'assets/img/space-fox-06.jpg',
+    'assets/img/space-fox-07.jpg'
+  ],
 
   /* SVG shown when no real photo is available */
   gallerySvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 280" fill="none" aria-hidden="true">
@@ -753,6 +761,7 @@ const PRODUCT = {
   related: [
     {
       id:       'SBF · 002',
+      img:      'assets/img/the-owl-statue-01.jpg',
       name:     'The Owl Statue',
       tags:     'Abstract · Animals',
       href:     'gallery.html',
@@ -767,6 +776,7 @@ const PRODUCT = {
     },
     {
       id:       'SBF · 005',
+      img:      'assets/img/simorgh-phoenix-01.jpg',
       name:     'Simorgh (Phoenix)',
       tags:     'Animals · Symmetrical',
       href:     'gallery.html',
@@ -781,6 +791,7 @@ const PRODUCT = {
     },
     {
       id:       'SBF · 006',
+      img:      'assets/img/bird-of-dawn-01.jpg',
       name:     'Bird of Dawn',
       tags:     'Animals · Statue',
       href:     'gallery.html',
@@ -876,7 +887,7 @@ function buildProduct() {
     return `<a href="${r.href}" class="rel-card"${ext}>
       <div class="rel-img">
         <span class="rel-id">${r.id}</span>
-        <img data-failed="1" alt="${r.name}" loading="lazy">
+        <img ${r.img ? `src="${r.img}"` : 'data-failed="1"'} alt="${r.name}" loading="lazy">
         ${r.svg||''}
       </div>
       <div class="rel-tags">${r.tags}</div>

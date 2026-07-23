@@ -61,14 +61,19 @@ npx serve .
 
 ## Images
 
-Artwork photographs are **not yet wired up**. Every `<img>` currently renders a geometric SVG
-placeholder via the `data-failed="1"` fallback. To use real photos:
+The 64 artwork photographs were pulled from the WordPress media library at full size
+(up to 2560px) and live in , named by piece: ,
+, and so on. The card grids on the homepage and gallery use
+ of each set; the two artwork pages show the full set as a thumbnail strip.
 
-1. Drop files into `assets/img/`.
-2. Add a `src` to the corresponding `<img>` and remove `data-failed="1"`.
+To add a photo: drop it in  and either point an  at it, or —
+on an artwork page — add it to the  array in the  object near
+the bottom of the file. An image that fails to load falls back to its geometric SVG
+placeholder automatically.
 
-On the artwork pages the photos come from the `PRODUCT` data object near the bottom of the file —
-set `photos: ['assets/img/space-fox-01.jpg', ...]` instead of `photos: null`.
+Four process-chapter images on the homepage are still placeholders (concept diagram,
+bird anatomy, material philosophy, lamp functionality). Candidate source files exist in
+ (formation studies) but were not matched automatically.
 
 ## Still to do
 

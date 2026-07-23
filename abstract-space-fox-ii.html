@@ -625,7 +625,10 @@ const PRODUCT = {
 
   /* ── Gallery ── */
   modelPath: 'assets/models/pythagoras.obj',
-  photos:    null,
+  photos:    [
+    'assets/img/abstract-space-fox-ii-01.jpg',
+    'assets/img/abstract-space-fox-ii-02.jpg'
+  ],
 
   gallerySvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 280" fill="none" aria-hidden="true">
     <defs>
@@ -744,6 +747,7 @@ const PRODUCT = {
   related: [
     {
       id:   'SBF · 001',
+      img:      'assets/img/space-fox-01.jpg',
       name: 'Space Fox',
       tags: 'Abstract · Animals · Statue',
       href: 'space-fox.html',
@@ -757,6 +761,7 @@ const PRODUCT = {
     },
     {
       id:       'SBF · 005',
+      img:      'assets/img/simorgh-phoenix-01.jpg',
       name:     'Simorgh (Phoenix)',
       tags:     'Animals · Symmetrical',
       href:     'gallery.html',
@@ -770,6 +775,7 @@ const PRODUCT = {
     },
     {
       id:       'SBF · 002',
+      img:      'assets/img/the-owl-statue-01.jpg',
       name:     'The Owl Statue',
       tags:     'Abstract · Animals',
       href:     'gallery.html',
@@ -833,7 +839,7 @@ function buildProduct() {
   document.getElementById('manifest-edition').innerHTML    = M.edition;
   document.getElementById('related-grid').innerHTML = P.related.map(r=>{
     const ext = r.external ? ' target="_blank" rel="noopener"' : '';
-    return `<a href="${r.href}" class="rel-card"${ext}><div class="rel-img"><span class="rel-id">${r.id}</span><img data-failed="1" alt="${r.name}" loading="lazy">${r.svg||''}</div><div class="rel-tags">${r.tags}</div><div class="rel-name">${r.name}</div><div class="rel-row"><span class="rel-price" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">View piece</span><span class="rel-arrow">→</span></div></a>`;
+    return `<a href="${r.href}" class="rel-card"${ext}><div class="rel-img"><span class="rel-id">${r.id}</span><img ${r.img ? `src="${r.img}"` : 'data-failed="1"'} alt="${r.name}" loading="lazy">${r.svg||''}</div><div class="rel-tags">${r.tags}</div><div class="rel-name">${r.name}</div><div class="rel-row"><span class="rel-price" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">View piece</span><span class="rel-arrow">→</span></div></a>`;
   }).join('');
   document.getElementById('contact-product-name').textContent = P.name;
   document.getElementById('contact-inquire').href = `mailto:${P.inquireEmail}?subject=${encodeURIComponent(P.inquireSubject)}`;
