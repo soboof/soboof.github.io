@@ -111,6 +111,10 @@ header{
   border-color:var(--accent);color:var(--accent);background:rgba(232,197,71,.05);
 }
 .nav-link.cta:hover{background:rgba(232,197,71,.13);text-decoration:none}
+.nav-link.pe{border-color:rgba(207,214,220,.3);color:var(--mirror)}
+.nav-link.pe:hover{border-color:var(--mirror);background:rgba(207,214,220,.09);text-decoration:none}
+body.day .nav-link.pe{border-color:rgba(30,122,69,.4)}
+body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
 .status-dot{
   width:7px;height:7px;border-radius:50%;background:var(--green);
   box-shadow:0 0 8px rgba(76,175,125,.7);
@@ -158,6 +162,21 @@ header{
 }
 .hero-desc strong{color:var(--accent);font-weight:500}
 .hero-actions{display:flex;gap:8px;margin-top:28px;flex-wrap:wrap}
+.pe-intro{
+  margin-top:26px;max-width:560px;padding:14px 16px;
+  border:1px solid var(--border);border-left:2px solid var(--mirror);border-radius:0 6px 6px 0;
+  background:var(--card-inner);
+}
+.pe-intro-key{
+  display:block;font-family:var(--ff-m);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--mirror);margin-bottom:7px;
+}
+.pe-intro p{font-family:var(--ff-m);font-size:12px;line-height:1.7;color:var(--muted);margin-bottom:9px}
+.pe-intro a{
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--mirror);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .18s;
+}
+.pe-intro a:hover{border-color:var(--mirror);text-decoration:none}
 .btn{
   font-family:var(--ff-h);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
   padding:13px 22px;border-radius:7px;border:1px solid var(--border);
@@ -644,6 +663,7 @@ body.day .brand-sub{color:rgba(107,78,163,.4)}
       <a href="gallery.html" class="nav-link">Gallery</a>
       <a href="workshop.html" class="nav-link">Workshop</a>
       <a href="journal.html" class="nav-link">Journal</a>
+      <a href="https://pythagorasengine.com/builder" class="nav-link pe" target="_blank" rel="noopener">&#9651; Builder</a>
       <a href="#contact" class="nav-link cta">Contact</a>
     </div>
   </div>
@@ -674,6 +694,13 @@ body.day .brand-sub{color:rgba(107,78,163,.4)}
     <div class="hero-actions">
       <a href="#work" class="btn primary">See the work →</a>
       <a href="#process" class="btn">Read the process</a>
+    </div>
+    <div class="pe-intro">
+      <span class="pe-intro-key">&#9651; Pythagoras Engine</span>
+      <p>The same modular logic, running as software. A procedural builder for snapping
+      polyhedra face to face &mdash; tetrahedra, Johnson solids, prisms and cupolas &mdash;
+      setting height and rotation, then exporting the form you grow.</p>
+      <a href="https://pythagorasengine.com/builder" target="_blank" rel="noopener">Open the builder &rarr;</a>
     </div>
   </div>
 

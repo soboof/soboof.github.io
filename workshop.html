@@ -82,6 +82,10 @@ header{
 .nav-link:hover{color:var(--accent);border-color:var(--border);text-decoration:none}
 .nav-link.cta{border-color:var(--accent);color:var(--accent);background:rgba(232,197,71,.05)}
 .nav-link.cta:hover{background:rgba(232,197,71,.13);text-decoration:none}
+.nav-link.pe{border-color:rgba(207,214,220,.3);color:var(--mirror)}
+.nav-link.pe:hover{border-color:var(--mirror);background:rgba(207,214,220,.09);text-decoration:none}
+body.day .nav-link.pe{border-color:rgba(30,122,69,.4)}
+body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
 .nav-link.current{color:var(--accent);background:rgba(232,197,71,.06);border-color:var(--border)}
 .status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(76,175,125,.7);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
@@ -466,6 +470,7 @@ body.day .choice-row input[type=radio]:checked + label{border-color:var(--accent
       <a href="gallery.html" class="nav-link">Gallery</a>
       <a href="workshop.html" class="nav-link current">Workshop</a>
       <a href="journal.html" class="nav-link">Journal</a>
+      <a href="https://pythagorasengine.com/builder" class="nav-link pe" target="_blank" rel="noopener">&#9651; Builder</a>
       <a href="#book" class="nav-link cta">Book a slot</a>
     </div>
   </div>
