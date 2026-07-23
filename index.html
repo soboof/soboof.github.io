@@ -1145,18 +1145,34 @@ body.day .brand-sub{color:rgba(107,78,163,.4)}
   const root = new THREE.Group();
   scene.add(root);
 
-  function parseOBJ(text){
-    const verts=[], tris=[];
-    text.split('\n').forEach(line => {
-      const p = line.trim().split(/\s+/);
-      if (p[0]==='v') verts.push(parseFloat(p[1]),parseFloat(p[2]),parseFloat(p[3]));
-      else if (p[0]==='f'){
-        const idx=[];
-        for (let j=1;j<p.length;j++) idx.push(parseInt(p[j].split('/')[0],10)-1);
-        for (let k=1;k<idx.length-1;k++) tris.push(idx[0],idx[k],idx[k+1]);
-      }
-    });
-    return { verts, tris };
+  /* Minimal glTF 2.0 reader — the Pythagoras Engine export is a single mesh with
+     embedded base64 buffers, so no external loader is needed. */
+  function gltfBuffer(uri){
+    const bin = atob(uri.split(',')[1]);
+    const u8 = new Uint8Array(bin.length);
+    for (let i=0;i<bin.length;i++) u8[i] = bin.charCodeAt(i);
+    return u8;
+  }
+  function gltfAccessor(json, bufs, index){
+    const acc = json.accessors[index];
+    const view = json.bufferViews[acc.bufferView];
+    const comps = { SCALAR:1, VEC2:2, VEC3:3, VEC4:4 }[acc.type];
+    const bytes = { 5120:1, 5121:1, 5122:2, 5123:2, 5125:4, 5126:4 }[acc.componentType];
+    const start = (view.byteOffset||0) + (acc.byteOffset||0);
+    /* copy out so the typed array is always correctly aligned */
+    const slice = bufs[view.buffer].slice(start, start + acc.count * comps * bytes);
+    const Ctor  = { 5120:Int8Array, 5121:Uint8Array, 5122:Int16Array,
+                    5123:Uint16Array, 5125:Uint32Array, 5126:Float32Array }[acc.componentType];
+    return new Ctor(slice.buffer, 0, acc.count * comps);
+  }
+  function parseGLTF(json){
+    const bufs = json.buffers.map(b => gltfBuffer(b.uri));
+    const prim = json.meshes[0].primitives[0];
+    const pos  = gltfAccessor(json, bufs, prim.attributes.POSITION);
+    const tris = prim.indices != null
+      ? Array.from(gltfAccessor(json, bufs, prim.indices))
+      : Array.from({ length: pos.length/3 }, (_, i) => i);
+    return { verts: Array.from(pos), tris };
   }
   function buildGeometry(parsed){
     const positions = new Float32Array(parsed.tris.length*3);
@@ -1179,9 +1195,9 @@ body.day .brand-sub{color:rgba(107,78,163,.4)}
     return geo;
   }
 
-  fetch('assets/models/pe_model.obj')
-    .then(r=>r.text()).then(txt=>{
-      const geo = buildGeometry(parseOBJ(txt));
+  fetch('assets/models/pythagoras_m21.gltf')
+    .then(r=>r.json()).then(json=>{
+      const geo = buildGeometry(parseGLTF(json));
       const mesh = new THREE.Mesh(geo, mat);
       root.add(mesh);
       const wireMat = new THREE.LineBasicMaterial({ color: mat.color.clone(), transparent:true, opacity:0 });

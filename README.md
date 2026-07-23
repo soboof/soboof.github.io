@@ -16,8 +16,11 @@ No build step, no framework, no server — plain HTML/CSS/JS, ready for GitHub P
 | `about.html` | `/about.html` | About the studio |
 | `404.html` | — | Served by GitHub Pages on unknown URLs |
 
-`assets/models/` holds the OBJ files used by the three.js rail on the homepage and the
-artwork pages. `assets/img/` is where photography goes (see *Images* below).
+`assets/models/` holds the 3D geometry. The homepage rail loads
+`pythagoras_m21.gltf` — a Pythagoras Engine export, read by a small inline glTF parser
+rather than three.js's GLTFLoader, since the file is a single mesh with embedded buffers.
+The artwork pages still load `pythagoras.obj`. `assets/img/` holds the artwork
+photography and the logo (see *Images* below).
 
 ## Publishing to GitHub Pages
 
