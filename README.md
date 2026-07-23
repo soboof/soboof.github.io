@@ -25,32 +25,31 @@ photography and the logo (see *Images* below).
 ## Publishing to GitHub Pages
 
 1. Create an empty repository on GitHub (public — Pages is free on public repos).
-2. From this folder:
+This repo is live at **https://github.com/soboof/soboof.github.io**, published by GitHub
+Pages from `main` / root at **https://soboof.github.io/**. Pushing to `main` redeploys:
 
 ```bash
-git remote add origin https://github.com/<your-username>/<repo>.git
+git push
 ```
 
-```bash
-git push -u origin main
-```
+### Custom domain (soboof.com) — not connected yet
 
-3. On GitHub: **Settings → Pages → Source: Deploy from a branch → `main` / `root`**.
-4. The site goes live at `https://<your-username>.github.io/<repo>/` within a minute or two.
+There is deliberately **no `CNAME` file** in this repo right now. GitHub Pages redirects
+`soboof.github.io` to whatever custom domain is configured, so a `CNAME` naming `soboof.com`
+would bounce every visitor to the WordPress site that still answers on that domain — making
+the new site impossible to preview.
 
-### Custom domain (soboof.com)
+When you are ready to switch off WordPress, do it in this order:
 
-The `CNAME` file in this repo claims `soboof.com` for GitHub Pages.
+1. At your domain registrar, point `soboof.com` at GitHub:
+   - `A` records for the apex → `185.199.108.153`, `185.199.109.153`,
+     `185.199.110.153`, `185.199.111.153`
+   - `CNAME` record for `www` → `soboof.github.io`
+2. Re-add the file: `echo soboof.com > CNAME`, then commit and push.
+3. In **Settings → Pages**, wait for the certificate, then tick **Enforce HTTPS**.
 
-**Do not change your DNS until you are ready to switch off WordPress** — the live site keeps
-serving from its current host until DNS moves. When ready, at your domain registrar:
-
-- `A` records for the apex `soboof.com` → `185.199.108.153`, `185.199.109.153`,
-  `185.199.110.153`, `185.199.111.153`
-- `CNAME` record for `www` → `<your-username>.github.io`
-
-Then in **Settings → Pages**, tick **Enforce HTTPS** (available once the certificate is issued,
-usually within an hour).
+Until step 1, the site is only reachable at `soboof.github.io`, and soboof.com keeps
+serving WordPress exactly as it does today.
 
 ## Local preview
 
