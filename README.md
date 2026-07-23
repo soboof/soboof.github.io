@@ -62,18 +62,18 @@ npx serve .
 ## Images
 
 The 64 artwork photographs were pulled from the WordPress media library at full size
-(up to 2560px) and live in , named by piece: ,
-, and so on. The card grids on the homepage and gallery use
- of each set; the two artwork pages show the full set as a thumbnail strip.
+(up to 2560px) and live in `assets/img/`, named by piece — `space-fox-01.jpg`,
+`simorgh-phoenix-04.jpg`, and so on. The card grids on the homepage and gallery use the
+`-01` shot of each set; the two artwork pages show the full set as a thumbnail strip.
 
-To add a photo: drop it in  and either point an  at it, or —
-on an artwork page — add it to the  array in the  object near
-the bottom of the file. An image that fails to load falls back to its geometric SVG
-placeholder automatically.
+To add a photo: drop it in `assets/img/` and either point an `<img src>` at it, or — on an
+artwork page — add it to the `photos: [...]` array in the `PRODUCT` object near the bottom
+of the file. An image that fails to load falls back to its geometric SVG placeholder
+automatically.
 
-Four process-chapter images on the homepage are still placeholders (concept diagram,
-bird anatomy, material philosophy, lamp functionality). Candidate source files exist in
- (formation studies) but were not matched automatically.
+Four process-chapter images on the homepage are still placeholders (concept diagram, bird
+anatomy, material philosophy, lamp functionality). Candidate source files exist in
+`Documents/mir break/New folder/` (formation studies) but were not matched automatically.
 
 ## Still to do
 
