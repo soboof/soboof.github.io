@@ -508,7 +508,9 @@ body.day .cta-strip::before{background:linear-gradient(90deg,transparent,rgba(10
     </a>
     <div class="nav-spacer"></div>
     <div class="nav-links">
+      <a href="mirbreak.html" class="nav-link">Mirbreak</a>
       <a href="gallery.html" class="nav-link current">Gallery</a>
+      <a href="printing-lab.html" class="nav-link">Printing Lab</a>
       <a href="workshop.html" class="nav-link">Workshop</a>
       <a href="journal.html" class="nav-link">Journal</a>
       <a href="https://pythagorasengine.com/builder" class="nav-link pe" target="_blank" rel="noopener">&#9651; Builder</a>
@@ -587,13 +589,15 @@ body.day .cta-strip::before{background:linear-gradient(90deg,transparent,rgba(10
   <!-- Filters -->
   <div class="filters">
     <span class="filter-label">FILTER ·</span>
-    <button class="chip active" data-filter="all">All <span class="n">10</span></button>
+<!-- BUILD:gallery-chips -->
+    <button class="chip active" data-filter="all">All <span class="n">11</span></button>
     <button class="chip" data-filter="abstract">Abstract <span class="n">4</span></button>
-    <button class="chip" data-filter="animals">Animals <span class="n">7</span></button>
-    <button class="chip" data-filter="statue">Statue <span class="n">7</span></button>
-    <button class="chip" data-filter="symmetrical">Symmetrical <span class="n">3</span></button>
+    <button class="chip" data-filter="animals">Animals <span class="n">9</span></button>
+    <button class="chip" data-filter="statue">Statue <span class="n">10</span></button>
+    <button class="chip" data-filter="symmetrical">Symmetrical <span class="n">5</span></button>
     <button class="chip" data-filter="furniture">Furniture <span class="n">1</span></button>
-    <button class="chip" data-filter="sale">On sale <span class="n">3</span></button>
+    <button class="chip" data-filter="sale">On sale <span class="n">5</span></button>
+<!-- /BUILD:gallery-chips -->
     <div class="filter-spacer"></div>
     <div class="view-toggle">
       <button id="view-grid" class="active" title="Grid view" aria-label="Grid view">
@@ -613,186 +617,205 @@ body.day .cta-strip::before{background:linear-gradient(90deg,transparent,rgba(10
 
   <div class="gallery" id="gallery">
 
-    <!-- 1. Space Fox — feature -->
+<!-- BUILD:gallery-grid -->
+    <!-- 1. Space Fox -->
     <a href="space-fox.html" class="piece feature" data-cats="abstract animals statue">
       <div class="piece-img">
-        <span class="piece-id">SBF · 01</span>
+        <span class="piece-id">SBF · 001</span>
         <span class="piece-badge ooak">ONE OF A KIND</span>
-        <img src="assets/img/space-fox-01.jpg" alt="Space Fox sculpture">
+        <img src="assets/img/space-fox-01.jpg" alt="Space Fox" loading="lazy">
       </div>
       <div class="piece-body">
         <div class="piece-tags">Abstract · Animals · Statue</div>
         <div class="piece-name">Space Fox</div>
         <div class="piece-desc">Space Fox prowls the void between matter and imagination, its body forged from black mirror, veins of gold tracing constellations across faceted surfaces.</div>
         <div class="piece-row">
-          <span class="piece-edition">Original · One of a kind</span>
+          <span class="piece-edition">One of a kind · 16 × 20 × 18 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
-    <!-- 2. The Owl statue -->
-    <a href="gallery.html" class="piece" data-cats="animals statue">
+    <!-- 2. The Owl Statue -->
+    <a href="the-owl-statue.html" class="piece" data-cats="abstract animals statue">
       <div class="piece-img">
-        <span class="piece-id">SBF · 02</span>
+        <span class="piece-id">SBF · 002</span>
         <span class="piece-badge ooak">ONE OF A KIND</span>
-        <img src="assets/img/the-owl-statue-01.jpg" alt="The Owl statue">
+        <img src="assets/img/the-owl-statue-01.jpg" alt="The Owl Statue" loading="lazy">
       </div>
       <div class="piece-body">
-        <div class="piece-tags">Animals · Statue</div>
-        <div class="piece-name">The Owl statue</div>
+        <div class="piece-tags">Abstract · Animals · Statue</div>
+        <div class="piece-name">The Owl Statue</div>
         <div class="piece-desc">Perches in quiet vigilance, a guardian of thresholds between knowledge and mystery. Its body, sculpted from faceted mirror, watches without moving.</div>
         <div class="piece-row">
-          <span class="piece-edition">Original · One of a kind</span>
+          <span class="piece-edition">One of a kind · 16 × 20 × 18 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
     <!-- 3. Simorgh (Phoenix) -->
-    <a href="gallery.html" class="piece" data-cats="animals statue symmetrical">
+    <a href="simorgh-phoenix.html" class="piece" data-cats="animals statue symmetrical sale">
       <div class="piece-img">
-        <span class="piece-id">SBF · 03</span>
-        <span class="piece-badge">1ST EDITION</span>
-        <img src="assets/img/simorgh-phoenix-01.jpg" alt="Simorgh / Phoenix">
+        <span class="piece-id">SBF · 003</span>
+        <span class="piece-badge sale">SALE · 1ST ED.</span>
+        <img src="assets/img/simorgh-phoenix-01.jpg" alt="Simorgh (Phoenix)" loading="lazy">
       </div>
       <div class="piece-body">
         <div class="piece-tags">Animals · Statue · Symmetrical</div>
         <div class="piece-name">Simorgh (Phoenix)</div>
         <div class="piece-desc">A benevolent bird in Persian mythology and literature. It bears similarities with mythological birds from different origins, such as the phoenix.</div>
         <div class="piece-row">
-          <span class="piece-edition">1st edition · Original</span>
+          <span class="piece-edition">1st edition · 22 × 22 × 18 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
-    <!-- 4. abstract Space Vogel — SALE -->
-    <a href="gallery.html" class="piece" data-cats="abstract animals sale">
+    <!-- 4. Abstract Space Vogel -->
+    <a href="abstract-space-vogel.html" class="piece" data-cats="abstract animals statue">
       <div class="piece-img">
-        <span class="piece-id">SBF · 04</span>
-        <span class="piece-badge sale">SALE · OOAK</span>
-        <img src="assets/img/abstract-space-vogel-01.jpg" alt="abstract Space Vogel">
+        <span class="piece-id">SBF · 004</span>
+        <span class="piece-badge ooak">ONE OF A KIND</span>
+        <img src="assets/img/abstract-space-vogel-01.jpg" alt="Abstract Space Vogel" loading="lazy">
       </div>
       <div class="piece-body">
-        <div class="piece-tags">Abstract · Animals</div>
+        <div class="piece-tags">Abstract · Animals · Statue</div>
         <div class="piece-name">Abstract Space Vogel</div>
         <div class="piece-desc">A sculptural exploration of geometry, reflection, and transformation. Rising from a mirrored pedestal, its faceted black crystalline body breaks light into shards.</div>
         <div class="piece-row">
-          <span class="piece-edition">One of a kind · Original</span>
+          <span class="piece-edition">One of a kind · 16 × 20 × 18 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
-    <!-- 5. Geometrical Mouse — feature -->
-    <a href="gallery.html" class="piece feature" data-cats="animals statue symmetrical">
+    <!-- 5. Geometrical Mouse -->
+    <a href="geometrical-mouse.html" class="piece feature" data-cats="animals statue symmetrical">
       <div class="piece-img">
-        <span class="piece-id">SBF · 05</span>
+        <span class="piece-id">SBF · 005</span>
         <span class="piece-badge">3RD EDITION</span>
-        <img src="assets/img/geometrical-mouse-01.jpg" alt="Geometrical Mouse home decor">
+        <img src="assets/img/geometrical-mouse-01.jpg" alt="Geometrical Mouse" loading="lazy">
       </div>
       <div class="piece-body">
         <div class="piece-tags">Animals · Home decor · Symmetrical</div>
         <div class="piece-name">Geometrical Mouse</div>
-        <div class="piece-desc">The geometrical mouse home decor series transforms the familiar feline form into a work of abstract geometry and generative design — small, sharp, and mirror-faceted.</div>
+        <div class="piece-desc">The geometrical mouse home decor series transforms the familiar animal form into a work of abstract geometry and generative design — small, sharp, and mirror-faceted.</div>
         <div class="piece-row">
-          <span class="piece-edition">3rd edition · Home decor · Original</span>
+          <span class="piece-edition">3rd edition · 20 × 17 × 15 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
-    <!-- 6. Geometrical cat home decor -->
-    <a href="gallery.html" class="piece" data-cats="animals statue">
+    <!-- 6. Geometrical Cat -->
+    <a href="geometrical-cat.html" class="piece" data-cats="animals statue symmetrical sale">
       <div class="piece-img">
-        <span class="piece-id">SBF · 06</span>
-        <span class="piece-badge">3RD EDITION</span>
-        <img src="assets/img/geometrical-cat-01.jpg" alt="Geometrical cat home decor">
+        <span class="piece-id">SBF · 006</span>
+        <span class="piece-badge sale">SALE · 3RD ED.</span>
+        <img src="assets/img/geometrical-cat-01.jpg" alt="Geometrical Cat" loading="lazy">
       </div>
       <div class="piece-body">
-        <div class="piece-tags">Animals · Home decor</div>
+        <div class="piece-tags">Animals · Home decor · Symmetrical</div>
         <div class="piece-name">Geometrical Cat</div>
         <div class="piece-desc">The geometrical cat statue home decor series transforms the familiar feline form into a work of abstract geometry and generative design — a quieter sibling to the mouse.</div>
         <div class="piece-row">
-          <span class="piece-edition">3rd edition · Home decor</span>
+          <span class="piece-edition">3rd edition · 16 × 16 × 18 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
-    <!-- 7. abstract Space Fox II -->
-    <a href="abstract-space-fox-ii.html" class="piece" data-cats="abstract animals">
+    <!-- 7. Abstract Space Fox II -->
+    <a href="abstract-space-fox-ii.html" class="piece" data-cats="abstract animals statue">
       <div class="piece-img">
-        <span class="piece-id">SBF · 07</span>
+        <span class="piece-id">SBF · 007</span>
         <span class="piece-badge ooak">ONE OF A KIND</span>
-        <img src="assets/img/abstract-space-fox-ii-01.jpg" alt="abstract Space Fox II">
+        <img src="assets/img/abstract-space-fox-ii-01.jpg" alt="Abstract Space Fox II" loading="lazy">
       </div>
       <div class="piece-body">
-        <div class="piece-tags">Abstract · Animals</div>
+        <div class="piece-tags">Abstract · Animals · Statue</div>
         <div class="piece-name">Abstract Space Fox II</div>
         <div class="piece-desc">A second take on the Space Fox study: faceted black crystalline body rising from a mirrored pedestal, geometry collapsing into instinct.</div>
         <div class="piece-row">
-          <span class="piece-edition">One of a kind · Original</span>
+          <span class="piece-edition">One of a kind · 16 × 20 × 18 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
-    <!-- 8. Dear Mr Fox — SALE -->
-    <a href="gallery.html" class="piece" data-cats="animals statue sale">
+    <!-- 8. Dear Mr. Fox -->
+    <a href="dear-mr-fox.html" class="piece" data-cats="animals statue">
       <div class="piece-img">
-        <span class="piece-id">SBF · 08</span>
-        <span class="piece-badge sale">SALE · 2ND ED.</span>
-        <img src="assets/img/dear-mr-fox-01.jpg" alt="Dear Mr Fox">
+        <span class="piece-id">SBF · 008</span>
+        <span class="piece-badge">2ND EDITION</span>
+        <img src="assets/img/dear-mr-fox-01.jpg" alt="Dear Mr. Fox" loading="lazy">
       </div>
       <div class="piece-body">
         <div class="piece-tags">Animals · Statue</div>
         <div class="piece-name">Dear Mr. Fox</div>
         <div class="piece-desc">A mirrored fox caught between curiosity and caution. Its angular body, born of generative geometry, refuses to settle into a single read.</div>
         <div class="piece-row">
-          <span class="piece-edition">2nd edition · Original</span>
+          <span class="piece-edition">2nd edition · 16 × 18 × 18 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
-    <!-- 9. abstract table lamp -->
-    <a href="gallery.html" class="piece" data-cats="furniture symmetrical">
+    <!-- 9. Abstract Table Lamp -->
+    <a href="abstract-table-lamp.html" class="piece" data-cats="furniture symmetrical sale">
       <div class="piece-img">
-        <span class="piece-id">SBF · 09</span>
-        <span class="piece-badge">FUNCTIONAL · 1ST ED.</span>
-        <img src="assets/img/abstract-table-lamp-01.jpg" alt="abstract table lamp">
+        <span class="piece-id">SBF · 009</span>
+        <span class="piece-badge sale">FUNCTIONAL · 1ST ED.</span>
+        <img src="assets/img/abstract-table-lamp-01.jpg" alt="Abstract Table Lamp" loading="lazy">
       </div>
       <div class="piece-body">
         <div class="piece-tags">Furniture · Symmetrical · Functional</div>
         <div class="piece-name">Abstract Table Lamp</div>
         <div class="piece-desc">Transform your space with the abstract table lamp — where sculptural design meets functional lighting. Inspired by modern art; the bulb hides inside the geometry.</div>
         <div class="piece-row">
-          <span class="piece-edition">1st edition · Functional · Original</span>
+          <span class="piece-edition">1st edition · Functional · 16 × 20 × 18 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
-    <!-- 10. Bird of Dawn — SALE -->
-    <a href="gallery.html" class="piece" data-cats="animals statue sale">
+    <!-- 10. Bird of Dawn -->
+    <a href="bird-of-dawn.html" class="piece" data-cats="animals statue sale">
       <div class="piece-img">
-        <span class="piece-id">SBF · 10</span>
+        <span class="piece-id">SBF · 010</span>
         <span class="piece-badge sale">SALE · 2ND ED.</span>
-        <img src="assets/img/bird-of-dawn-01.jpg" alt="Bird of Dawn">
+        <img src="assets/img/bird-of-dawn-01.jpg" alt="Bird of Dawn" loading="lazy">
       </div>
       <div class="piece-body">
         <div class="piece-tags">Animals · Statue</div>
         <div class="piece-name">Bird of Dawn</div>
         <div class="piece-desc">A quiet sentinel at the edge of night, Bird of Dawn perches in stillness — its faceted body a mosaic of dawnlight before any sun has risen.</div>
         <div class="piece-row">
-          <span class="piece-edition">2nd edition · Original</span>
+          <span class="piece-edition">2nd edition · 16 × 20 × 18 cm</span>
           <span class="piece-arrow">→</span>
         </div>
       </div>
     </a>
 
+    <!-- 11. Adam -->
+    <a href="adam.html" class="piece" data-cats="statue symmetrical sale">
+      <div class="piece-img">
+        <span class="piece-id">SBF · 011</span>
+        <span class="piece-badge sale">SALE · 1ST ED.</span>
+        <img src="assets/img/adam-01.jpg" alt="Adam" loading="lazy">
+      </div>
+      <div class="piece-body">
+        <div class="piece-tags">Statue · Symmetrical</div>
+        <div class="piece-name">Adam</div>
+        <div class="piece-desc">The first statue of the studio — mirrored modular fragments that treat the first human not as ancestor but as structural hypothesis.</div>
+        <div class="piece-row">
+          <span class="piece-edition">1st edition · 16 × 18 × 16 cm</span>
+          <span class="piece-arrow">→</span>
+        </div>
+      </div>
+    </a>
+<!-- /BUILD:gallery-grid -->
   </div>
 
   <div class="gallery-empty" id="gallery-empty">

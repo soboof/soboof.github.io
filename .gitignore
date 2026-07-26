@@ -15,3 +15,6 @@ Desktop.ini
 *.psd
 *.ai
 node_modules/
+
+# Safety copies the studio takes before it edits a data file
+tools/studio/backups/

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Soboof Studio</title>
+<style>
+:root{
+  --bg:#15140f; --panel:#1c1a14; --inner:#12110c; --line:#2e2b22;
+  --text:#ebe6dc; --muted:#8f8878; --gold:#e8c547; --red:#d9534f; --green:#4caf7d;
+  --ff:'DM Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--ff);font-size:13px;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1000px;margin:0 auto;padding:26px 22px 80px}
+
+header{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;justify-content:space-between;
+  border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px}
+h1{font-size:19px;margin:0;letter-spacing:.04em}
+h1 span{color:var(--gold)}
+.state{font-size:11px;color:var(--muted);text-align:right}
+.state b{color:var(--text);font-weight:400}
+
+nav{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap}
+nav button{background:var(--panel);border:1px solid var(--line);color:var(--muted);
+  font:inherit;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  padding:9px 15px;border-radius:5px;cursor:pointer}
+nav button.on{background:var(--gold);border-color:var(--gold);color:#15140f}
+nav button:hover:not(.on){color:var(--text)}
+
+section.tab{display:none} section.tab.on{display:block}
+
+fieldset{border:1px solid var(--line);border-radius:7px;padding:18px 18px 20px;margin:0 0 16px;background:var(--panel)}
+legend{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);padding:0 7px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
+label{display:block;margin-bottom:12px}
+label>span{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+input[type=text],input[type=number],textarea,select{
+  width:100%;background:var(--inner);border:1px solid var(--line);border-radius:5px;
+  color:var(--text);font:inherit;font-size:13px;padding:9px 11px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold)}
+textarea{resize:vertical;min-height:74px;line-height:1.65}
+.hint{font-size:10.5px;color:var(--muted);margin-top:4px}
+.hint.warn{color:var(--gold)} .hint.bad{color:var(--red)}
+
+.checks{display:flex;flex-wrap:wrap;gap:7px}
+.checks label{display:inline-flex;align-items:center;gap:6px;margin:0;
+  background:var(--inner);border:1px solid var(--line);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:12px}
+.checks label:has(:checked){border-color:var(--gold);color:var(--gold)}
+.checks input{accent-color:var(--gold);margin:0}
+
+.drop{border:1px dashed var(--line);border-radius:7px;background:var(--inner);
+  padding:22px;text-align:center;color:var(--muted);cursor:pointer}
+.drop:hover,.drop.over{border-color:var(--gold);color:var(--text)}
+.drop input{display:none}
+.thumbs{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.thumb{position:relative;width:78px}
+.thumb img{width:78px;height:104px;object-fit:cover;border-radius:4px;border:1px solid var(--line);display:block}
+.thumb .n{position:absolute;top:3px;left:3px;background:rgba(0,0,0,.75);color:var(--gold);
+  font-size:9px;padding:1px 5px;border-radius:3px}
+.thumb .x{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.75);color:var(--red);
+  border:0;font:inherit;font-size:11px;line-height:1;padding:3px 5px;border-radius:3px;cursor:pointer}
+.thumb .kb{font-size:9px;color:var(--muted);text-align:center;padding-top:3px}
+
+.go{background:var(--gold);border:0;color:#15140f;font:inherit;font-size:12px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;padding:12px 22px;border-radius:5px;cursor:pointer}
+.go:disabled{opacity:.45;cursor:default}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--text);font:inherit;font-size:12px;
+  letter-spacing:.1em;text-transform:uppercase;padding:12px 18px;border-radius:5px;cursor:pointer}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+.msg{border-radius:6px;padding:13px 15px;margin:14px 0;white-space:pre-wrap;font-size:12px;display:none}
+.msg.on{display:block}
+.msg.ok{background:rgba(76,175,125,.1);border:1px solid rgba(76,175,125,.5);color:#a8e0c4}
+.msg.bad{background:rgba(217,83,79,.1);border:1px solid rgba(217,83,79,.5);color:#f0b3b1}
+.msg.busy{background:var(--panel);border:1px solid var(--line);color:var(--muted)}
+
+.list{width:100%;border-collapse:collapse;font-size:12px}
+.list th{text-align:left;font-weight:400;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
+.list td{padding:7px 10px 7px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.list td b{color:var(--text);font-weight:400}
+pre.out{background:var(--inner);border:1px solid var(--line);border-radius:6px;padding:13px;
+  font-size:11.5px;line-height:1.55;overflow:auto;max-height:340px;color:var(--muted);white-space:pre-wrap}
+.step{margin-bottom:9px}
+.step b{color:var(--text);font-weight:400}
+.step .tick{color:var(--green)} .step .cross{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Soboof <span>Studio</span></h1>
+  <div class="state" id="state">reading the repo…</div>
+</header>
+
+<nav>
+  <button data-tab="art" class="on">Add a sculpture</button>
+  <button data-tab="print">Add a poster</button>
+  <button data-tab="pub">Publish</button>
+</nav>
+
+<!-- ══ SCULPTURE ══════════════════════════════════════════════════════ -->
+<section class="tab on" id="tab-art">
+  <fieldset>
+    <legend>The piece</legend>
+    <div class="row">
+      <label><span>Name</span><input type="text" id="a-name" placeholder="Space Fox">
+        <div class="hint" id="a-slug">page: —</div></label>
+      <label><span>Catalogue code</span><input type="text" id="a-code" readonly>
+        <div class="hint">assigned automatically</div></label>
+    </div>
+    <label><span>Subtitle — one line, shown under the title</span>
+      <input type="text" id="a-sub" placeholder="Prowling the void between matter and imagination."></label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Edition &amp; price</legend>
+    <div class="row">
+      <label><span>Edition</span>
+        <select id="a-ed">
+          <option value="ooak">One of a kind</option>
+          <option value="ltd">Limited edition</option>
+          <option value="sale">On sale</option>
+        </select></label>
+      <label id="a-ordwrap" style="display:none"><span>Which edition</span>
+        <select id="a-ord"><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></label>
+      <label><span>Price €</span><input type="text" id="a-price" placeholder="440"></label>
+      <label id="a-salewrap" style="display:none"><span>Sale price €</span><input type="text" id="a-saleprice" placeholder="180"></label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Size</legend>
+    <div class="row">
+      <label><span>Length cm</span><input type="number" id="a-l" min="1" step="0.5"></label>
+      <label><span>Width cm</span><input type="number" id="a-w" min="1" step="0.5"></label>
+      <label><span>Height cm</span><input type="number" id="a-h" min="1" step="0.5"></label>
+      <label><span>Weight kg</span><input type="number" id="a-kg" min="0.1" step="0.1"></label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Where it belongs</legend>
+    <label><span>Categories — shown on the piece</span>
+      <div class="checks" id="a-cats"></div></label>
+    <label style="margin-top:14px"><span>Gallery filters — which chips it answers to</span>
+      <div class="checks" id="a-filters"></div>
+      <div class="hint">ticked from the categories; change if you want</div></label>
+    <label style="margin-top:14px"><span>On the Mirbreak page</span>
+      <select id="a-feat">
+        <option value="std">Show in the work grid</option>
+        <option value="big">Show large in the work grid</option>
+        <option value="">Gallery only</option>
+      </select></label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Photos</legend>
+    <div class="drop" id="a-drop">
+      <input type="file" id="a-files" accept="image/*" multiple>
+      Drop photos here, or click to choose.<br>
+      <span style="font-size:10.5px">First one is the cover. Resized to 2560px and saved as JPEG.</span>
+    </div>
+    <div class="thumbs" id="a-thumbs"></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Words</legend>
+    <label><span>Card description — the gallery tile</span>
+      <textarea id="a-card" placeholder="One or two sentences."></textarea></label>
+    <label><span>Full description — &lt;strong&gt; allowed</span>
+      <textarea id="a-desc" style="min-height:120px"></textarea></label>
+    <label><span>Search title</span><input type="text" id="a-mtitle" placeholder="Space Fox — One-of-a-Kind Mirrored Sculpture | Soboof">
+      <div class="hint" id="a-mtitle-n"></div></label>
+    <label><span>Search description</span><textarea id="a-mdesc"></textarea>
+      <div class="hint" id="a-mdesc-n">aim for 120–165 characters</div></label>
+    <label><span>Structured-data line — one plain sentence</span>
+      <input type="text" id="a-schema" placeholder="One-of-a-kind mirrored sculpture: hand-cut Ayeneh-Kari tiles on a 3D-printed modular body."></label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Form</legend>
+    <label><span>Form tags</span><div class="checks" id="a-tags"></div></label>
+    <label style="margin-top:14px"><span>Primitive — shown on the piece's manifest</span>
+      <select id="a-prim"></select></label>
+  </fieldset>
+
+  <div class="msg" id="a-msg"></div>
+  <div class="actions"><button class="go" id="a-save">Add the piece</button>
+    <span class="hint">saves photos, updates the catalogue, rebuilds the site</span></div>
+</section>
+
+<!-- ══ POSTER ═════════════════════════════════════════════════════════ -->
+<section class="tab" id="tab-print">
+  <fieldset>
+    <legend>The sheet</legend>
+    <label><span>Collection</span><select id="p-set"></select></label>
+    <div class="drop" id="p-drop">
+      <input type="file" id="p-file" accept="image/*">
+      Drop the scan here, or click to choose.<br>
+      <span style="font-size:10.5px">Resized to 1600px and saved as JPEG.</span>
+    </div>
+    <div class="thumbs" id="p-thumbs"></div>
+    <label style="margin-top:14px"><span>Caption — what is on the sheet</span>
+      <textarea id="p-cap" placeholder="Cypress panels repeated in a column, ink thinning with each pull."></textarea></label>
+  </fieldset>
+  <div class="msg" id="p-msg"></div>
+  <div class="actions"><button class="go" id="p-save">Add the poster</button>
+    <span class="hint">numbered automatically, counts update themselves</span></div>
+</section>
+
+<!-- ══ PUBLISH ════════════════════════════════════════════════════════ -->
+<section class="tab" id="tab-pub">
+  <fieldset>
+    <legend>Waiting to go up</legend>
+    <div id="pub-changes"><span class="hint">reading…</span></div>
+  </fieldset>
+  <fieldset>
+    <legend>Publish</legend>
+    <label><span>What changed</span><input type="text" id="pub-msg" placeholder="Add Winter Fox and two posters"></label>
+    <label class="checks" style="margin:0"><label><input type="checkbox" id="pub-push" checked> push to GitHub</label></label>
+    <div class="actions" style="margin-top:14px">
+      <button class="go" id="pub-go">Build &amp; publish</button>
+      <button class="ghost" id="pub-build">Rebuild only</button>
+    </div>
+  </fieldset>
+  <div class="msg" id="pub-msg-box"></div>
+  <pre class="out" id="pub-out" style="display:none"></pre>
+</section>
+
+<fieldset style="margin-top:26px">
+  <legend>What is on the site now</legend>
+  <table class="list"><thead><tr><th>Code</th><th>Piece</th><th>Photos</th></tr></thead>
+    <tbody id="inv-art"></tbody></table>
+  <table class="list" style="margin-top:18px"><thead><tr><th>Collection</th><th>Sheets</th></tr></thead>
+    <tbody id="inv-print"></tbody></table>
+</fieldset>
+
+</div>
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+
+const CATEGORIES = ['Abstract','Animals','Statue','Symmetrical','Home decor','Furniture','Functional'];
+const FILTERS    = ['abstract','animals','statue','symmetrical','furniture'];
+const TAGS = ['Branching growth','Crystallization','Lattices','Modular repetition','Faceting',
+  'Radial symmetry','Bilateral symmetry','Feathered facets','Reflection doubling',
+  'Parametric geometry','Pop-break shards','Light diffusion','Fragmentation'];
+const PRIMITIVES = ['MODULAR<br>FORM','FACETED<br>MASS','WINGED<br>FORM','CRYSTAL<br>FORM',
+  'FUNCTIONAL<br>FORM','FIGURE<br>FORM'];
+
+/* ── tabs ── */
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.tab').forEach(s => s.classList.toggle('on', s.id === 'tab-' + b.dataset.tab));
+  if (b.dataset.tab === 'pub') refresh();
+});
+
+/* ── message helper ── */
+function say(box, kind, text) {
+  const m = $(box); m.className = 'msg on ' + kind; m.textContent = text;
+}
+const clear = box => { $(box).className = 'msg'; };
+
+/* ── build the checkbox groups ── */
+function checks(host, items, name) {
+  $(host).innerHTML = '';
+  items.forEach(v => {
+    const l = el('label'); const i = el('input'); i.type = 'checkbox'; i.value = v; i.name = name;
+    l.append(i, document.createTextNode(v.replace(/<br>/g, ' ')));
+    $(host).append(l);
+  });
+}
+const picked = name => [...document.querySelectorAll(`input[name=${name}]:checked`)].map(i => i.value);
+
+checks('#a-cats', CATEGORIES, 'cat');
+checks('#a-filters', FILTERS, 'flt');
+checks('#a-tags', TAGS, 'tag');
+PRIMITIVES.forEach(p => { const o = el('option', null, p.replace(/<br>/g, ' ')); o.value = p; $('#a-prim').append(o); });
+
+/* Ticking a category ticks the matching filter, if there is one. */
+$('#a-cats').onchange = e => {
+  const f = [...document.querySelectorAll('input[name=flt]')].find(x => x.value === e.target.value.toLowerCase());
+  if (f) f.checked = e.target.checked;
+};
+
+/* ── slug + counters ── */
+const slugify = s => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+$('#a-name').oninput = () => {
+  const s = slugify($('#a-name').value);
+  $('#a-slug').textContent = s ? 'page: ' + s + '.html' : 'page: —';
+};
+function counter(input, out, lo, hi) {
+  const n = $(input).value.length;
+  const e = $(out);
+  e.textContent = n + ' characters' + (lo ? ` — aim for ${lo}–${hi}` : '');
+  e.className = 'hint' + (n === 0 ? '' : n < lo || n > hi ? ' warn' : '');
+}
+$('#a-mdesc').oninput = () => counter('#a-mdesc', '#a-mdesc-n', 120, 165);
+$('#a-mtitle').oninput = () => counter('#a-mtitle', '#a-mtitle-n', 40, 60);
+
+/* ── edition switches ── */
+$('#a-ed').onchange = () => {
+  const v = $('#a-ed').value;
+  $('#a-ordwrap').style.display = v === 'ooak' ? 'none' : '';
+  $('#a-salewrap').style.display = v === 'sale' ? '' : 'none';
+};
+
+/* ── images: resized in the browser, so nothing large is ever uploaded ── */
+async function toJpeg(file, maxLong) {
+  const bmp = await createImageBitmap(file);
+  const scale = Math.min(1, maxLong / Math.max(bmp.width, bmp.height));
+  const w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
+  const c = Object.assign(document.createElement('canvas'), { width: w, height: h });
+  c.getContext('2d').drawImage(bmp, 0, 0, w, h);
+  bmp.close?.();
+  return { url: c.toDataURL('image/jpeg', 0.86), w, h };
+}
+
+function dropzone(zone, input, onFiles) {
+  const z = $(zone);
+  z.onclick = () => $(input).click();
+  $(input).onchange = e => onFiles([...e.target.files]);
+  ['dragenter','dragover'].forEach(t => z.addEventListener(t, e => { e.preventDefault(); z.classList.add('over'); }));
+  ['dragleave','drop'].forEach(t => z.addEventListener(t, e => { e.preventDefault(); z.classList.remove('over'); }));
+  z.addEventListener('drop', e => onFiles([...e.dataTransfer.files].filter(f => f.type.startsWith('image/'))));
+}
+
+let artPhotos = [];
+function drawThumbs(host, arr, redraw) {
+  $(host).innerHTML = '';
+  arr.forEach((p, i) => {
+    const d = el('div', 'thumb');
+    const im = el('img'); im.src = p.url;
+    const n = el('span', 'n', String(i + 1).padStart(2, '0'));
+    const x = el('button', 'x', '×'); x.onclick = ev => { ev.stopPropagation(); arr.splice(i, 1); redraw(); };
+    d.append(im, n, x, el('div', 'kb', Math.round(p.url.length * 0.75 / 1024) + ' KB'));
+    $(host).append(d);
+  });
+}
+const redrawArt = () => drawThumbs('#a-thumbs', artPhotos, redrawArt);
+
+dropzone('#a-drop', '#a-files', async files => {
+  say('#a-msg', 'busy', 'resizing ' + files.length + ' photo(s)…');
+  for (const f of files) artPhotos.push(await toJpeg(f, 2560));
+  redrawArt(); clear('#a-msg');
+});
+
+let posterImg = null;
+const redrawPoster = () => drawThumbs('#p-thumbs', posterImg ? [posterImg] : [], redrawPoster);
+dropzone('#p-drop', '#p-file', async files => {
+  if (!files[0]) return;
+  say('#p-msg', 'busy', 'resizing…');
+  posterImg = await toJpeg(files[0], 1600);
+  redrawPoster(); clear('#p-msg');
+});
+
+/* ── talking to the server ── */
+async function api(path, body) {
+  const r = await fetch(path, body ? { method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body) } : {});
+  return r.json();
+}
+
+/* ── save a sculpture ── */
+$('#a-save').onclick = async () => {
+  const btn = $('#a-save'); btn.disabled = true;
+  say('#a-msg', 'busy', 'saving…');
+  const out = await api('/api/artwork', {
+    name: $('#a-name').value, slug: slugify($('#a-name').value), subtitle: $('#a-sub').value,
+    edition: $('#a-ed').value, editionNumber: $('#a-ord').value,
+    price: { regular: $('#a-price').value, sale: $('#a-saleprice').value },
+    categories: picked('cat'), filters: picked('flt'), featured: $('#a-feat').value,
+    dims: { l: $('#a-l').value, w: $('#a-w').value, h: $('#a-h').value, weight: $('#a-kg').value },
+    metaTitle: $('#a-mtitle').value, metaDesc: $('#a-mdesc').value,
+    cardDesc: $('#a-card').value, description: $('#a-desc').value, schemaDesc: $('#a-schema').value,
+    formTags: picked('tag'), manifestPrimitive: $('#a-prim').value,
+    photos: artPhotos.map(p => p.url),
+  }).catch(e => ({ ok: false, problems: [String(e)] }));
+  btn.disabled = false;
+
+  if (!out.ok) return say('#a-msg', 'bad', 'Not saved:\n• ' + out.problems.join('\n• '));
+  const b = await api('/api/build', {});
+  say('#a-msg', 'ok', `Added ${out.added.code} — ${out.added.slug}.html with ${out.added.photos} photo(s).\n\n` +
+    b.output.trim() + '\n\nGo to Publish when you want it on the site.');
+  document.querySelectorAll('#tab-art input[type=text],#tab-art input[type=number],#tab-art textarea')
+    .forEach(i => { if (i.id !== 'a-code') i.value = ''; });
+  document.querySelectorAll('#tab-art input[type=checkbox]').forEach(i => i.checked = false);
+  artPhotos = []; redrawArt(); $('#a-slug').textContent = 'page: —';
+  refresh();
+};
+
+/* ── save a poster ── */
+$('#p-save').onclick = async () => {
+  const btn = $('#p-save'); btn.disabled = true;
+  say('#p-msg', 'busy', 'saving…');
+  const out = await api('/api/poster', {
+    set: $('#p-set').value, caption: $('#p-cap').value, image: posterImg && posterImg.url,
+  }).catch(e => ({ ok: false, problems: [String(e)] }));
+  btn.disabled = false;
+  if (!out.ok) return say('#p-msg', 'bad', 'Not saved:\n• ' + out.problems.join('\n• '));
+  const b = await api('/api/build', {});
+  say('#p-msg', 'ok', `Added sheet ${out.added.sheet} to ${out.added.set} (${out.added.kb} KB).\n\n` +
+    b.output.trim() + '\n\nGo to Publish when you want it on the site.');
+  $('#p-cap').value = ''; posterImg = null; redrawPoster();
+  refresh();
+};
+
+/* ── publish ── */
+function showLog(log) {
+  const box = $('#pub-out'); box.style.display = 'block'; box.innerHTML = '';
+  log.forEach(s => {
+    const d = el('div', 'step');
+    d.innerHTML = `<span class="${s.ok ? 'tick' : 'cross'}">${s.ok ? '✓' : '✗'}</span> <b>${s.step}</b>`;
+    if (s.output.trim()) d.append(el('div', null, s.output.trim()));
+    box.append(d);
+  });
+}
+$('#pub-build').onclick = async () => {
+  say('#pub-msg-box', 'busy', 'building…');
+  const b = await api('/api/build', {});
+  say('#pub-msg-box', b.ok ? 'ok' : 'bad', b.output.trim());
+  refresh();
+};
+$('#pub-go').onclick = async () => {
+  const btn = $('#pub-go'); btn.disabled = true;
+  say('#pub-msg-box', 'busy', 'building and publishing…');
+  const out = await api('/api/publish', { message: $('#pub-msg').value, push: $('#pub-push').checked })
+    .catch(e => ({ ok: false, log: [], problems: [String(e)] }));
+  btn.disabled = false;
+  showLog(out.log || []);
+  say('#pub-msg-box', out.ok ? 'ok' : 'bad', out.ok
+    ? (out.pushed ? 'Published. GitHub Pages will show it in a minute or two.' : 'Committed. Not pushed.')
+    : 'Stopped at ' + (out.stoppedAt || 'the first step') + '. Nothing was pushed — see below.');
+  $('#pub-msg').value = '';
+  refresh();
+};
+
+/* ── state ── */
+async function refresh() {
+  const s = await api('/api/state');
+  $('#a-code').value = s.nextCode;
+
+  $('#p-set').innerHTML = '';
+  s.sets.forEach(x => { const o = el('option', null, `${x.name} — ${x.count} sheets`); o.value = x.prefix; $('#p-set').append(o); });
+
+  $('#inv-art').innerHTML = '';
+  s.artworks.forEach(a => {
+    const tr = el('tr');
+    tr.append(el('td', null, a.code), Object.assign(el('td'), { innerHTML: `<b>${a.name}</b> · ${a.slug}.html` }), el('td', null, a.photos + ' photos'));
+    $('#inv-art').append(tr);
+  });
+  $('#inv-print').innerHTML = '';
+  s.sets.forEach(x => { const tr = el('tr'); tr.append(Object.assign(el('td'), { innerHTML: `<b>${x.name}</b>` }), el('td', null, x.count)); $('#inv-print').append(tr); });
+
+  const g = s.git;
+  $('#state').innerHTML = g.repo
+    ? `branch <b>${g.branch}</b> · ${g.remote ? 'remote <b>set</b>' : '<b>no remote</b>'} · <b>${g.changedCount}</b> file(s) changed`
+    : '<b>not a git repository</b> — publishing is unavailable';
+
+  const box = $('#pub-changes');
+  box.innerHTML = '';
+  if (!g.repo) { box.append(el('div', 'hint', 'This folder is not a git repository, so there is nothing to publish to.')); return; }
+  if (!g.changedCount) { box.append(el('div', 'hint', 'Nothing has changed since the last publish.')); return; }
+  box.append(el('div', 'hint', `${g.changedCount} file(s) changed${g.lastCommit ? ' · last commit ' + g.lastCommit : ''}`));
+  const pre = el('pre', 'out', g.changed.join('\n') + (g.changedCount > g.changed.length ? `\n… and ${g.changedCount - g.changed.length} more` : ''));
+  pre.style.maxHeight = '180px';
+  box.append(pre);
+}
+refresh();
+counter('#a-mdesc', '#a-mdesc-n', 120, 165);
+</script>
+</body>
+</html>
