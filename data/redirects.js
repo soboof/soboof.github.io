@@ -22,18 +22,35 @@
 module.exports = [
 
   /* ── Products → artwork pages ───────────────────────────────────────────
-     WordPress nests these under their category path; here they are flat.   */
-  { from: '/gallery/statue/christmas-gifts/adam/',                     to: 'adam.html' },
-  { from: '/gallery/statue/christmas-gifts/bird-of-dawn/',             to: 'bird-of-dawn.html' },
-  { from: '/gallery/statue/christmas-gifts/simorgh-phoenix/',          to: 'simorgh-phoenix.html' },
-  { from: '/gallery/statue/christmas-gifts/space-fox/',                to: 'space-fox.html' },
-  { from: '/gallery/statue/christmas-gifts/the-owl-statue/',           to: 'the-owl-statue.html' },
-  { from: '/gallery/statue/christmas-gifts/geometrical-mouse-home-decor/', to: 'geometrical-mouse.html' },
-  { from: '/gallery/statue/christmas-gifts/lamp/',                     to: 'abstract-table-lamp.html', note: 'slug renamed: lamp → abstract-table-lamp' },
-  { from: '/gallery/animals/dear-mr-fox/',                             to: 'dear-mr-fox.html' },
-  { from: '/gallery/animals/geometrical-cat-statue/',                  to: 'geometrical-cat.html', note: 'slug renamed: geometrical-cat-statue → geometrical-cat' },
-  { from: '/gallery/abstract/abstract-space-fox-ii/',                  to: 'abstract-space-fox-ii.html' },
-  { from: '/gallery/abstract/abstract-space-vogel/',                   to: 'abstract-space-vogel.html' },
+     WordPress nests these under their category path; here every piece lives at
+     /work/<slug>/, so both shapes collapse onto one target.                 */
+  { from: '/gallery/statue/christmas-gifts/adam/',                     to: 'work/adam/' },
+  { from: '/gallery/statue/christmas-gifts/bird-of-dawn/',             to: 'work/bird-of-dawn/' },
+  { from: '/gallery/statue/christmas-gifts/simorgh-phoenix/',          to: 'work/simorgh-phoenix/' },
+  { from: '/gallery/statue/christmas-gifts/space-fox/',                to: 'work/space-fox/' },
+  { from: '/gallery/statue/christmas-gifts/the-owl-statue/',           to: 'work/the-owl-statue/' },
+  { from: '/gallery/statue/christmas-gifts/geometrical-mouse-home-decor/', to: 'work/geometrical-mouse/' },
+  { from: '/gallery/statue/christmas-gifts/lamp/',                     to: 'work/abstract-table-lamp/', note: 'slug renamed: lamp → abstract-table-lamp' },
+  { from: '/gallery/animals/dear-mr-fox/',                             to: 'work/dear-mr-fox/' },
+  { from: '/gallery/animals/geometrical-cat-statue/',                  to: 'work/geometrical-cat/', note: 'slug renamed: geometrical-cat-statue → geometrical-cat' },
+  { from: '/gallery/abstract/abstract-space-fox-ii/',                  to: 'work/abstract-space-fox-ii/' },
+  { from: '/gallery/abstract/abstract-space-vogel/',                   to: 'work/abstract-space-vogel/' },
+
+  /* ── Flat artwork URLs → /work/<slug>/ ──────────────────────────────────
+     The shape this repo published before the pieces moved into /work/. These
+     URLs were live on soboof.github.io and are linked from elsewhere, so they
+     keep answering rather than 404ing. The stubs overwrite the old page files. */
+  { from: '/adam.html',                     to: 'work/adam/' },
+  { from: '/bird-of-dawn.html',             to: 'work/bird-of-dawn/' },
+  { from: '/simorgh-phoenix.html',          to: 'work/simorgh-phoenix/' },
+  { from: '/space-fox.html',                to: 'work/space-fox/' },
+  { from: '/the-owl-statue.html',           to: 'work/the-owl-statue/' },
+  { from: '/geometrical-mouse.html',        to: 'work/geometrical-mouse/' },
+  { from: '/abstract-table-lamp.html',      to: 'work/abstract-table-lamp/' },
+  { from: '/dear-mr-fox.html',              to: 'work/dear-mr-fox/' },
+  { from: '/geometrical-cat.html',          to: 'work/geometrical-cat/' },
+  { from: '/abstract-space-fox-ii.html',    to: 'work/abstract-space-fox-ii/' },
+  { from: '/abstract-space-vogel.html',     to: 'work/abstract-space-vogel/' },
 
   /* ── Pages ──────────────────────────────────────────────────────────── */
   { from: '/gallery/',              to: 'gallery.html',  note: 'also the WooCommerce shop page' },

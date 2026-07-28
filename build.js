@@ -9,10 +9,10 @@
           data/projects.js, data/redirects.js
    and writes:
 
-     <slug>.html         one page per artwork
+     work/<slug>/        one page per artwork
      printing-lab.html   the print collections, counts derived
      gallery.html        filter chips + piece grid   (between BUILD markers)
-     index.html          the three project sections  (same)
+     index.html          the four project sections   (same)
      mirbreak.html       the Mirbreak work grid      (same)
      sitemap.xml         every page, artworks included
      <old-wp-url>/       a redirect for every URL soboof.com serves today
@@ -49,6 +49,17 @@ const attr = s => String(s)
 /** Photo paths for a piece: prefix-01.jpg … prefix-0N.jpg */
 const photosOf = a => Array.from({ length: a.photos },
   (_, i) => `assets/img/${a.imgPrefix}-${String(i + 1).padStart(2, '0')}.jpg`);
+
+/* ── where an artwork page lives ───────────────────────────────────────────
+   Pieces are served from /work/<slug>/, so every artwork page sits two
+   directories below the site root and reaches shared assets through
+   ARTWORK_BASE. Everything that needs a piece's URL goes through these three,
+   so the layout is defined in exactly one place. */
+const artworkFile = a => `work/${a.slug}/index.html`;   // file the build writes
+const artworkUrl  = a => `work/${a.slug}/`;             // URL, from the site root
+const ARTWORK_BASE = '../../';                          // site root, from a piece
+/** Rewrite a root-relative asset path for use inside an artwork page. */
+const asset = p => ARTWORK_BASE + p;
 
 const isOnSale   = a => Boolean(a.price && a.price.sale);
 const dimsLine   = a => `${a.dims.l} × ${a.dims.w} × ${a.dims.h} cm`;
@@ -105,19 +116,20 @@ const RELATED_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 12
 /* ── the PRODUCT object each artwork page runs on ──────────────────────── */
 
 function productJs(a, all) {
-  const photos = photosOf(a);
+  const photos = photosOf(a).map(asset);
   const j = JSON.stringify;
 
-  /* Related pieces: the next three in the catalogue, wrapping around. */
+  /* Related pieces: the next three in the catalogue, wrapping around. Each one is a
+     sibling directory under /work/, so the link only has to climb one level. */
   const here = all.indexOf(a);
   const related = [1, 2, 3].map(n => {
     const r = all[(here + n) % all.length];
     return {
       id:   r.code,
-      img:  photosOf(r)[0],
+      img:  asset(photosOf(r)[0]),
       name: r.name,
       tags: r.categories.join(' · '),
-      href: `${r.slug}.html`,
+      href: `../${r.slug}/`,
     };
   });
 
@@ -162,10 +174,10 @@ const PRODUCT = {
 
   /* ── Breadcrumb ── */
   breadcrumbCategory:     ${j(a.categories[0])},
-  breadcrumbCategoryHref: 'gallery.html',
+  breadcrumbCategoryHref: ${j(asset('gallery.html'))},
 
   /* ── Gallery ── */
-  modelPath:   'assets/models/pythagoras.obj',
+  modelPath:   ${j(asset('assets/models/pythagoras.obj'))},
   photos:      ${j(photos)},
   gallerySvg:  PLACEHOLDER_SVG,
   thumbSvgs:   [],
@@ -206,7 +218,7 @@ const PRODUCT = {
 /* ── structured data ───────────────────────────────────────────────────── */
 
 function jsonLd(a) {
-  const url = `${SITE}/${a.slug}.html`;
+  const url = `${SITE}/${artworkUrl(a)}`;
   const graph = [
     {
       '@type': 'VisualArtwork',
@@ -263,7 +275,8 @@ function artworkPage(template, a, all) {
   return template
     .replace(/\{\{META_TITLE\}\}/g,  attr(a.metaTitle))
     .replace(/\{\{META_DESC\}\}/g,   attr(a.metaDesc))
-    .replace(/\{\{CANONICAL\}\}/g,   `${SITE}/${a.slug}.html`)
+    .replace(/\{\{BASE\}\}/g,        ARTWORK_BASE)
+    .replace(/\{\{CANONICAL\}\}/g,   `${SITE}/${artworkUrl(a)}`)
     .replace(/\{\{OG_IMAGE\}\}/g,    `${SITE}/${photosOf(a)[0]}`)
     .replace(/\{\{OG_IMAGE_ALT\}\}/g, attr(`${a.name} — mirrored sculpture by Soboof`))
     .replace(/\{\{JSONLD\}\}/g,      () => jsonLd(a))
@@ -296,7 +309,7 @@ function galleryGrid(all) {
     const feature = a.featured === 'big' ? ' feature' : '';
     const photo   = photosOf(a)[0];
     return `    <!-- ${i + 1}. ${a.name} -->
-    <a href="${a.slug}.html" class="piece${feature}" data-cats="${attr(filterKeys(a))}">
+    <a href="${artworkUrl(a)}" class="piece${feature}" data-cats="${attr(filterKeys(a))}">
       <div class="piece-img">
         <span class="piece-id">${attr(a.code)}</span>
         <span class="piece-badge${badgeClass(a)}">${attr(a.galleryBadge)}</span>
@@ -320,7 +333,7 @@ function homeGrid(all) {
     const big   = a.featured === 'big';
     const photo = photosOf(a)[0];
     return `    <!-- ${a.name} -->
-    <a href="${a.slug}.html" class="prod ${big ? 'big' : 'std'}">
+    <a href="${artworkUrl(a)}" class="prod ${big ? 'big' : 'std'}">
       <div class="prod-img">
         <span class="prod-id">${attr(a.code)}</span>
         <span class="prod-edition">${attr(a.editionLabel)}</span>
@@ -344,7 +357,7 @@ function sitemap(all) {
     ['workshop.html',      '0.8'],
     ['about.html',         '0.7'],
     ['journal.html',       '0.7'],
-    ...all.map(a => [`${a.slug}.html`, '0.6']),
+    ...all.map(a => [artworkUrl(a), '0.6']),
   ];
   return '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
@@ -534,7 +547,148 @@ function wireframeSVG(geo, { size = 300, rotX = -0.42, rotY = 0.62, pad = 14 } =
            verts: verts.length, faces: faces.length };
 }
 
-/* ── the three projects (landing page intro) ───────────────────────────── */
+/* ── SuperAdobe: a course stack laid from the build rule ───────────────────
+   Superadobe has no photographs here either, and it does not need any: a
+   structure is fully described by its span, the section of the sack it is laid
+   from, and how the profile closes.
+
+     dome      pointed, struck the way every conventional superadobe dome is —
+               the compass sits on the outer edge of the base sack on the far
+               side, so the radius of rotation is rr = 2·rb + sw and the two
+               arcs cross on the axis
+     vault     the same wall run along a length, closing on the catenary a
+               barrel stands in
+     cylinder  a straight drum, left open at the top
+
+   The build lays the courses, then draws them. Everything printed under a
+   drawing — the course count and the running metres of sack — is measured off
+   the stack that got drawn, so a caption cannot drift from its picture. */
+
+const SACK_W = 0.45;   // width of the tube once tamped, m — the generator's default
+const SACK_H = 0.13;   // height of one course once tamped, m
+
+/** Where a profile's inner face sits at height `y`. 0 once it has closed. */
+function profileAt(type, rb, y, h) {
+  if (type === 'cylinder') return y <= h ? rb : 0;
+  if (type === 'dome') {
+    const rr = 2 * rb + SACK_W;
+    return Math.max(Math.sqrt(Math.max(rr * rr - y * y, 0)) - (rb + SACK_W), 0);
+  }
+  const c = 2;                                   // catenary, taut enough to stand
+  const t = Math.cosh(c) - (y / h) * (Math.cosh(c) - 1);
+  return t <= 1 ? 0 : (rb / c) * Math.acosh(t);
+}
+
+/** How high a profile reaches before it closes on the axis, m. */
+function profileHeight(type, rb, given) {
+  if (type === 'cylinder') return given;
+  if (type === 'dome') {
+    const rr = 2 * rb + SACK_W;
+    return Math.sqrt(rr * rr - (rb + SACK_W) * (rb + SACK_W));
+  }
+  return given || 1.25 * rb;
+}
+
+/** Lay the courses one sack high until the profile closes, measuring as we go. */
+function courseStack(spec) {
+  const rb = spec.span / 2;
+  const h  = profileHeight(spec.type, rb, spec.height);
+  const courses = [];
+  let sack = 0;
+  for (let y = 0; y < h + SACK_H; y += SACK_H) {
+    /* A drum is defined by its height, so it stops on the last whole course;
+       a dome and a vault run on until their profile closes on the axis. */
+    if (spec.type === 'cylinder' && y + SACK_H > h + 1e-9) break;
+    const inner = profileAt(spec.type, rb, y + SACK_H / 2, h);
+    if (inner <= 0) break;
+    /* A dome and a drum close a ring every course; a vault runs two straight
+       walls the length of the barrel. */
+    sack += spec.type === 'vault' ? 2 * spec.length
+                                  : 2 * Math.PI * (inner + SACK_W / 2);
+    courses.push({ y, inner, outer: inner + SACK_W });
+  }
+  /* A barrel is closed by a keystone course laid across what the two walls
+     left open. A dome and a drum are left open at the crown — a skylight is
+     what the generator gives you unless you tick "closed top". */
+  if (spec.type === 'vault' && courses.length) {
+    const top = courses[courses.length - 1];
+    courses.push({ y: top.y + SACK_H, inner: 0, outer: top.outer, closing: true });
+    sack += spec.length;
+  }
+  return { courses, height: h, sack };
+}
+
+/** The stack drawn: an elevation, or a section where the inside is the point. */
+function domeSVG(spec) {
+  const st   = courseStack(spec);
+  const W    = 300, PAD = 14;
+  const half = Math.max(...st.courses.map(c => c.outer));
+  const tall = st.courses.length * SACK_H;
+  const deep = spec.type === 'vault' ? half * 0.5 : 0;   // room for the run back
+  const box  = W - PAD * 2;
+  const s    = Math.min(box / (half * 2 + deep), box / (tall + deep * 0.5));
+  /* Whichever dimension didn't set the scale has room left over; split it, so
+     a squat drum and a tall dome both sit in the middle of their card. */
+  const cx   = PAD + (box - (half * 2 + deep) * s) / 2 + half * s;
+  const base = W - PAD - (box - (tall + deep * 0.5) * s) / 2;
+  const X = x => (cx + x * s).toFixed(1);
+  const Y = y => (base - y * s).toFixed(1);
+
+  const bh  = SACK_H * s;
+  const gap = Math.min(bh * 0.18, 1.1);
+  /* A dome tapers and a vault is cut open, so both read as what they are from
+     the silhouette alone. A drum has neither — straight sides, flat top — so
+     it gets the shading across the courses that says the wall turns away. */
+  const gid  = spec.type === 'cylinder' ? `drum-${String(spec.span).replace('.', '-')}` : '';
+  const fill = gid ? `url(#${gid})` : 'currentColor';
+  const bar = (x1, x2, y, o) =>
+    `<rect x="${X(x1)}" y="${(base - (y + SACK_H) * s + gap / 2).toFixed(1)}" ` +
+    `width="${((x2 - x1) * s).toFixed(1)}" height="${(bh - gap).toFixed(1)}" ` +
+    `rx="${((bh - gap) / 2).toFixed(1)}" fill="${fill}" fill-opacity="${o}"/>`;
+
+  /* A dome is the thing you stand in front of, so it is drawn as an elevation;
+     a vault and a drum are what you stand inside, so they are cut open and the
+     wall is drawn on both sides of the space it holds. Courses alternate weight
+     the way tamped sacks catch the light, and `dim` fades a whole stack — for
+     the end of the barrel standing behind the near one. */
+  const cut = spec.type === 'vault';
+  const courses = dim => st.courses.map((c, i) => {
+    const o = ((i % 2 ? 0.58 : 0.9) * dim).toFixed(2);
+    return cut && !c.closing
+      ? bar(-c.outer, -c.inner, c.y, o) + bar(c.inner, c.outer, c.y, o)
+      : bar(-c.outer, c.outer, c.y, o);
+  }).join('');
+
+  const body = [];
+  /* The far end of the barrel, seen through the near one — the same stack,
+     stepped back, so a vault reads as a run and not as a single arch. */
+  if (spec.type === 'vault') {
+    body.push(`<g transform="translate(${(deep * s).toFixed(1)},` +
+      `${(-deep * s / 2).toFixed(1)})">${courses(0.3)}</g>`);
+  }
+  body.push(courses(1));
+
+  const defs = gid ? `<defs><linearGradient id="${gid}">` +
+    '<stop offset="0" stop-color="currentColor" stop-opacity=".3"/>' +
+    '<stop offset=".4" stop-color="currentColor" stop-opacity="1"/>' +
+    '<stop offset="1" stop-color="currentColor" stop-opacity=".28"/>' +
+    '</linearGradient></defs>' : '';
+
+  return { svg: `<svg viewBox="0 0 ${W} ${W}" fill="none" aria-hidden="true">${defs}${body.join('')}</svg>`,
+           courses: st.courses.length, sack: Math.round(st.sack) };
+}
+
+/* ── the four projects (landing page intro) ────────────────────────────── */
+
+/** Inline a project's mark. The .svg in assets/img/ is the master and uses
+    fill="currentColor", so the drawing takes the section tint and follows the
+    night/day theme — the same rule the owl logo is inlined under. */
+function inlineMark(file) {
+  return read(`assets/img/${file}`).trim()
+    .replace(/^<\?xml[^>]*\?>\s*/, '')
+    .replace(/<svg\b/, '<svg class="sec-mark" aria-hidden="true"')
+    .replace(/\s*\n\s*/g, ' ');
+}
 
 function projectCards(projects, artworks, prints) {
   const counts = { '{{ARTWORKS}}': String(artworks.length),
@@ -572,9 +726,21 @@ function exampleCards(p, artworks, prints) {
           </div>
         </div>`;
     }
+    if (p.source === 'domes') {
+      const d = domeSVG(ex);
+      const size = ex.type === 'vault' ? `${ex.span} × ${ex.length} m` : `${ex.span} m`;
+      return `        <div class="ex ex-earth">
+          <div class="ex-media">${d.svg}</div>
+          <div class="ex-body">
+            <div class="ex-title">${attr(ex.label)}</div>
+            <div class="ex-spec">${size} · ${d.courses} courses · ${d.sack} m of sack</div>
+            <p>${attr(ex.note)}</p>
+          </div>
+        </div>`;
+    }
     if (p.source === 'artworks') {
       const a = artworks.find(a => a.slug === ex.slug);
-      return `        <a href="${a.slug}.html" class="ex ex-art">
+      return `        <a href="${artworkUrl(a)}" class="ex ex-art">
           <div class="ex-media"><img src="${photosOf(a)[0]}" alt="${attr(a.name)} sculpture" loading="lazy" decoding="async"></div>
           <div class="ex-body">
             <div class="ex-title">${attr(a.name)}</div>
@@ -615,16 +781,22 @@ function projectSections(projects, artworks, prints) {
     const side = i % 2 === 0 ? 'rail-left' : 'rail-right';
     const rel  = p.external ? ' target="_blank" rel="noopener"' : '';
     const meta = p.meta.map(m => `<span>${attr(m)}</span>`).join('');
+    /* `key` is "<ABBREVIATION> · <FIELD>": the tick down the rail takes the
+       abbreviation, the eyebrow above the heading takes the field — the name
+       itself is the heading now, so repeating it above would say it twice. */
+    const [abbr, ...rest] = p.key.split(' · ');
+    const mark = p.logo ? inlineMark(p.logo) : '';
     return `<!-- ── PROJECT · ${p.name.toUpperCase()} ── -->
 <section id="${attr(p.id)}" class="${side} proj-sec" style="--proj:${p.accent}">
   <div class="model-rail" data-section="${attr(p.id)}">
-    <span class="rail-tick top">· · · ${attr(p.key.split(' ')[0])} ↑</span>
-    <span class="rail-tick bot">· · · ${attr(p.key.split(' ')[0])} ↓</span>
+    <span class="rail-tick top">· · · ${attr(abbr)} ↑</span>
+    <span class="rail-tick bot">· · · ${attr(abbr)} ↓</span>
   </div>
   <div class="sec-head">
     <div>
-      <div class="sec-num">${String(i + 1).padStart(2, '0')} · ${attr(p.name)}</div>
-      <h2 class="sec-title">${attr(p.role)}</h2>
+      <div class="sec-num">${String(i + 1).padStart(2, '0')} · ${attr(rest.join(' · ') || p.name)}</div>
+      <h2 class="sec-title">${mark}${attr(p.name)}</h2>
+      <div class="sec-role">${attr(p.role)}</div>
     </div>
     <div class="sec-sub">${sub(attr(p.body))}</div>
   </div>
@@ -642,7 +814,8 @@ ${exampleCards(p, artworks, prints)}
 
 function checkProjects(projects, artworks, prints) {
   const problems = [];
-  const ok = new Set(['var(--accent)', 'var(--mirror)', 'var(--green)', 'var(--red)']);
+  const ok = new Set(['var(--accent)', 'var(--mirror)', 'var(--earth)',
+                      'var(--green)', 'var(--red)']);
   const ids = new Set();
   projects.forEach((p, i) => {
     const at = `project ${i + 1} ("${p.name || '?'}")`;
@@ -653,8 +826,8 @@ function checkProjects(projects, artworks, prints) {
     /* Three examples, each resolvable. */
     const ex = p.examples || [];
     if (ex.length !== 3) problems.push(`${at}: needs exactly 3 examples, has ${ex.length}`);
-    if (!['models', 'artworks', 'prints'].includes(p.source)) {
-      problems.push(`${at}: source must be "models", "artworks" or "prints"`);
+    if (!['models', 'domes', 'artworks', 'prints'].includes(p.source)) {
+      problems.push(`${at}: source must be "models", "domes", "artworks" or "prints"`);
     } else ex.forEach((e, n) => {
       const where = `${at} example ${n + 1}`;
       if (p.source === 'models') {
@@ -662,6 +835,17 @@ function checkProjects(projects, artworks, prints) {
         else if (!fs.existsSync(path.join(ROOT, 'assets/models', e.file))) {
           problems.push(`${where}: assets/models/${e.file} does not exist`);
         }
+        if (!e.label) problems.push(`${where}: missing "label"`);
+        if (!e.note)  problems.push(`${where}: missing "note"`);
+      } else if (p.source === 'domes') {
+        /* Anything the course stack needs to lay itself. A span that never
+           closes would otherwise draw an empty box. */
+        if (!['dome', 'vault', 'cylinder'].includes(e.type)) {
+          problems.push(`${where}: type must be "dome", "vault" or "cylinder"`);
+        }
+        if (!(e.span > 0)) problems.push(`${where}: missing "span" (inner diameter, m)`);
+        if (e.type === 'vault'    && !(e.length > 0)) problems.push(`${where}: a vault needs a "length" (m)`);
+        if (e.type === 'cylinder' && !(e.height > 0)) problems.push(`${where}: a cylinder needs a "height" (m)`);
         if (!e.label) problems.push(`${where}: missing "label"`);
         if (!e.note)  problems.push(`${where}: missing "note"`);
       } else if (p.source === 'artworks') {
@@ -681,6 +865,14 @@ function checkProjects(projects, artworks, prints) {
     });
     for (const f of ['key', 'status', 'name', 'role', 'body', 'href', 'cta', 'accent']) {
       if (!p[f]) problems.push(`${at}: missing "${f}"`);
+    }
+    /* The eyebrow reads the field out of `key`, the rail tick the abbreviation. */
+    if (p.key && !p.key.includes(' · ')) {
+      problems.push(`${at}: key "${p.key}" must read "<ABBREVIATION> · <FIELD>"`);
+    }
+    /* A mark is optional, but a named one has to be on disk. */
+    if (p.logo && !fs.existsSync(path.join(ROOT, 'assets/img', p.logo))) {
+      problems.push(`${at}: logo assets/img/${p.logo} does not exist`);
     }
     if (p.accent && !ok.has(p.accent)) {
       problems.push(`${at}: accent "${p.accent}" is not a colour index.html defines ` +
@@ -761,8 +953,10 @@ function checkRedirects(list, artworks) {
   const problems = [];
   const seen = new Set();
 
-  /* Real pages a redirect must never shadow, compared without a trailing slash. */
-  const own = new Set(['', ...artworks.map(a => `/${a.slug}.html`),
+  /* Real pages a redirect must never shadow, compared without a trailing slash.
+     Pieces live at /work/<slug>/ now; the old flat /<slug>.html URLs are no longer
+     pages, which is exactly why the map is allowed to redirect them. */
+  const own = new Set(['', ...artworks.map(a => `/${artworkUrl(a)}`.replace(/\/$/, '')),
     '/index.html', '/mirbreak.html', '/gallery.html', '/printing-lab.html',
     '/workshop.html', '/about.html', '/journal.html', '/404.html']);
 
@@ -822,11 +1016,16 @@ function willExist(artworks) {
   return new Set([
     'index.html', 'mirbreak.html', 'gallery.html', 'printing-lab.html',
     'workshop.html', 'about.html', 'journal.html', '404.html',
-    ...artworks.map(a => `${a.slug}.html`),
+    ...artworks.map(artworkFile),
   ]);
 }
-const hasPage = (f, artworks) =>
-  willExist(artworks).has(f) || fs.existsSync(path.join(ROOT, f));
+/** A target may be written as a directory (`work/adam/`), which resolves to the
+ *  index.html inside it — the form the redirect map and the grids both use. */
+const hasPage = (f, artworks) => {
+  const asFile = f.endsWith('/') ? f + 'index.html' : f;
+  return willExist(artworks).has(asFile) ||
+         fs.existsSync(path.join(ROOT, asFile));
+};
 
 /* ── sanity checks ─────────────────────────────────────────────────────── */
 
@@ -897,8 +1096,8 @@ function main() {
 
   const template = read('templates/artwork.html');
   for (const a of ARTWORKS) {
-    write(`${a.slug}.html`, artworkPage(template, a, ARTWORKS));
-    console.log(`  ✓ ${a.slug}.html`);
+    write(artworkFile(a), artworkPage(template, a, ARTWORKS));
+    console.log(`  ✓ ${artworkUrl(a)}`);
   }
 
   write('printing-lab.html', deathCulturePage(read('templates/printing-lab.html'), PRINTS));

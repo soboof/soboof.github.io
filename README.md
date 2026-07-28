@@ -9,15 +9,49 @@ published output stays static while adding a piece stays a one-file edit.
 
 | File | URL | Purpose |
 |---|---|---|
-| `index.html` | `/` | Landing page — studio overview: hero, the three projects, dossier, contact |
+| `index.html` | `/` | Landing page — studio overview: hero, the four projects, dossier, contact |
 | `mirbreak.html` | `/mirbreak.html` | Mirbreak — the sculpture project: work grid, working method |
 | `gallery.html` | `/gallery.html` | Full collection, filterable grid/list |
-| `<slug>.html` × 11 | `/<slug>.html` | One artwork page per piece — **generated**, see below |
+| `work/<slug>/` × 11 | `/work/<slug>/` | One artwork page per piece — **generated**, see below |
 | `printing-lab.html` | `/printing-lab.html` | Printing Lab — the hand-printing kiosk, currently showing Death Culture |
 | `workshop.html` | `/workshop.html` | Creatieve Workshop — Ayeneh-Kari course + booking form |
 | `journal.html` | `/journal.html` | Journal / writing |
 | `about.html` | `/about.html` | About the studio |
 | `404.html` | — | Served by GitHub Pages on unknown URLs |
+
+## Where things live
+
+CSS and the shared artwork JavaScript are files, not inline blocks:
+
+```
+assets/
+├── css/
+│   ├── artwork.css          shared by all 11 artwork pages
+│   ├── index.css  mirbreak.css  gallery.css  printing-lab.css
+│   └── workshop.css  about.css  journal.css  404.css
+├── js/
+│   ├── artwork.js           page builder, shared by all 11 artwork pages
+│   └── artwork-viewer.js    the three.js viewer module
+├── img/                     artwork photography + the logo
+└── models/                  3D geometry
+```
+
+One stylesheet per page, because the pages' CSS has genuinely diverged — no two of
+them share a single identical rule block, so there is no common core to hoist. Merging
+them into one `site.css` would mean reconciling nineteen variants of the same tokens by
+hand, which is a rewrite rather than a move; it is worth doing, but as its own job.
+
+The eleven artwork pages *were* byte-identical, so they now share one `artwork.css`,
+one `artwork.js` and one `artwork-viewer.js`. That took each artwork page from 80 KB to
+39 KB and turned ~408 KB of repeated payload into 41 KB fetched once and cached.
+
+What stays inline, deliberately:
+
+- the **JSON-LD** block and the generated **`PRODUCT`** object on each artwork page —
+  both are per-piece, and the structured data has to be in the raw HTML for crawlers
+- each page's own **page-specific JavaScript** (filters, 3D rails, lightboxes). It is
+  unique per page, so moving it would buy structure but no caching, and it sits in
+  ordered blocks alongside the theme toggle where a careless move changes behaviour.
 
 ## Soboof Studio — adding work without the terminal
 
@@ -55,7 +89,7 @@ you edit to add work.
 node build.js
 ```
 
-That writes `<slug>.html`, adds the piece to the gallery grid, recounts the filter chips,
+That writes `work/<slug>/index.html`, adds the piece to the gallery grid, recounts the filter chips,
 adds it to the homepage grid if `featured` is set, rebuilds the related-work links on every
 other artwork page, and adds it to `sitemap.xml`. Nothing else needs touching.
 
@@ -67,9 +101,9 @@ points at a photo that is not on disk, and it warns when a `metaDesc` falls outs
 |---|---|
 | `data/artworks.js` | The sculpture catalogue — **edit this** |
 | `data/prints.js` | The Death Culture print catalogue — **edit this** |
-| `data/projects.js` | The three projects introduced on the landing page — **edit this** |
+| `data/projects.js` | The four projects introduced on the landing page — **edit this** |
 | `data/redirects.js` | Old WordPress URL → new page map |
-| `templates/artwork.html` | Page shell with `{{TOKEN}}` placeholders — edit to change *every* artwork page |
+| `templates/artwork.html` | Page shell with `{{TOKEN}}` placeholders — edit to change *every* artwork page. `{{BASE}}` becomes `../../`, since a piece sits two directories down; use it on every link and asset path |
 | `templates/printing-lab.html` | Shell and prose for the Printing Lab page |
 | `build.js` | The generator |
 
@@ -80,7 +114,7 @@ the output.
 
 | Marker | Lives in | Holds |
 |---|---|---|
-| `projects` | `index.html` | the three project cards |
+| `projects` | `index.html` | the four project sections |
 | `home-grid` | `mirbreak.html` | the Mirbreak work grid |
 | `gallery-chips`, `gallery-grid` | `gallery.html` | filters and the full catalogue |
 
@@ -153,30 +187,44 @@ Pages from `main` / root at **https://soboof.github.io/**. Pushing to `main` red
 git push
 ```
 
-## The three projects
+## The four projects
 
 The landing page is a studio overview, not a Mirbreak page. Each project gets its own full
 section with three examples:
 
 ```
-hero → 01 · Pythagoras Engine → 02 · Mirbreak → 03 · Death Culture
-     → 04 · Dossier → 05 · Beyond the object → contact
+hero → 01 · Pythagoras Engine → 02 · SuperAdobe Generator → 03 · Mirbreak
+     → 04 · Death Culture → 05 · Dossier → 06 · Beyond the object → contact
 ```
 
 Mirbreak's own material — the work grid and the four working-method chapters — lives on
-`mirbreak.html`, so all three projects are reached the same way rather than one of them owning
+`mirbreak.html`, so all four projects are reached the same way rather than one of them owning
 the front page. Each section ends with a link to its project page (`mirbreak.html`,
-`printing-lab.html`, pythagorasengine.com); `gallery.html` stays the full filterable catalogue
-that `mirbreak.html` links onward to.
+`printing-lab.html`, pythagorasengine.com, `soboof.com/superadobe-generator/`); `gallery.html`
+stays the full filterable catalogue that `mirbreak.html` links onward to.
 
-All three sections are generated from **`data/projects.js`** — edit the copy there, never the
+The two software tools are external — they are their own sites, not pages in this repo — so
+their sections link out and the nav carries a button for each (`△ Builder`, `⬡ SuperAdobe`).
+
+All four sections are generated from **`data/projects.js`** — edit the copy there, never the
 markup in `index.html`. `source` decides where a project's three examples come from:
 
 | `source` | Each example is | Where the rest comes from |
 |---|---|---|
 | `models` | `{ file, label, note }` | a real file in `assets/models/` |
+| `domes` | `{ type, span, …, label, note }` | nothing — the build lays the courses from the spec |
 | `artworks` | `{ slug }` | `data/artworks.js` — photo, name, edition, dimensions |
 | `prints` | `{ img }` | `data/prints.js` — set name and caption |
+
+### Headings
+
+The section heading is the project's `name`; `role` sits under it as the sub-heading, and the
+eyebrow above reads the field out of `key` — which is always `<ABBREVIATION> · <FIELD>`, the
+abbreviation being what runs down the vertical rail. A project may also name a `logo` in
+`assets/img/`, drawn ahead of its name; the file on disk is the master and must use
+`fill="currentColor"`, so the mark takes the section tint and follows the night/day theme —
+the same rule the owl logo is inlined under. Only the two software tools have a logotype;
+Mirbreak and Death Culture have none, and the field is optional.
 
 So a caption is written once and reused; changing a piece's name or a print's caption updates the
 landing page on the next build. Each source is framed the way that medium already is elsewhere on
@@ -196,38 +244,67 @@ printed under each drawing are **measured from the file**, not typed in — so t
 To swap in a different model, drop the `.obj` or `.gltf` into `assets/models/` and name it in
 `data/projects.js`. Only the `label` and `note` are yours to write.
 
+### The SuperAdobe course stacks
+
+SuperAdobe has no photographs either, and needs none: a structure is fully described by its span,
+the section of the sack it is laid from, and how the profile closes. The build lays the courses —
+a 45 cm tube tamped to 13 cm, the generator's default — and draws the stack it laid.
+
+| `type` | Profile | Drawn as |
+|---|---|---|
+| `dome` | pointed, `rr = 2·rb + sw` struck from the outer edge of the base sack | elevation, crown left open as a skylight |
+| `vault` | catenary, run along `length` | section, with the far end of the barrel behind it |
+| `cylinder` | straight wall to `height` | elevation, shaded across the courses so the drum reads round |
+
+The course count and the running metres of sack printed under each drawing are **measured off
+the stack that got drawn**, not typed — a caption cannot drift from its picture. As with the
+wireframes there is no WebGL and no runtime cost, and the fill is `currentColor`, so each
+drawing takes its project tint and follows the theme.
+
 The build refuses to run on a missing model file, an unknown artwork slug, a print index that
-doesn't exist, a bad `source`, a duplicate section `id`, or any project that doesn't have exactly
-three examples.
+doesn't exist, a dome spec that can't be laid, a missing logo file, a bad `source`, a `key` that
+isn't `<ABBREVIATION> · <FIELD>`, a duplicate section `id`, or any project that doesn't have
+exactly three examples.
 
 Two tokens are substituted at build time so the counts can't drift: `{{ARTWORKS}}` becomes the
 number of pieces in `data/artworks.js`, `{{PRINTS}}` the number of sheets in `data/prints.js`.
 
-`accent` tints each card's top rule, index number, status and call to action. Only four colours
-exist in `index.html` — `var(--accent)`, `var(--mirror)`, `var(--green)`, `var(--red)` — and the
-build rejects anything else, because an undefined variable renders as no colour at all. It also
-rejects a missing field, an internal link to a page that doesn't exist, and a card marked
-`external` whose href isn't an absolute URL.
+`accent` tints each card's top rule, index number, status and call to action. Only five colours
+exist in `index.html` — `var(--accent)`, `var(--mirror)`, `var(--earth)`, `var(--green)`,
+`var(--red)` — and the build rejects anything else, because an undefined variable renders as no
+colour at all. It also rejects a missing field, an internal link to a page that doesn't exist,
+and a card marked `external` whose href isn't an absolute URL.
 
-Those four are theme-swapped so the small 10px labels stay legible on both backgrounds; the day
-palette deepens them, and `--red` was moved from `#c44444` to `#e05c5c` (night) / `#9e2b2b` (day)
-to clear WCAG AA. Nothing else used `--red`.
+The four a project can actually use are theme-swapped so the small 10px labels stay legible on
+both backgrounds; the day palette deepens them. `--red` was moved from `#c44444` to `#e05c5c`
+(night) / `#9e2b2b` (day) to clear WCAG AA, and `--earth` — added for SuperAdobe, the earthbag
+tan the generator brands itself with — is `#c98a4b` / `#8a5a22` for the same reason. It has to
+stay clear of `--mirror`'s day value, which is itself a deep green (`#1e7a45`), or the two
+software sections would be indistinguishable in day mode.
+
+`--green` is the exception: it is the same in both themes, so it is still only safe on the dark
+background (the status dot, a rail label) and a project should not tint itself with it.
 
 ## Old WordPress URLs
 
 Every URL soboof.com serves today is mapped in `data/redirects.js`, and `node build.js` turns each
 one into a real directory containing an `index.html` that forwards to the new page. GitHub Pages
 cannot issue 301s, so these use a `<link rel="canonical">` plus a zero-delay meta refresh and a
-`location.replace()` — which search engines treat as a permanent move. 46 URLs, ~121 KB total.
+`location.replace()` — which search engines treat as a permanent move. 58 URLs.
 
 | Old shape | Count | Goes to |
 |---|---|---|
-| `/gallery/<cat>/<product>/` | 11 | the matching artwork page |
+| `/gallery/<cat>/<product>/` | 11 | `work/<slug>/` |
+| `/<slug>.html` | 11 | `work/<slug>/` — the flat shape this repo published before the move |
 | `/product-category/…`, `/product-tag/…` | 17 | `gallery.html` |
-| `/category/…` | 6 | `journal.html`, except `/category/performance/` → `death-culture.html` |
+| `/category/…` | 6 | `journal.html`, except `/category/performance/` → `printing-lab.html` |
 | `/philosophizing/<post>/` | 3 | `journal.html` — until the posts are migrated |
-| `/performance/death-culture/` | 1 | `death-culture.html` |
+| `/performance/death-culture/` | 1 | `printing-lab.html` |
 | pages (`/about-me/`, `/blog/`, `/creatieve-workshop/`, …) | 8 | their counterparts |
+
+The eleven `/<slug>.html` entries exist because those URLs were live on
+`soboof.github.io` before the pieces moved into `/work/`. Their stubs overwrite the old
+page files, so nothing is left serving a stale copy and no old link 404s.
 
 Three product slugs changed and the map absorbs that: `lamp` → `abstract-table-lamp`,
 `geometrical-cat-statue` → `geometrical-cat`, `geometrical-mouse-home-decor` → `geometrical-mouse`.
@@ -319,8 +396,11 @@ Every indexable page carries:
 | `about.html` | `AboutPage` (with `Person`), `BreadcrumbList` |
 | `journal.html` | `Blog`, `BreadcrumbList` |
 | `workshop.html` | `Course` (with `CourseInstance`), `BreadcrumbList` |
-| `death-culture.html` | `CreativeWorkSeries` + `VisualArtwork`, `BreadcrumbList` |
+| `printing-lab.html` | `CreativeWorkSeries` + `VisualArtwork`, `BreadcrumbList` |
 | artwork pages | `VisualArtwork`, `BreadcrumbList` |
+
+`death-culture.html` is no longer a page — it is a redirect stub pointing at
+`printing-lab.html`, which carries that schema now.
 
 `404.html` is `noindex` and deliberately has no canonical or social tags.
 
@@ -353,7 +433,7 @@ journal entries because the journal has no individual post pages yet.
   only thing derived from price is which pieces answer the gallery's *On sale* filter.
 - The catalogue mirrors the 11 published WooCommerce products on soboof.com as of
   25 July 2026. Copy, dimensions, categories and edition labels came from that catalogue;
-  slugs are flat here (`/adam.html`) where WordPress nests them (`/gallery/statue/…/adam/`).
+  pieces live at `/work/adam/` here where WordPress nests them (`/gallery/statue/…/adam/`).
 - The official Soboof owl mark lives at `assets/img/soboof-logo.svg`. It is also inlined into
   every page's header, hero and footer, and encoded into the favicon. The inline copies use
   `fill="currentColor"` so the mark follows the theme — gold at night, purple by day. If the
