@@ -7,34 +7,71 @@ published output stays static while adding a piece stays a one-file edit.
 
 ## Pages
 
-| File | URL | Purpose |
+Every page is **generated**. You edit its body in `src/pages/` and its `<head>` block in
+`data/pages.js`; `node build.js` writes the file that ships.
+
+| Source | URL | Purpose |
 |---|---|---|
-| `index.html` | `/` | Landing page — studio overview: hero, the four projects, dossier, contact |
-| `mirbreak.html` | `/mirbreak.html` | Mirbreak — the sculpture project: work grid, working method |
-| `gallery.html` | `/gallery.html` | Full collection, filterable grid/list |
-| `work/<slug>/` × 11 | `/work/<slug>/` | One artwork page per piece — **generated**, see below |
-| `printing-lab.html` | `/printing-lab.html` | Printing Lab — the hand-printing kiosk, currently showing Death Culture |
-| `workshop.html` | `/workshop.html` | Creatieve Workshop — Ayeneh-Kari course + booking form |
-| `journal.html` | `/journal.html` | Journal / writing |
-| `about.html` | `/about.html` | About the studio |
-| `404.html` | — | Served by GitHub Pages on unknown URLs |
+| `src/pages/index.html` | `/` | Landing page — studio overview: hero, the four projects, dossier, contact |
+| `src/pages/mirbreak.html` | `/mirbreak/` | Mirbreak — the sculpture project: work grid, working method |
+| `src/templates/artwork.html` × 11 | `/work/<slug>/` | One artwork page per piece — from `data/artworks.js` |
+| `src/pages/printing-lab.html` | `/printing-lab/` | Printing Lab — the hand-printing kiosk, currently showing Death Culture |
+| `src/pages/workshop.html` | `/workshop/` | Creatieve Workshop — Ayeneh-Kari course + booking form |
+| `src/pages/journal.html` | `/journal/` | Journal / writing |
+| `src/pages/about.html` | `/about/` | About the studio |
+| `404.html` | — | Served by GitHub Pages on unknown URLs. Hand-written and left alone: it is `noindex` with no canonical or social tags, so it does not fit the shared `<head>` |
+
+Pages live in their own directory rather than as flat `.html` files, so the URLs have no
+extension. The old flat URLs (`/gallery.html`, `/about.html`, …) were live, so they are kept
+as redirects — see *Old WordPress URLs* below.
+
+**Every URL the build emits is root-relative** (`/assets/css/index.css`, `/gallery/`). That is
+what let the pages move down a directory without a single link being rewritten, and it is the
+rule to keep: a relative `assets/…` on a page at `/about/` would resolve to `/about/assets/…`.
+The only exception is the redirect stubs, which compute `../` hops from their own depth.
 
 ## Where things live
 
-CSS and the shared artwork JavaScript are files, not inline blocks:
+Source on the left, published output on the right. The repo root **is** the web root —
+GitHub Pages serves this repo from `main`/root — so generated pages sit alongside the
+source that makes them, and both are committed.
 
 ```
-assets/
+src/                          ← edit these
+├── pages/                    body copy, one file per page
+│   ├── index.html  mirbreak.html  printing-lab.html
+│   └── workshop.html  journal.html  about.html
+├── partials/                 the shared chrome, one copy of each
+│   ├── head.html             <head> — tokens filled from data/pages.js
+│   ├── header.html           nav; the current link and CTA are tokens
+│   ├── footer.html
+│   ├── chrome.html           status line + theme toggle button
+│   └── owl.html              the Soboof mark, tinted by {{cls}}
+└── templates/
+    └── artwork.html          the shell all 11 artwork pages use
+
+data/                         ← and these
+├── pages.js                  every page's <head>: title, description, canonical…
+├── artworks.js  prints.js  projects.js  redirects.js
+
+assets/                       ← served as-is
 ├── css/
-│   ├── artwork.css          shared by all 11 artwork pages
+│   ├── artwork.css           shared by all 11 artwork pages
 │   ├── index.css  mirbreak.css  gallery.css  printing-lab.css
 │   └── workshop.css  about.css  journal.css  404.css
 ├── js/
-│   ├── artwork.js           page builder, shared by all 11 artwork pages
-│   └── artwork-viewer.js    the three.js viewer module
-├── img/                     artwork photography + the logo
-└── models/                  3D geometry
+│   ├── theme.js              night/day toggle, shared by every page
+│   ├── artwork.js            page builder, shared by all 11 artwork pages
+│   └── artwork-viewer.js     the three.js viewer module
+├── img/                      artwork photography + the logos
+└── models/                   3D geometry
 ```
+
+Before this split the `<head>`, header and footer were pasted into all seven pages, and had
+already drifted: three of them still said *Mirbreak · Mirrored Sculpture* under the logo after
+the studio was rebranded, only the homepage carried the SuperAdobe nav link, and the owl mark
+was duplicated 22 times for 61 KB. There is now one copy of each, so that class of bug is
+gone — a change to the nav is a change to one file.
 
 One stylesheet per page, because the pages' CSS has genuinely diverged — no two of
 them share a single identical rule block, so there is no common core to hoist. Merging
@@ -89,9 +126,10 @@ you edit to add work.
 node build.js
 ```
 
-That writes `work/<slug>/index.html`, adds the piece to the gallery grid, recounts the filter chips,
+That writes `work/<slug>/index.html`, adds the piece to the Work grid on `/mirbreak/`, recounts the filter chips,
 adds it to the homepage grid if `featured` is set, rebuilds the related-work links on every
 other artwork page, and adds it to `sitemap.xml`. Nothing else needs touching.
+`featured: 'big'` only decides how large a tile is now — every piece appears either way.
 
 The build refuses to run if a piece is missing a required field, has a duplicate slug, or
 points at a photo that is not on disk, and it warns when a `metaDesc` falls outside the
@@ -103,20 +141,24 @@ points at a photo that is not on disk, and it warns when a `metaDesc` falls outs
 | `data/prints.js` | The Death Culture print catalogue — **edit this** |
 | `data/projects.js` | The four projects introduced on the landing page — **edit this** |
 | `data/redirects.js` | Old WordPress URL → new page map |
-| `templates/artwork.html` | Page shell with `{{TOKEN}}` placeholders — edit to change *every* artwork page. `{{BASE}}` becomes `../../`, since a piece sits two directories down; use it on every link and asset path |
-| `templates/printing-lab.html` | Shell and prose for the Printing Lab page |
+| `src/templates/artwork.html` | Page shell with `{{TOKEN}}` placeholders — edit to change *every* artwork page. Links and asset paths are root-relative, so there is no base-path token to remember |
+| `src/pages/printing-lab.html` | Body and prose for the Printing Lab page |
+| `data/pages.js` | Every page's `<head>` — title, description, canonical, social tags — **edit this** |
+| `src/partials/*.html` | The chrome every page shares — edit once, changes everywhere |
 | `build.js` | The generator |
 
-In `gallery.html`, `index.html` and `mirbreak.html` only the regions between `<!-- BUILD:name -->`
+In the `src/pages` files only the regions between `<!-- BUILD:name -->`
 and `<!-- /BUILD:name -->` are rewritten; hand-written copy outside those markers survives a
 rebuild. Generated `<slug>.html` files are overwritten wholesale — edit the template, never
 the output.
 
 | Marker | Lives in | Holds |
 |---|---|---|
-| `projects` | `index.html` | the four project sections |
-| `home-grid` | `mirbreak.html` | the Mirbreak work grid |
-| `gallery-chips`, `gallery-grid` | `gallery.html` | filters and the full catalogue |
+| `hero-tools` | `src/pages/index.html` | the row of tool marks under the hero |
+| `projects` | `src/pages/index.html` | the four project sections |
+| `work-chips` | `src/pages/mirbreak.html` | the filter chips above the Work grid |
+| `home-grid` | `src/pages/mirbreak.html` | the Work grid — the whole catalogue |
+| `work-chips`, `home-grid` | `src/pages/mirbreak.html` | the filter chips and the full catalogue |
 
 Re-running the build with no data changes produces no diff, so it is safe to run any time.
 
@@ -135,7 +177,7 @@ the container so that later print projects have somewhere to go without renaming
 
 `printing-lab.html` is the studio's third strand — a hand-printing kiosk performance, worked in
 cut lino and ink rather than mirror. Like the artwork pages it is **generated**, from
-`data/prints.js` + `templates/printing-lab.html`.
+`data/prints.js` + `src/pages/printing-lab.html`.
 
 ### Adding a poster
 
@@ -155,7 +197,7 @@ caption — the second case would otherwise leave a scan silently invisible on t
 The stamp collection section (cypress, hound, bird, mountain, flame, cloud) has been **taken off the
 page**. Its `motifs` array is still in `data/prints.js` because those descriptions are the only
 written record of what each block means, but nothing renders it. To bring the section back, restore
-the `03 · The stamp collection` block in `templates/printing-lab.html` with a `{{MOTIF_GRID}}` token
+the `03 · The stamp collection` block in `src/pages/printing-lab.html` with a `{{MOTIF_GRID}}` token
 and the `motifGrid()` renderer in `build.js`; to drop it for good, delete the array.
 
 ### Print sources
@@ -169,7 +211,7 @@ and the `motifGrid()` renderer in `build.js`; to drop it for good, delete the ar
 The originals are image-only PDFs with no text layer; the JPEGs were pulled out of them and resized
 to fit 1600px (25 sheets, 4.8 MB total, down from ~20 MB).
 
-The prose — statement, kiosk section, CTA — lives in `templates/printing-lab.html`. The artist
+The prose — statement, kiosk section, CTA — lives in `src/pages/printing-lab.html`. The artist
 statement there is reproduced verbatim from the WordPress post at
 `soboof.com/performance/death-culture/`; once WordPress is switched off, the template becomes the
 only copy, so keep it.
@@ -197,11 +239,30 @@ hero → 01 · Pythagoras Engine → 02 · SuperAdobe Generator → 03 · Mirbre
      → 04 · Death Culture → 05 · Dossier → 06 · Beyond the object → contact
 ```
 
+How the four relate is deliberate, and the copy states it in both directions:
+
+| Project | Field (`key`) | Relationship |
+|---|---|---|
+| Pythagoras Engine | `SOFTWARE` | **Paired with Mirbreak** — it grows the bodies Mirbreak tiles |
+| SuperAdobe Generator | `PROCEDURAL DESIGN` | **Stands alone** — not related to the Engine |
+| Mirbreak | `SCULPTURE` | **Paired with the Engine** — its bodies come from there |
+| Death Culture | `GRAPHIC DESIGN` | Stands alone |
+
+An earlier version presented the Engine and SuperAdobe as a matched pair of browser tools
+sharing "the same modular logic". That is wrong — they are unrelated, and the real pair is
+the Engine and Mirbreak. Do not reintroduce the link when editing this copy.
+
+The order is the order of `data/projects.js`, and two things follow from it and have to
+move with it: the section numbers, and the side each vertical rail sits on (they alternate
+from the first project, and `about` / `more` / `contact` continue the alternation by hand).
+The `STATES` array in `index.html`'s 3D scene script is **indexed by document order**, so
+reordering projects means reordering it to match, or the rail shows the wrong model.
+
 Mirbreak's own material — the work grid and the four working-method chapters — lives on
-`mirbreak.html`, so all four projects are reached the same way rather than one of them owning
-the front page. Each section ends with a link to its project page (`mirbreak.html`,
-`printing-lab.html`, pythagorasengine.com, `soboof.com/superadobe-generator/`); `gallery.html`
-stays the full filterable catalogue that `mirbreak.html` links onward to.
+`/mirbreak/`, so all four projects are reached the same way rather than one of them owning
+the front page. Each section ends with a link to its project page (`/mirbreak/`,
+`/printing-lab/`, pythagorasengine.com, `soboof.com/superadobe-generator/`); `/gallery/`
+stays the full filterable catalogue that `/mirbreak/` links onward to.
 
 The two software tools are external — they are their own sites, not pages in this repo — so
 their sections link out and the nav carries a button for each (`△ Builder`, `⬡ SuperAdobe`).
@@ -216,15 +277,24 @@ markup in `index.html`. `source` decides where a project's three examples come f
 | `artworks` | `{ slug }` | `data/artworks.js` — photo, name, edition, dimensions |
 | `prints` | `{ img }` | `data/prints.js` — set name and caption |
 
-### Headings
+### Headings and marks
 
 The section heading is the project's `name`; `role` sits under it as the sub-heading, and the
 eyebrow above reads the field out of `key` — which is always `<ABBREVIATION> · <FIELD>`, the
-abbreviation being what runs down the vertical rail. A project may also name a `logo` in
-`assets/img/`, drawn ahead of its name; the file on disk is the master and must use
-`fill="currentColor"`, so the mark takes the section tint and follows the night/day theme —
-the same rule the owl logo is inlined under. Only the two software tools have a logotype;
-Mirbreak and Death Culture have none, and the field is optional.
+abbreviation being what runs down the vertical rail.
+
+A project may also name a `logo` in `assets/img/`. The file on disk is the master and must use
+`fill="currentColor"`, so the mark takes the section tint and follows the night/day theme — the
+same rule the owl logo is inlined under. A logo is used in two places, both generated:
+
+- **behind the section heading**, enlarged and faint — the treatment the owl already gets
+  behind the hero headline. It is `pointer-events:none` and sits under the type, so it stays
+  decoration and never eats a click.
+- **in the row of marks under the hero**, where it links to that project's own site.
+
+The row follows the data: anything with a `logo` appears in it, so adding a mark is a one-file
+edit. Only the two software tools have a logotype today — Mirbreak and Death Culture have none,
+so the field is optional and they simply don't appear in the row.
 
 So a caption is written once and reused; changing a piece's name or a print's caption updates the
 landing page on the next build. Each source is framed the way that medium already is elsewhere on
@@ -290,17 +360,23 @@ background (the status dot, a rail label) and a project should not tint itself w
 Every URL soboof.com serves today is mapped in `data/redirects.js`, and `node build.js` turns each
 one into a real directory containing an `index.html` that forwards to the new page. GitHub Pages
 cannot issue 301s, so these use a `<link rel="canonical">` plus a zero-delay meta refresh and a
-`location.replace()` — which search engines treat as a permanent move. 58 URLs.
+`location.replace()` — which search engines treat as a permanent move. 63 URLs.
 
 | Old shape | Count | Goes to |
 |---|---|---|
 | `/gallery/<cat>/<product>/` | 11 | `work/<slug>/` |
 | `/<slug>.html` | 11 | `work/<slug>/` — the flat shape this repo published before the move |
-| `/product-category/…`, `/product-tag/…` | 17 | `gallery.html` |
-| `/category/…` | 6 | `journal.html`, except `/category/performance/` → `printing-lab.html` |
-| `/philosophizing/<post>/` | 3 | `journal.html` — until the posts are migrated |
-| `/performance/death-culture/` | 1 | `printing-lab.html` |
-| pages (`/about-me/`, `/blog/`, `/creatieve-workshop/`, …) | 8 | their counterparts |
+| `/<page>.html` | 6 | `/<page>/` — the flat shape used before pages moved into directories |
+| `/product-category/…`, `/product-tag/…` | 17 | `/mirbreak/` |
+| `/category/…` | 6 | `/journal/`, except `/category/performance/` → `/printing-lab/` |
+| `/philosophizing/<post>/` | 3 | `/journal/` — until the posts are migrated |
+| `/performance/death-culture/` | 1 | `/printing-lab/` |
+| pages (`/about-me/`, `/blog/`, `/creatieve-workshop/`, …) | 7 | their counterparts |
+
+`/gallery/` is a redirect as well now: the catalogue it used to hold is the Work section of
+`/mirbreak/`, so the 20 URLs that pointed at the gallery point there instead. Its nested
+children (`/gallery/abstract/…`) are untouched — a page and a tree of redirects can share a
+directory, since only the `index.html` is taken.
 
 The eleven `/<slug>.html` entries exist because those URLs were live on
 `soboof.github.io` before the pieces moved into `/work/`. Their stubs overwrite the old
@@ -316,51 +392,46 @@ The redirect directories are generated, so don't hand-edit them. The build refus
 duplicate `from`, a `to` that doesn't exist, a path that would shadow a real page, a malformed
 path, or a directory that already holds unrelated files.
 
-### Custom domain (soboof.com) — not connected yet
+### Custom domain (soboof.com) — connected
 
-There is deliberately **no `CNAME` file** in this repo right now. GitHub Pages redirects
-`soboof.github.io` to whatever custom domain is configured, so a `CNAME` naming `soboof.com`
-would bounce every visitor to the WordPress site that still answers on that domain — making
-the new site impossible to preview.
+`CNAME` holds **`soboof.com`**, so that is where the site answers; `soboof.github.io`
+redirects to it. The DNS side of the cutover is done:
 
-When you are ready to switch off WordPress, do it in this order:
+- `A` records for the apex → `185.199.108.153`, `185.199.109.153`,
+  `185.199.110.153`, `185.199.111.153`
+- `CNAME` record for `www` → `soboof.github.io`
 
-1. At your domain registrar, point `soboof.com` at GitHub:
-   - `A` records for the apex → `185.199.108.153`, `185.199.109.153`,
-     `185.199.110.153`, `185.199.111.153`
-   - `CNAME` record for `www` → `soboof.github.io`
-2. Re-add the file: `echo soboof.com > CNAME`, then commit and push.
-3. In **Settings → Pages**, wait for the certificate, then tick **Enforce HTTPS**.
+**Leave `CNAME` alone.** Deleting it sends every visitor back to whatever answers on the
+domain, and it has already been removed and restored once. It is a tracked file like any
+other, so a careless `git add -A` after deleting it will publish the deletion.
 
-WordPress currently serves **`www.soboof.com`**, while every canonical in this repo is the bare
-apex `soboof.com`. Putting `soboof.com` in `CNAME` is what makes GitHub Pages redirect `www` to the
-apex for you — so keep the apex in that file and the two stay consistent. Flipping it (apex → www)
-would mean rewriting every canonical, `sitemap.xml` and the redirect map, so don't.
+The file holds the bare apex on purpose. Every canonical in this repo, `sitemap.xml` and the
+redirect map all use `soboof.com`, and putting the apex in `CNAME` is what makes Pages
+redirect `www` → apex for you. Flipping it (apex → www) would mean rewriting all of them,
+so don't.
 
-After the switch, spot-check a few old URLs — `/gallery/statue/christmas-gifts/space-fox/`,
-`/product-tag/one-of-a-kind/`, `/performance/death-culture/` — and re-submit `sitemap.xml` in
-Search Console.
-
-Until step 1, the site is only reachable at `soboof.github.io`, and soboof.com keeps
-serving WordPress exactly as it does today.
+Still worth confirming, if it has not been done: **Settings → Pages → Enforce HTTPS** is
+ticked once the certificate has been issued. Then spot-check a few old URLs —
+`/gallery/statue/christmas-gifts/space-fox/`, `/product-tag/one-of-a-kind/`,
+`/performance/death-culture/` — and re-submit `sitemap.xml` in Search Console.
 
 ## Local preview
 
-Because the homepage loads an OBJ model with `fetch()`, opening `index.html` straight from the
-file system leaves the 3D rail empty (browsers block `fetch` on `file://`). Everything else works.
-For a full preview, serve the folder over HTTP:
+The site **must** be served over HTTP now — opening a file from disk no longer works at all,
+because every link and asset path is root-relative (`/assets/css/index.css`), and on `file://`
+a leading slash means the root of the drive. The 3D rail also loads its model with `fetch()`,
+which browsers block on `file://` regardless.
 
 ```bash
 npx http-server -p 3001 -c-1 .
 ```
 
-**Use `http-server`, not `serve`.** Since the WordPress redirects landed, the repo contains both a
-file `gallery.html` and a directory `gallery/`. GitHub Pages serves those as two distinct URLs, and
-`http-server` does the same. `serve` does not: by default it rewrites `/gallery.html` to `/gallery`,
-which resolves to the directory and shows the redirect stub instead of the real gallery page —
-so the preview lies about what visitors will see. Its `cleanUrls: false` setting fixes that but
-then stops resolving directory indexes, breaking every redirect instead. Neither mode matches
-production, so avoid it here.
+**Use `http-server`, not `serve`.** The repo contains both a file `about.html` (a redirect)
+and a directory `about/` (the real page). GitHub Pages serves those as two distinct URLs and
+`http-server` does the same; `serve` rewrites `/about.html` to `/about` by default, so the
+preview would silently skip the redirect it is supposed to be testing. Its `cleanUrls: false`
+setting fixes that but then stops resolving directory indexes, breaking every page instead.
+Neither mode matches production, so avoid it here.
 
 ## Images
 
@@ -392,7 +463,6 @@ Every indexable page carries:
 |---|---|
 | `index.html` | `WebSite`, `Organization` |
 | `mirbreak.html` | `CreativeWorkSeries`, `BreadcrumbList` |
-| `gallery.html` | `CollectionPage`, `BreadcrumbList` |
 | `about.html` | `AboutPage` (with `Person`), `BreadcrumbList` |
 | `journal.html` | `Blog`, `BreadcrumbList` |
 | `workshop.html` | `Course` (with `CourseInstance`), `BreadcrumbList` |
@@ -430,7 +500,7 @@ journal entries because the journal has no individual post pages yet.
 - This is a **portfolio**, not a shop: no prices, cart, or checkout. Artwork pages invite an
   enquiry by email (`mirbreak@soboof.com`). Each piece does carry its WooCommerce `price`
   in `data/artworks.js` so the catalogue matches soboof.com, but nothing renders it — the
-  only thing derived from price is which pieces answer the gallery's *On sale* filter.
+  only thing derived from price is which pieces answer the *On sale* filter in the Work grid.
 - The catalogue mirrors the 11 published WooCommerce products on soboof.com as of
   25 July 2026. Copy, dimensions, categories and edition labels came from that catalogue;
   pieces live at `/work/adam/` here where WordPress nests them (`/gallery/statue/…/adam/`).

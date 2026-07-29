@@ -155,6 +155,35 @@ body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
 }
 .hero-desc strong{color:var(--accent);font-weight:500}
 .hero-actions{display:flex;gap:8px;margin-top:28px;flex-wrap:wrap}
+/* ── The tools' marks, in a line under the hero ──
+   One per project that has a logotype, each linking to that project's own
+   site. The mark keeps its project tint; the label only takes it on hover, so
+   the row reads as a set rather than as four competing colours. */
+.hero-tools{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-top:30px;padding-top:20px;max-width:520px;
+  border-top:1px solid var(--border);
+}
+.hero-tools-k{
+  font-family:var(--ff-m);font-size:9px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);margin-right:4px;
+}
+.hero-tool{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);
+  padding:7px 12px;border:1px solid var(--border);border-radius:6px;
+  transition:color .16s,border-color .16s,background .16s;
+}
+.hero-tool:hover{
+  color:var(--proj);border-color:var(--proj);
+  background:var(--card-inner);text-decoration:none;
+}
+.tool-mark{flex:none;height:19px;width:auto;color:var(--proj)}
+@media(max-width:560px){
+  .hero-tools{gap:8px}
+  .hero-tool{flex:1 1 auto;justify-content:center}
+}
 .pe-intro{
   margin-top:26px;max-width:560px;padding:14px 16px;
   border:1px solid var(--border);border-left:2px solid var(--mirror);border-radius:0 6px 6px 0;
@@ -294,10 +323,19 @@ section{max-width:1280px;margin:0 auto;padding:80px 28px;position:relative}
 }
 .sec-title .accent{color:var(--accent)}
 .sec-title .mirror{color:var(--mirror)}
-/* A project's own mark, ahead of its name. Sized in em so it tracks the
-   heading at every width, and baseline-aligned — both marks sit on their base
-   the way the type does. `currentColor` inside the file takes the tint. */
-.sec-mark{height:.74em;width:auto;margin-right:.32em;color:var(--proj)}
+/* A project's own mark, enlarged and set behind its heading — the treatment
+   the owl already gets behind the hero headline. It sits under the type and
+   takes no clicks, so it stays decoration; `currentColor` inside the file
+   takes the section tint and follows the theme. */
+.sec-id{position:relative}
+.sec-id > *{position:relative;z-index:1}
+.sec-mark{
+  position:absolute;z-index:0;left:0;top:50%;transform:translateY(-46%);
+  height:clamp(96px,12vw,158px);width:auto;
+  color:var(--proj);opacity:.14;pointer-events:none;
+}
+/* The light background swallows a faint mark, so give it a little more. */
+body.day .sec-mark{opacity:.18}
 /* What the section used to call its title, now under the name it belongs to. */
 .sec-role{
   font-family:var(--ff-m);font-size:13px;line-height:1.6;

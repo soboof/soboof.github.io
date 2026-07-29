@@ -1,0 +1,638 @@
+
+<canvas id="scene-canvas"></canvas>
+<div id="scene-state-hud"><span class="ssd"></span><span id="scene-state-lbl">SHADED · GOLD</span></div>
+
+<!-- Status & Theme toggle -->
+{{> chrome }}
+
+{{> header }}
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">SOBOOF · LEEUWARDEN, NL</div>
+    <div class="hero-headline">
+      {{> owl cls="hero-logo-bg" }}
+      <div class="hero-text">
+        <h1 style="font-weight: 500">
+          Think in<br>triangles.
+          <span class="line2" style="font-size: 44px">Bring in the light.</span>
+        </h1>
+      </div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-desc">
+      A design studio working in <strong>3D</strong>, <strong>graphics</strong>
+      and <strong>fabrication</strong> — made to be built with, not just bought.
+    </div>
+    <div class="hero-actions">
+      <a href="#pythagoras-engine" class="btn primary">The four projects →</a>
+      <a href="/mirbreak/" class="btn">See the sculptures</a>
+    </div>
+
+    <!-- ── the tools' own marks, generated from data/projects.js ── -->
+<!-- BUILD:hero-tools -->
+  <div class="hero-tools">
+    <span class="hero-tools-k">Tools</span>
+    <a href="https://pythagorasengine.com/builder" class="hero-tool" style="--proj:var(--mirror)" target="_blank" rel="noopener"><svg class="tool-mark" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62.27 53.93"> <path d="M31.13,0,0,53.93H62.27ZM15.62,44.55h-1V39.4h1Zm6-10h-1V29.4h1Zm5,10h-1V39.4h1Zm1-20h-1V19.39h1Zm4,10h-1V29.4h1Zm0-20h-1V9.38h1Zm4,4.86h1v5.14h-1Zm2,25.16h-1V39.4h1Zm4-10h-1V29.4h1Zm5,10V39.4h1v5.15Z" fill="currentColor"/> </svg><span>Pythagoras Engine</span></a>
+    <a href="https://soboof.com/superadobe-generator/" class="hero-tool" style="--proj:var(--earth)" target="_blank" rel="noopener"><svg class="tool-mark" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="9 8 46 48"> <rect x="9" y="48" width="46" height="8" rx="4" fill="currentColor"/> <rect x="10" y="38" width="44" height="8" rx="4" fill="currentColor" opacity=".7"/> <rect x="12.5" y="28" width="39" height="8" rx="4" fill="currentColor"/> <rect x="17" y="18" width="30" height="8" rx="4" fill="currentColor" opacity=".7"/> <rect x="24.5" y="8" width="15" height="8" rx="4" fill="currentColor"/> </svg><span>SuperAdobe Generator</span></a>
+  </div>
+<!-- /BUILD:hero-tools -->
+  </div>
+
+  <div class="model-rail" data-section="hero">
+    <span class="rail-tick top">· · · MIRROR ↑</span>
+    <span class="rail-tick bot">· · · MIRROR ↓</span>
+  </div>
+</div>
+
+<!-- ── MANIFEST STRIP ── -->
+<div class="manifest-wrap">
+  <div class="manifest">
+    <div class="eq-corner tl"></div><div class="eq-corner tr"></div>
+    <div class="eq-corner bl"></div><div class="eq-corner br"></div>
+    <div class="manifest-head">
+      <div class="manifest-id"><b>SYS::SOBOOF</b><br>v2025 · ACTIVE</div>
+    </div>
+    <div class="manifest-eqs">
+      <div class="manifest-eq">
+        <div class="manifest-eq-k">Geometric primitive</div>
+        <div class="manifest-eq-v">△ + ☼</div>
+      </div>
+      <div class="manifest-eq">
+        <div class="manifest-eq-k">Studio rule</div>
+        <div class="manifest-eq-v">make → don't consume</div>
+      </div>
+      <div class="manifest-eq">
+        <div class="manifest-eq-k">Output</div>
+        <div class="manifest-eq-v label">BUILD · RAISE · SCULPT · PRINT</div>
+      </div>
+    </div>
+    <div class="manifest-foot">BY SOBOOF<br>ENGINE · EARTH · MIRROR · PRESS</div>
+  </div>
+</div>
+
+<!-- ── THE FOUR PROJECTS — one section each, generated ── -->
+<!-- BUILD:projects -->
+<!-- ── PROJECT · PYTHAGORAS ENGINE ── -->
+<section id="pythagoras-engine" class="rail-left proj-sec" style="--proj:var(--mirror)">
+  <div class="model-rail" data-section="pythagoras-engine">
+    <span class="rail-tick top">· · · PE ↑</span>
+    <span class="rail-tick bot">· · · PE ↓</span>
+  </div>
+  <div class="sec-head">
+    <div class="sec-id">
+      <svg class="sec-mark" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62.27 53.93"> <path d="M31.13,0,0,53.93H62.27ZM15.62,44.55h-1V39.4h1Zm6-10h-1V29.4h1Zm5,10h-1V39.4h1Zm1-20h-1V19.39h1Zm4,10h-1V29.4h1Zm0-20h-1V9.38h1Zm4,4.86h1v5.14h-1Zm2,25.16h-1V39.4h1Zm4-10h-1V29.4h1Zm5,10V39.4h1v5.15Z" fill="currentColor"/> </svg>
+      <div class="sec-num">01 · SOFTWARE</div>
+      <h2 class="sec-title">Pythagoras Engine</h2>
+      <div class="sec-role">Procedural polyhedron builder</div>
+    </div>
+    <div class="sec-sub">The studio’s modular logic, running as software. Snap polyhedra face to face — tetrahedra, Johnson solids, prisms and cupolas — set height and rotation, then export the form you grew. The bodies behind Mirbreak are grown here.</div>
+  </div>
+  <div class="proj-bar">
+    <div class="proj-meta"><span>WEB</span><span>THREE.JS</span><span>FREE</span></div>
+    <span class="proj-status">LIVE</span>
+  </div>
+  <div class="ex-grid">
+        <div class="ex ex-wire">
+          <div class="ex-media"><svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><path d="M179.2 145.1L204.1 125.3M166.2 110.5L204.1 125.3M197.6 84.4L166.2 110.5M204.1 125.3L197.6 84.4M197.6 84.4L182.3 107.4M182.3 107.4L166.2 110.5M204.1 125.3L182.3 107.4" stroke-opacity="0.20" stroke-width="0.60"/><path d="M190.9 174.7L190.9 135.1M190.9 174.7L179.2 145.1M179.2 145.1L190.9 135.1M190.9 135.1L158.1 116.5M153.9 156.7L190.9 174.7M153.9 156.7L179.2 145.1M158.1 116.5L179.2 145.1M153.9 156.7L158.1 116.5M190.9 135.1L196.3 106.1M196.3 106.1L158.1 116.5M219.4 140.5L196.3 106.1M190.9 135.1L219.4 140.5M219.4 140.5L204.1 125.3M204.1 125.3L196.3 106.1M196.3 106.1L166.2 110.5M166.2 110.5L158.1 116.5M179.2 145.1L219.4 140.5M179.2 145.1L166.2 110.5M196.3 106.1L197.6 84.4" stroke-opacity="0.38" stroke-width="0.82"/><path d="M133.7 162.5L155.4 189.3M92.5 160.9L133.7 162.5M114.2 126L92.5 160.9M133.7 162.5L114.2 126M114.2 126L110.4 152.4M110.4 152.4L92.5 160.9M133.7 162.5L110.4 152.4M110.4 152.4L110.1 191.2M110.1 191.2L92.5 160.9M133.7 162.5L110.1 191.2M155.4 189.3L177.1 164.5M153.1 194.2L177.1 164.5M155.4 189.3L153.1 194.2M153.1 194.2L153.9 156.7M153.9 156.7L177.1 164.5M177.1 164.5L156.8 128.6M133.7 162.5L153.1 194.2M133.7 162.5L153.9 156.7M156.8 128.6L153.9 156.7M133.7 162.5L156.8 128.6M177.1 164.5L190.9 135.1M190.9 135.1L156.8 128.6M177.1 164.5L190.9 174.7M158.1 116.5L156.8 128.6" stroke-opacity="0.55" stroke-width="1.05"/><path d="M133.7 224.3L114.2 249.5M116.5 208.9L133.7 224.3M155.4 251.1L157.7 210.5M133.7 224.3L157.7 210.5M155.4 251.1L133.7 224.3M155.4 251.1L114.2 249.5M133.7 224.3L155.4 189.3M155.4 189.3L157.7 210.5M133.7 224.3L114.2 187.7M114.2 187.7L155.4 189.3M116.5 208.9L114.2 187.7M138.3 174L114.2 187.7M138.3 174L116.5 147.1M116.5 147.1L114.2 187.7M116.5 147.1L157.7 148.8M157.7 148.8L133.7 162.5M133.7 162.5L116.5 147.1M157.7 148.8L138.3 174M138.3 174L155.4 189.3M155.4 189.3L157.7 148.8M114.2 187.7L133.7 162.5M116.5 147.1L92.5 160.9M92.5 160.9L114.2 187.7M116.5 147.1L114.2 126M157.7 148.8L142.9 133.9M138.4 112.1L142.9 133.9M157.7 148.8L138.4 112.1M116.5 147.1L138.4 112.1M116.5 147.1L107.1 114.7M107.1 114.7L138.4 112.1M116.5 147.1L107 152.9M138.4 112.1L143.3 92.5M115.7 78.6L143.3 92.5M138.4 112.1L115.7 78.6M107.1 114.7L115.7 78.6M115.7 78.6L135.7 51.9M115.7 78.6L95.3 46.9M177.1 164.5L157.7 148.8M156.8 128.6L157.7 148.8M155.4 189.3L191.7 192.9M191.7 192.9L157.7 210.5M155.4 189.3L172.2 156.4M172.2 156.4L191.7 192.9M138.3 174L172.2 156.4M208.5 159.9L172.2 156.4M208.5 159.9L191.7 192.9M114.2 249.5L133.7 286M155.4 251.1L133.7 286" stroke-opacity="0.72" stroke-width="1.27"/><path d="M114.2 249.5L138.3 235.7M138.3 235.7L116.5 208.9M116.5 208.9L114.2 249.5M138.3 235.7L157.7 210.5M157.7 210.5L116.5 208.9M138.3 235.7L155.4 251.1M116.5 208.9L138.3 174M157.7 210.5L138.3 174M142.9 133.9L138.3 174M142.9 133.9L107.1 114.7M107.1 114.7L107 152.9M107 152.9L142.9 133.9M107 152.9L138.3 174M143.3 92.5L142.9 133.9M143.3 92.5L106.1 79.6M106.1 79.6L122.9 113.7M122.9 113.7L143.3 92.5M122.9 113.7L142.9 133.9M107.1 114.7L106.1 79.6M106.1 79.6L115.7 78.6M107.1 114.7L122.9 113.7M135.7 51.9L143.3 92.5M95.3 46.9L135.7 51.9M135.7 51.9L110.3 41.2M110.3 41.2L140 69.4M140 69.4L135.7 51.9M140 69.4L143.3 92.5M106.1 79.6L95.3 46.9M106.1 79.6L110.3 41.2M110.3 41.2L95.3 46.9M106.1 79.6L140 69.4M135.7 51.9L119 14M119 14L110.3 41.2M95.3 46.9L119 14M110.3 41.2L80.6 16.3M80.6 16.3L95.3 46.9M119 14L80.6 16.3M174.5 177.5L157.7 210.5M191.7 192.9L174.5 177.5M174.5 177.5L172.2 156.4M138.3 174L174.5 177.5M174.5 177.5L208.5 159.9M174.5 177.5L210.9 197.2M210.9 197.2L208.5 159.9M191.7 192.9L210.9 197.2M114.2 249.5L116.5 270.6M116.5 270.6L138.3 235.7M133.7 286L116.5 270.6M133.7 286L157.7 272.3M157.7 272.3L116.5 270.6M157.7 272.3L138.3 235.7M155.4 251.1L157.7 272.3" stroke-opacity="0.90" stroke-width="1.50"/></svg></div>
+          <div class="ex-body">
+            <div class="ex-title">M21</div>
+            <div class="ex-spec">52 vertices · 100 faces</div>
+            <p>Modules stacked along a single axis — the growth rule applied in one direction.</p>
+          </div>
+        </div>
+        <div class="ex ex-wire">
+          <div class="ex-media"><svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><path d="M66.5 195L124.4 163.8M181.1 137.2L182.2 178.7M182.2 178.7L124.4 163.8M182.2 178.7L230.5 181.4M182.2 178.7L226.8 129.5M226.8 129.5L230.5 181.4M286 150.1L226.8 129.5M124.4 163.8L71.8 129.7M66.5 195L71.8 129.7" stroke-opacity="0.20" stroke-width="0.60"/><path d="M66.5 195L104 211.2M37.7 208.6L66.5 195M124.4 163.8L104 211.2M124.4 163.8L169 202M181.1 137.2L124.4 163.8M182.2 178.7L169 202M230.5 181.4L181.1 137.2M181.1 137.2L226.8 129.5M243.4 120L226.8 129.5M243.4 120L286 150.1M230.5 181.4L286 150.1M124.4 163.8L116.9 104.1M124.4 163.8L72.7 152.5M72.7 152.5L66.5 195M66.5 195L14 159.5M71.8 129.7L72.7 152.5" stroke-opacity="0.38" stroke-width="0.82"/><path d="M72.7 152.5L37.7 208.6M104 211.2L72.7 152.5M37.7 208.6L104 211.2M169 202L104 211.2M169 202L134.2 156.7M134.2 156.7L181.1 137.2M124.4 163.8L134.2 156.7M169 202L181.1 137.2M169 202L230.5 181.4M181.1 137.2L243.4 120M230.5 181.4L243.4 120M116.9 104.1L134.2 156.7M72.7 152.5L116.9 104.1M14 159.5L72.7 152.5M37.7 208.6L14 159.5M14 159.5L16.4 152M116.9 104.1L53.2 88.8M72.7 152.5L53.2 88.8" stroke-opacity="0.55" stroke-width="1.05"/><path d="M76.4 186.5L72.7 152.5M37.7 208.6L76.4 186.5M76.4 186.5L104 211.2M134.2 156.7L104 211.2M116.9 104.1L91.4 111.6M72.7 152.5L134.2 156.7M82 176.4L72.7 152.5M91.4 111.6L72.7 152.5M72.7 152.5L82.8 183M104 211.2L82.8 183M16.4 152L72.7 152.5M37.7 208.6L16.4 152M70.6 182.5L72.7 152.5M37.7 208.6L70.6 182.5M53.2 88.8L91.4 111.6M53.2 88.8L28 131.2M72.7 152.5L28 131.2M72.7 152.5L74.9 174.7" stroke-opacity="0.72" stroke-width="1.27"/><path d="M91.4 111.6L134.2 156.7M134.2 156.7L82 176.4M91.4 111.6L82 176.4M82.8 183L134.2 156.7M16.4 152L70.6 182.5M28 131.2L91.4 111.6M28 131.2L74.9 174.7M74.9 174.7L91.4 111.6" stroke-opacity="0.90" stroke-width="1.50"/></svg></div>
+          <div class="ex-body">
+            <div class="ex-title">M22</div>
+            <div class="ex-spec">25 vertices · 46 faces</div>
+            <p>A short run of solids snapped face to face, each rotated against the last.</p>
+          </div>
+        </div>
+        <div class="ex ex-wire">
+          <div class="ex-media"><svg viewBox="0 0 300 300" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><path d="M254.9 110L248.8 78.2M254.9 110L224.2 105.1M269.6 113.3L254.9 110M269.6 113.3L224.2 105.1M269.6 113.3L192.8 101.1M263.5 126.1L269.6 113.3M269.6 113.3L264.7 124.4M235.7 181.6L269.6 113.3M247.5 124.5L233.9 151.9M233.9 151.9L216.7 141.3M216.7 141.3L247.5 124.5M216.8 119.6L216.7 141.3M216.8 119.6L247.5 124.5M247.5 124.5L269.6 113.3M269.6 113.3L233.9 151.9M192.8 101.1L247.5 124.5M81.6 118.2L65.5 126.2M65.5 126.2L49.2 118M49.2 118L32 112.4M35.5 130.1L32 112.4M49.2 118L35.5 130.1M14 110.5L20.2 122.7M20.2 122.7L21.6 126.1M20.2 122.7L35.5 130.1M32 112.4L20.2 122.7" stroke-opacity="0.20" stroke-width="0.60"/><path d="M235.7 181.6L144.8 178M144.8 178L192.8 101.1M192.8 101.1L235.7 181.6M224.2 105.1L256.2 108.2M256.2 108.2L248.8 78.2M248.8 78.2L224.2 105.1M256.2 108.2L254.9 110M272.8 108.9L254.9 110M272.8 108.9L269.6 113.3M224.2 105.1L192.8 101.1M192.8 101.1L256.2 108.2M192.8 101.1L272.8 108.9M249.9 153.4L263.5 126.1M263.5 126.1L286 148.1M286 148.1L249.9 153.4M264.7 124.4L286 148.1M263.5 126.1L264.7 124.4M264.7 124.4L249.9 153.4M249.9 153.4L235.7 181.6M235.7 181.6L263.5 126.1M272.8 108.9L249.9 153.4M272.8 108.9L235.7 181.6M233.9 151.9L216.8 119.6M233.9 151.9L235.7 181.6M235.7 181.6L216.8 119.6M192.8 101.1L216.8 119.6M209.8 112L192.8 101.1M163.2 133.3L171.8 149.4M181.4 134.1L163.2 133.3M171.8 149.4L144.8 178M144.8 178L182.4 143.4M171.8 149.4L181.4 134.1M181.4 134.1L192.8 101.1M192.8 101.1L171.8 149.4M181.4 134.1L170.8 140.1M170.8 140.1L163.2 133.3M171.8 149.4L170.8 140.1M171.8 149.4L156.1 148.8M156.1 148.8L170.8 140.1M156 147.2L156.1 148.8M145.2 136.5L156.1 148.8M156.1 148.8L154.4 132.1M154.4 132.1L170.8 140.1M163.2 133.3L145.2 136.5M154.4 132.1L145.2 136.5M163.2 133.3L154.4 132.1M156.1 148.8L140.8 144.3M140.8 144.3L154.4 132.1M139.8 153.9L140.8 144.3M156.1 148.8L139.8 153.9M139.8 153.9L128 140.3M128 140.3L140.8 144.3M140.8 144.3L137 126.8M137 126.8L154.4 132.1M145.2 136.5L139.8 153.9M145.2 136.5L128 140.3M137 126.8L128 140.3M145.2 136.5L137 126.8M140.8 144.3L125.5 136.6M125.5 136.6L137 126.8M125.2 153.7L125.5 136.6M140.8 144.3L125.2 153.7M125.2 153.7L111.7 142M111.7 142L125.5 136.6M125.5 136.6L119 125.5M119 125.5L137 126.8M128 140.3L125.2 153.7M128 140.3L111.7 142M119 125.5L111.7 142M128 140.3L119 125.5M125.5 136.6L109.5 128.2M109.5 128.2L119 125.5M111.4 145.7L109.5 128.2M125.5 136.6L111.4 145.7M111.4 145.7L96.2 140.1M96.2 140.1L109.5 128.2M109.5 128.2L100.9 127.6M100.9 127.6L119 125.5M111.7 142L111.4 145.7M111.7 142L96.2 140.1M100.9 127.6L96.2 140.1M111.7 142L100.9 127.6M109.5 128.2L92.6 121.5M92.6 121.5L100.9 127.6M97.2 132.3L92.6 121.5M109.5 128.2L97.2 132.3M97.2 132.3L81 134.4M81 134.4L92.6 121.5M92.6 121.5L83.3 131.5M83.3 131.5L100.9 127.6M96.2 140.1L97.2 132.3M96.2 140.1L81 134.4M83.3 131.5L81 134.4M96.2 140.1L83.3 131.5M92.6 121.5L74.8 118.3M74.8 118.3L83.3 131.5M81.6 118.2L74.8 118.3M92.6 121.5L81.6 118.2M65.5 126.2L74.8 118.3M74.8 118.3L66.6 134.4M66.6 134.4L83.3 131.5M81 134.4L81.6 118.2M81 134.4L65.5 126.2M66.6 134.4L65.5 126.2M81 134.4L66.6 134.4M74.8 118.3L56.6 119.1M56.6 119.1L66.6 134.4M64.1 108.2L56.6 119.1M74.8 118.3L64.1 108.2M64.1 108.2L49.2 118M49.2 118L56.6 119.1M56.6 119.1L50.7 134.2M50.7 134.2L66.6 134.4M65.5 126.2L64.1 108.2M50.7 134.2L49.2 118M65.5 126.2L50.7 134.2M56.6 119.1L38.7 122.5M38.7 122.5L50.7 134.2M45 105.6L38.7 122.5M56.6 119.1L45 105.6M45 105.6L32 112.4M32 112.4L38.7 122.5M38.7 122.5L35.5 130.1M35.5 130.1L50.7 134.2M49.2 118L45 105.6M38.7 122.5L21.6 126.1M21.6 126.1L35.5 130.1M25.5 110.4L21.6 126.1M38.7 122.5L25.5 110.4M25.5 110.4L14 110.5M14 110.5L21.6 126.1M32 112.4L25.5 110.4M32 112.4L14 110.5M183.2 170.9L191.8 187M183.2 170.9L201.4 171.6M201.4 171.6L191.8 187M183.2 170.9L144.8 178M144.8 178L201.4 171.6M235.7 181.6L201.4 171.6M235.7 181.6L193.8 164.9M181.2 220.3L190.8 204.9M190.8 204.9L172.6 204.2M209 205.6L190.8 204.9M190.8 204.9L199.4 221M181.2 220.3L172.6 204.2M172.6 204.2L180.2 211M180.2 211L181.2 220.3M190.8 204.9L180.2 211M209 205.6L198.4 211.7M198.4 211.7L190.8 204.9M199.4 221L198.4 211.7M209 205.6L199.4 221M209 205.6L217.5 221.8M217.5 221.8L199.4 221M163 219.6L181.2 220.3M172.6 204.2L163 219.6M235.6 167.4L235.7 181.6M235.7 181.6L257.8 123.8" stroke-opacity="0.38" stroke-width="0.82"/><path d="M256.2 108.2L272.8 108.9M272.8 108.9L264.7 124.4M209.8 112L211.9 130.7M211.9 130.7L215.3 94.3M215.3 94.3L209.8 112M241.8 115.1L215.3 94.3M211.9 130.7L241.8 115.1M197.9 147.8L241.8 115.1M197.9 147.8L272.8 108.9M272.8 108.9L241.8 115.1M192.8 101.1L211.9 130.7M192.8 101.1L197.9 147.8M209.8 112L241.8 115.1M272.8 108.9L209.8 112M232.1 111.1L216.1 109.6M216.1 109.6L231 101.8M231 101.8L232.1 111.1M216.1 109.6L217.8 91.4M217.8 91.4L231 101.8M217.8 91.4L233.8 93M233.8 93L231 101.8M233.8 93L232.1 111.1M216.1 109.6L218.8 100.7M218.8 100.7L217.8 91.4M218.8 100.7L233.8 93M218.8 100.7L232.1 111.1M216.1 109.6L209.8 112M209.8 112L218.8 100.7M215.3 94.3L218.8 100.7M232.1 111.1L241.8 115.1M241.8 115.1L216.1 109.6M215.3 94.3L232.1 111.1M171.8 149.4L164.2 142.7M164.2 142.7L163.2 133.3M173.8 127.3L181.4 134.1M163.2 133.3L173.8 127.3M182.4 143.4L171.8 149.4M144.8 178L197.9 147.8M197.9 147.8L182.4 143.4M181.4 134.1L182.4 143.4M197.9 147.8L181.4 134.1M182.4 143.4L172.8 158.8M172.8 158.8L171.8 149.4M172.8 158.8L164.2 142.7M173.8 127.3L192 128M192 128L181.4 134.1M192 128L182.4 143.4M164.2 142.7L154.7 127.1M154.7 127.1L163.2 133.3M165.3 130.6L154.7 127.1M164.2 142.7L165.3 130.6M165.3 130.6L164.9 113.9M164.9 113.9L154.7 127.1M164.9 113.9L163.6 115.5M163.6 115.5L154.7 127.1M163.6 115.5L163.2 133.3M164.2 142.7L173.8 127.3M173.8 127.3L165.3 130.6M173.8 127.3L164.9 113.9M173.8 127.3L163.6 115.5M182.4 143.4L183.4 152.7M183.4 152.7L172.8 158.8M183.4 152.7L174.8 136.6M174.8 136.6L165.2 152M165.2 152L183.4 152.7M174.8 136.6L164.2 142.7M164.2 142.7L165.2 152M172.8 158.8L165.2 152M173.8 127.3L184.4 121.2M184.4 121.2L192 128M173.8 127.3L174.8 136.6M174.8 136.6L184.4 121.2M174.8 136.6L193 137.3M193 137.3L184.4 121.2M193 137.3L192 128M193 137.3L182.4 143.4M183.4 152.7L173.8 168.1M173.8 168.1L172.8 158.8M165.2 152L173.8 168.1M193 137.3L183.4 152.7M171.8 149.4L156 147.2M156 147.2L145.2 136.5M163.2 133.3L156 147.2M193.8 164.9L183.2 170.9M183.2 170.9L184.2 180.3M184.2 180.3L193.8 164.9M191.8 187L184.2 180.3M202.4 181L193.8 164.9M184.2 180.3L202.4 181M202.4 181L191.8 187M201.4 171.6L202.4 181M201.4 171.6L193.8 164.9M193.8 164.9L197.9 147.8M197.9 147.8L183.2 170.9M235.7 181.6L197.9 147.8M191.8 187L183.2 198.2M183.2 198.2L184.2 180.3M191.8 187L201.4 198.9M201.4 198.9L183.2 198.2M193.8 192.1L184.2 180.3M183.2 198.2L193.8 192.1M202.4 181L201.4 198.9M193.8 192.1L201.4 198.9M202.4 181L193.8 192.1M201.4 198.9L191.8 214.3M191.8 214.3L183.2 198.2M191.8 214.3L202.4 208.2M202.4 208.2L184.2 207.5M184.2 207.5L191.8 214.3M202.4 208.2L201.4 198.9M193.8 192.1L202.4 208.2M183.2 198.2L184.2 207.5M184.2 207.5L193.8 192.1M202.4 208.2L194.8 201.4M194.8 201.4L184.2 207.5M193.8 192.1L194.8 201.4M183.2 198.2L173.6 213.5M173.6 213.5L184.2 207.5M173.6 213.5L191.8 214.3M202.4 208.2L210 215M210 215L201.4 198.9M191.8 214.3L210 215M173.6 213.5L181.2 220.3M181.2 220.3L191.8 214.3M190.8 204.9L191.8 214.3M172.6 204.2L173.6 213.5M183.2 198.2L172.6 204.2M183.2 198.2L190.8 204.9M201.4 198.9L190.8 204.9M201.4 198.9L209 205.6M199.4 221L191.8 214.3M210 215L209 205.6M199.4 221L210 215M193.8 192.1L186.3 185.3M193.8 192.1L175.7 191.4M175.7 191.4L186.3 185.3M184.2 207.5L175.7 191.4M176.7 200.7L175.7 191.4M184.2 207.5L176.7 200.7M210 215L217.5 221.8M175.7 191.4L168.1 184.6M168.1 184.6L157.5 190.7M157.5 190.7L158.5 200M166.1 206.8L176.7 200.7M158.5 200L166.1 206.8M175.7 191.4L157.5 190.7M166.1 206.8L157.5 190.7M175.7 191.4L166.1 206.8M157.5 190.7L147.9 206.1M147.9 206.1L158.5 200M166.1 206.8L147.9 206.1M173.6 213.5L163 219.6M212.9 147.1L235.6 167.4M235.6 167.4L238.7 195.4M238.7 195.4L212.9 147.1M235.6 167.4L283.6 172.1M283.6 172.1L238.7 195.4M235.6 167.4L257.8 123.8M257.8 123.8L283.6 172.1M257.8 123.8L212.9 147.1M272.8 108.9L257.8 123.8M197.9 147.8L235.6 167.4M272.8 108.9L212.9 147.1" stroke-opacity="0.55" stroke-width="1.05"/><path d="M211.9 130.7L197.9 147.8M186.3 185.3L194.8 201.4M194.8 201.4L176.7 200.7M194.8 201.4L187.3 194.6M187.3 194.6L176.7 200.7M186.3 185.3L187.3 194.6M168.1 184.6L186.3 185.3M169.1 193.9L176.7 200.7M187.3 194.6L169.1 193.9M187.3 194.6L178.7 178.5M178.7 178.5L169.1 193.9M186.3 185.3L178.7 178.5M168.1 184.6L178.7 178.5M168.1 184.6L160.5 177.8M160.5 177.8L178.7 178.5M169.1 193.9L160.5 177.8M168.1 184.6L169.1 193.9M158.5 200L168.1 184.6M176.7 200.7L158.5 200M158.5 200L169.1 193.9M283.6 172.1L260.9 151.8M260.9 151.8L238.7 195.4M257.8 123.8L260.9 151.8M212.9 147.1L260.9 151.8M212.9 147.1L197.9 147.8M212.9 147.1L214.8 144.4M212.9 147.1L192.6 188.1M238.7 195.4L192.6 188.1M238.7 195.4L240.5 192.8M208.2 179.4L192.6 188.1" stroke-opacity="0.72" stroke-width="1.27"/><path d="M214.8 144.4L260.9 151.8M192.6 188.1L214.8 144.4M240.5 192.8L260.9 151.8M214.8 144.4L240.5 192.8M240.5 192.8L192.6 188.1M221 188.6L223.5 170.5M223.5 170.5L210.5 177.1M210.5 177.1L221 188.6M207.1 162.5L210.5 177.1M223.5 170.5L207.1 162.5M207.1 162.5L194.5 175.6M194.5 175.6L210.5 177.1M194.5 175.6L203.1 191.7M203.1 191.7L210.5 177.1M203.1 191.7L221 188.6M211.5 194.1L221 188.6M203.1 191.7L211.5 194.1M224.2 181L223.5 170.5M221 188.6L224.2 181M211.5 194.1L224.2 181M224.2 181L215.6 164.9M215.6 164.9L223.5 170.5M215.6 164.9L207.1 162.5M215.6 164.9L197.6 168M197.6 168L207.1 162.5M197.6 168L194.5 175.6M197.6 168L195.1 186M195.1 186L194.5 175.6M195.1 186L203.1 191.7M195.1 186L211.5 194.1M211.5 194.1L208.2 179.4M208.2 179.4L224.2 181M215.6 164.9L208.2 179.4M208.2 179.4L197.6 168M208.2 179.4L195.1 186M192.6 188.1L224.2 181M240.5 192.8L224.2 181M215.6 164.9L214.8 144.4M214.8 144.4L208.2 179.4M240.5 192.8L215.6 164.9" stroke-opacity="0.90" stroke-width="1.50"/></svg></div>
+          <div class="ex-body">
+            <div class="ex-title">PE MODEL</div>
+            <div class="ex-spec">140 vertices · 278 faces</div>
+            <p>Branching in more than one direction until the form closes on itself.</p>
+          </div>
+        </div>
+  </div>
+  <a href="https://pythagorasengine.com/builder" class="btn primary proj-go" target="_blank" rel="noopener">Open the builder &rarr;</a>
+</section>
+
+<!-- ── PROJECT · MIRBREAK ── -->
+<section id="mirbreak" class="rail-right proj-sec" style="--proj:var(--accent)">
+  <div class="model-rail" data-section="mirbreak">
+    <span class="rail-tick top">· · · MB ↑</span>
+    <span class="rail-tick bot">· · · MB ↓</span>
+  </div>
+  <div class="sec-head">
+    <div class="sec-id">
+      <div class="sec-num">02 · SCULPTURE</div>
+      <h2 class="sec-title">Mirbreak</h2>
+      <div class="sec-role">Mirrored modular sculptures</div>
+    </div>
+    <div class="sec-sub">Hand-cut mirror tiles mounted on modular 3D-printed bodies grown in the Pythagoras Engine, using the centuries-old Ayeneh-Kari technique. Every face holds a triangular fragment of the room, so the piece changes as you move around it.</div>
+  </div>
+  <div class="proj-bar">
+    <div class="proj-meta"><span>MIRROR</span><span>PLA</span><span>ONE-OFF</span></div>
+    <span class="proj-status">11 PIECES</span>
+  </div>
+  <div class="ex-grid">
+        <a href="work/space-fox/" class="ex ex-art">
+          <div class="ex-media"><img src="/assets/img/space-fox-01.jpg" alt="Space Fox sculpture" loading="lazy" decoding="async"></div>
+          <div class="ex-body">
+            <div class="ex-title">Space Fox</div>
+            <div class="ex-spec">One of a kind · 16×20×18 cm</div>
+            <p>Prowling the void between matter and imagination.</p>
+          </div>
+        </a>
+        <a href="work/simorgh-phoenix/" class="ex ex-art">
+          <div class="ex-media"><img src="/assets/img/simorgh-phoenix-01.jpg" alt="Simorgh (Phoenix) sculpture" loading="lazy" decoding="async"></div>
+          <div class="ex-body">
+            <div class="ex-title">Simorgh (Phoenix)</div>
+            <div class="ex-spec">1st edition · 22×22×18 cm</div>
+            <p>A benevolent bird of Persian myth, reassembled in mirror.</p>
+          </div>
+        </a>
+        <a href="work/the-owl-statue/" class="ex ex-art">
+          <div class="ex-media"><img src="/assets/img/the-owl-statue-01.jpg" alt="The Owl Statue sculpture" loading="lazy" decoding="async"></div>
+          <div class="ex-body">
+            <div class="ex-title">The Owl Statue</div>
+            <div class="ex-spec">One of a kind · 16×20×18 cm</div>
+            <p>A guardian of thresholds between knowledge and mystery.</p>
+          </div>
+        </a>
+  </div>
+  <a href="/mirbreak/" class="btn primary proj-go">Inside Mirbreak &rarr;</a>
+</section>
+
+<!-- ── PROJECT · DEATH CULTURE ── -->
+<section id="death-culture" class="rail-left proj-sec" style="--proj:var(--red)">
+  <div class="model-rail" data-section="death-culture">
+    <span class="rail-tick top">· · · DC ↑</span>
+    <span class="rail-tick bot">· · · DC ↓</span>
+  </div>
+  <div class="sec-head">
+    <div class="sec-id">
+      <div class="sec-num">03 · GRAPHIC DESIGN</div>
+      <h2 class="sec-title">Death Culture</h2>
+      <div class="sec-role">Hand-printing kiosk · with Ju Bergman</div>
+    </div>
+    <div class="sec-sub">Six carved lino stamps: cypress, hound, bird of prey, mountain, flame, cloud. They are printed live on site while visitors help place the body bags on the paper. 25 sheets documented so far, across two collections.</div>
+  </div>
+  <div class="proj-bar">
+    <div class="proj-meta"><span>LINO</span><span>A4</span><span>LIVE</span></div>
+    <span class="proj-status">ONGOING</span>
+  </div>
+  <div class="ex-grid">
+        <a href="/printing-lab/" class="ex ex-print">
+          <div class="ex-media"><img src="/assets/img/death-culture/death-culture-04.jpg" alt="Bird of prey, ornamented hound and mountains, layered in grey and gold over a printed field." loading="lazy" decoding="async"></div>
+          <div class="ex-body">
+            <div class="ex-title">Death Culture · 04</div>
+            <div class="ex-spec">Lino relief · A4</div>
+            <p>Bird of prey, ornamented hound and mountains, layered in grey and gold over a printed field.</p>
+          </div>
+        </a>
+        <a href="/printing-lab/" class="ex ex-print">
+          <div class="ex-media"><img src="/assets/img/death-culture/sky-bodybags-09.jpg" alt="Seven cypress panels arranged as a cross beside a circuit-cut tree, flame and cloud in red." loading="lazy" decoding="async"></div>
+          <div class="ex-body">
+            <div class="ex-title">Sky Bodybags · 09</div>
+            <div class="ex-spec">Lino relief · A4</div>
+            <p>Seven cypress panels arranged as a cross beside a circuit-cut tree, flame and cloud in red.</p>
+          </div>
+        </a>
+        <a href="/printing-lab/" class="ex ex-print">
+          <div class="ex-media"><img src="/assets/img/death-culture/sky-bodybags-01.jpg" alt="Black bird between two red cloud stamps; below, a hound in blue and a cypress on a blue ground." loading="lazy" decoding="async"></div>
+          <div class="ex-body">
+            <div class="ex-title">Sky Bodybags · 01</div>
+            <div class="ex-spec">Lino relief · A4</div>
+            <p>Black bird between two red cloud stamps; below, a hound in blue and a cypress on a blue ground.</p>
+          </div>
+        </a>
+  </div>
+  <a href="/printing-lab/" class="btn primary proj-go">See the prints &rarr;</a>
+</section>
+
+<!-- ── PROJECT · SUPERADOBE GENERATOR ── -->
+<section id="superadobe" class="rail-right proj-sec" style="--proj:var(--earth)">
+  <div class="model-rail" data-section="superadobe">
+    <span class="rail-tick top">· · · SA ↑</span>
+    <span class="rail-tick bot">· · · SA ↓</span>
+  </div>
+  <div class="sec-head">
+    <div class="sec-id">
+      <svg class="sec-mark" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="9 8 46 48"> <rect x="9" y="48" width="46" height="8" rx="4" fill="currentColor"/> <rect x="10" y="38" width="44" height="8" rx="4" fill="currentColor" opacity=".7"/> <rect x="12.5" y="28" width="39" height="8" rx="4" fill="currentColor"/> <rect x="17" y="18" width="30" height="8" rx="4" fill="currentColor" opacity=".7"/> <rect x="24.5" y="8" width="15" height="8" rx="4" fill="currentColor"/> </svg>
+      <div class="sec-num">04 · PROCEDURAL DESIGN</div>
+      <h2 class="sec-title">SuperAdobe Generator</h2>
+      <div class="sec-role">Earthbag dome designer &amp; material calculator</div>
+    </div>
+    <div class="sec-sub">Procedural design at building scale. Lay out a complex of domes, vaults and cylinders on a scan of your own land, watch it rise course by course, and get back the sack, wire, fill and plaster it will take.</div>
+  </div>
+  <div class="proj-bar">
+    <div class="proj-meta"><span>WEB</span><span>EARTHBAG</span><span>FREE</span></div>
+    <span class="proj-status">FREE · OPEN SOURCE</span>
+  </div>
+  <div class="ex-grid">
+        <div class="ex ex-earth">
+          <div class="ex-media"><svg viewBox="0 0 300 300" fill="none" aria-hidden="true"><rect x="14.0" y="249.4" width="272.0" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="14.1" y="243.4" width="271.7" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="14.4" y="237.5" width="271.1" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="14.9" y="231.5" width="270.3" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="15.4" y="225.5" width="269.1" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="16.2" y="219.5" width="267.7" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="17.0" y="213.5" width="266.0" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="18.0" y="207.5" width="263.9" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="19.2" y="201.5" width="261.6" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="20.5" y="195.5" width="259.0" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="22.0" y="189.5" width="256.0" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="23.6" y="183.5" width="252.8" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="25.4" y="177.5" width="249.2" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="27.4" y="171.5" width="245.3" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="29.5" y="165.5" width="241.0" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="31.8" y="159.5" width="236.4" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="34.3" y="153.5" width="231.5" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="36.9" y="147.5" width="226.2" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="39.8" y="141.5" width="220.5" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="42.8" y="135.6" width="214.4" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="46.1" y="129.6" width="207.9" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="49.5" y="123.6" width="200.9" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="53.2" y="117.6" width="193.5" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="57.2" y="111.6" width="185.7" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="61.4" y="105.6" width="177.3" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="65.8" y="99.6" width="168.4" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="70.6" y="93.6" width="158.9" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="75.6" y="87.6" width="148.8" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="81.0" y="81.6" width="138.0" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="86.7" y="75.6" width="126.6" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="92.9" y="69.6" width="114.3" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="99.5" y="63.6" width="101.1" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="106.5" y="57.6" width="86.9" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/><rect x="114.2" y="51.6" width="71.6" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.58"/><rect x="122.5" y="45.6" width="55.0" height="4.9" rx="2.5" fill="currentColor" fill-opacity="0.90"/></svg></div>
+          <div class="ex-body">
+            <div class="ex-title">Dome</div>
+            <div class="ex-spec">5 m · 35 courses · 440 m of sack</div>
+            <p>Struck the conventional way — compass on the outer edge of the base sack, rr = 2·rb + sw.</p>
+          </div>
+        </div>
+        <div class="ex ex-earth">
+          <div class="ex-media"><svg viewBox="0 0 300 300" fill="none" aria-hidden="true"><g transform="translate(54.4,-27.2)"><rect x="14.0" y="216.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="209.1" y="216.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="16.1" y="209.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="207.1" y="209.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="18.3" y="203.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="204.9" y="203.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="20.6" y="196.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="202.6" y="196.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="23.0" y="190.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="200.1" y="190.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="25.6" y="183.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="197.5" y="183.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="28.4" y="177.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="194.8" y="177.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="31.3" y="170.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="191.8" y="170.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="34.5" y="164.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="188.6" y="164.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="38.0" y="157.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="185.1" y="157.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="41.9" y="151.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="181.3" y="151.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="46.1" y="144.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="177.0" y="144.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="51.0" y="138.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="172.2" y="138.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="56.6" y="131.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="166.6" y="131.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="63.3" y="125.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="159.8" y="125.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="72.0" y="118.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="151.1" y="118.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/><rect x="86.1" y="112.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="137.0" y="112.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.27"/><rect x="86.1" y="105.8" width="73.4" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.17"/></g><rect x="14.0" y="216.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="209.1" y="216.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="16.1" y="209.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="207.1" y="209.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="18.3" y="203.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="204.9" y="203.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="20.6" y="196.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="202.6" y="196.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="23.0" y="190.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="200.1" y="190.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="25.6" y="183.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="197.5" y="183.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="28.4" y="177.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="194.8" y="177.1" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="31.3" y="170.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="191.8" y="170.6" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="34.5" y="164.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="188.6" y="164.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="38.0" y="157.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="185.1" y="157.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="41.9" y="151.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="181.3" y="151.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="46.1" y="144.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="177.0" y="144.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="51.0" y="138.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="172.2" y="138.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="56.6" y="131.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="166.6" y="131.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="63.3" y="125.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="159.8" y="125.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="72.0" y="118.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="151.1" y="118.7" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/><rect x="86.1" y="112.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="137.0" y="112.2" width="22.5" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.90"/><rect x="86.1" y="105.8" width="73.4" height="5.4" rx="2.7" fill="currentColor" fill-opacity="0.58"/></svg></div>
+          <div class="ex-body">
+            <div class="ex-title">Vault</div>
+            <div class="ex-spec">3.5 × 7 m · 18 courses · 245 m of sack</div>
+            <p>The same wall run along a length, closing on the catenary a barrel stands in.</p>
+          </div>
+        </div>
+        <div class="ex ex-earth">
+          <div class="ex-media"><svg viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="drum-4"><stop offset="0" stop-color="currentColor" stop-opacity=".3"/><stop offset=".4" stop-color="currentColor" stop-opacity="1"/><stop offset="1" stop-color="currentColor" stop-opacity=".28"/></linearGradient></defs><rect x="14.0" y="208.3" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.90"/><rect x="14.0" y="201.1" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.58"/><rect x="14.0" y="193.8" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.90"/><rect x="14.0" y="186.6" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.58"/><rect x="14.0" y="179.4" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.90"/><rect x="14.0" y="172.2" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.58"/><rect x="14.0" y="165.0" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.90"/><rect x="14.0" y="157.8" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.58"/><rect x="14.0" y="150.6" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.90"/><rect x="14.0" y="143.3" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.58"/><rect x="14.0" y="136.1" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.90"/><rect x="14.0" y="128.9" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.58"/><rect x="14.0" y="121.7" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.90"/><rect x="14.0" y="114.5" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.58"/><rect x="14.0" y="107.3" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.90"/><rect x="14.0" y="100.0" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.58"/><rect x="14.0" y="92.8" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.90"/><rect x="14.0" y="85.6" width="272.0" height="6.1" rx="3.1" fill="url(#drum-4)" fill-opacity="0.58"/></svg></div>
+          <div class="ex-body">
+            <div class="ex-title">Cylinder</div>
+            <div class="ex-spec">4 m · 18 courses · 252 m of sack</div>
+            <p>A straight drum, left open at the top for a roof or a second storey.</p>
+          </div>
+        </div>
+  </div>
+  <a href="https://soboof.com/superadobe-generator/" class="btn primary proj-go" target="_blank" rel="noopener">Open the generator &rarr;</a>
+</section>
+<!-- /BUILD:projects -->
+
+
+
+<!-- ── ABOUT ── -->
+<section id="about" class="rail-left">
+  <div class="model-rail" data-section="about">
+    <span class="rail-tick top">· · · GHOST ↑</span>
+    <span class="rail-tick bot">· · · GHOST ↓</span>
+  </div>
+  <div class="sec-head">
+    <div>
+      <div class="sec-num">05 · Dossier</div>
+      <h2 class="sec-title">About <span class="accent">Soboof</span></h2>
+    </div>
+    <div class="sec-sub">
+      A design studio working across 3D form, 2D graphics and fabrication — built on sustainability and hands-on social engagement.
+    </div>
+  </div>
+
+  <div class="dossier">
+    <div class="dossier-body">
+      <p class="lead">Soboof is a design studio working in 3D and 2D graphics and fabrication — procedural software, mirrored sculpture, and hand-pulled print. The work is made to be built with, not simply bought.</p>
+      <p>The work sits at the intersection of <strong style="color:var(--accent)">sacred architecture, algorithmic geometry, and craft</strong>. A single modular logic — tetrahedron, pyramid, dodecahedron — is repeated, varied, and pushed until it becomes organic: a bird, a fox, a relic.</p>
+      <p>Surfaces are hand-finished in the <a href="https://en.wikipedia.org/wiki/Ayeneh-kari" target="_blank" rel="noopener">Ayeneh-Kari</a> tradition — a centuries-old Persian technique of mirror inlay used in palaces and shrines. Each triangular shard captures a fragment of reality, so the piece changes with every viewer.</p>
+    </div>
+    <div class="dossier-meta">
+      <dl>
+        <dt>Studio</dt><dd>Soboof · Mirbreak</dd>
+        <dt>Founded</dt><dd>2024</dd>
+        <dt>Location</dt><dd>Leeuwarden, NL</dd>
+        <dt>Status</dt><dd class="accent">Taking commissions</dd>
+        <dt>Method</dt><dd>Ayeneh-Kari · 3D Print · Modular</dd>
+        <dt>Materials</dt><dd>Mirror · Recycled PLA · Marble · Metal</dd>
+      </dl>
+      <hr class="dossier-divider">
+      <div style="font-family:var(--ff-m);font-size:9px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Disciplines</div>
+      <div class="dossier-tags">
+        <span class="dossier-tag">Sculpture</span>
+        <span class="dossier-tag">Graphic Design</span>
+        <span class="dossier-tag">Procedural Design</span>
+        <span class="dossier-tag">Fabrication</span>
+        <span class="dossier-tag">Mirror Craft</span>
+        <span class="dossier-tag">3D Print</span>
+        <span class="dossier-tag">Workshops</span>
+        <span class="dossier-tag">Commissions</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WORKSHOP / BLOG STRIP ── -->
+<section id="more" class="rail-right">
+  <div class="model-rail" data-section="more">
+    <span class="rail-tick top">· · · STRIP ↑</span>
+    <span class="rail-tick bot">· · · STRIP ↓</span>
+  </div>
+  <div class="sec-head">
+    <div>
+      <div class="sec-num">06 · Beyond the object</div>
+      <h2 class="sec-title">Workshop <span class="accent">&amp;</span> studio notes</h2>
+    </div>
+    <div class="sec-sub">
+      The technique taught first-hand, and the thinking behind the work.
+    </div>
+  </div>
+  <div class="strip">
+    <a href="/workshop/" class="strip-card">
+      <div class="k"><span>WS · 01 · LEEUWARDEN</span><span class="live">OPEN BOOKINGS</span></div>
+      <h3>Creative workshop — Mirbreak technique.</h3>
+      <p>A hands-on session on Ayeneh-Kari: cut mirror, mount it to a modular body, leave with a sculpture you built. Small groups, in-studio.</p>
+      <div class="arrow">BOOK A SLOT →</div>
+    </a>
+    <a href="/journal/" class="strip-card">
+      <div class="k"><span>JOURNAL · ONGOING</span><span style="color:var(--accent)">FIELD NOTES</span></div>
+      <h3>Notes from the studio.</h3>
+      <p>Short writing on geometry, growth, mirror craft, and the philosophy of modular form. New entries when something is worth saying.</p>
+      <div class="arrow">READ THE JOURNAL →</div>
+    </a>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact" class="rail-left">
+  <div class="model-rail" data-section="contact">
+    <span class="rail-tick top">· · · SIGNAL ↑</span>
+    <span class="rail-tick bot">· · · SIGNAL ↓</span>
+  </div>
+  <div class="contact">
+    <div>
+      <h2>Have a <span class="accent">space</span><br>that needs <span class="mirror">light</span>?</h2>
+      <p>Commissions, gallery enquiries, press, and workshop bookings. If the brief is honest and the geometry is interesting, you'll hear back within a week.</p>
+    </div>
+    <div class="contact-channels">
+      <a href="mailto:mirbreak@soboof.com" class="channel">
+        <span class="channel-key">Email</span>
+        <span class="channel-val">mirbreak@soboof.com</span>
+      </a>
+      <a href="https://www.instagram.com/soboof/" class="channel" target="_blank" rel="noopener">
+        <span class="channel-key">Instagram</span>
+        <span class="channel-val">@soboof</span>
+      </a>
+      <a href="http://www.linkedin.com/in/soboof" class="channel" target="_blank" rel="noopener">
+        <span class="channel-key">LinkedIn</span>
+        <span class="channel-val">/in/soboof</span>
+      </a>
+      <a href="/journal/" class="channel">
+        <span class="channel-key">Journal</span>
+        <span class="channel-val">Notes from the studio</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+{{> footer }}
+
+<script>
+/* Image fallback — soboof.com hotlinks fail cross-origin, so we mark them failed
+   and reveal the SVG mirror-shard background underneath. */
+(function(){
+  const zones = document.querySelectorAll('.prod-img, .chap-media, .hg-tile');
+  zones.forEach(zone => {
+    const img = zone.querySelector('img');
+    if (!img) return;
+    const onFail = () => {
+      img.setAttribute('data-failed','1');
+      if (!zone.querySelector('.ph')) {
+        const tag = document.createElement('span');
+        tag.className = 'ph';
+        const alt = (img.getAttribute('alt') || 'photo').trim();
+        tag.textContent = '◇ ' + alt + ' · drop image';
+        zone.appendChild(tag);
+      }
+    };
+    img.addEventListener('error', onFail);
+    /* If the image has already failed before this script ran */
+    if (img.complete && img.naturalWidth === 0) onFail();
+  });
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const STATES = [
+    { id:'hero',     color:[0.91,0.77,0.28], wire:0, rotY:0.0028, label:'SHADED · GOLD',   hex:'#e8c547', scale:1.85 },
+    { id:'pythagoras-engine', color:[0.81,0.84,0.86], wire:1, rotY:0.0034, label:'WIRE · MIRROR',  hex:'#cfd6dc', scale:1.30 },
+    { id:'mirbreak',      color:[0.91,0.77,0.28], wire:0, rotY:0.0044, label:'SHADED · GOLD',  hex:'#e8c547', scale:1.10 },
+    { id:'death-culture', color:[0.85,0.28,0.30], wire:1, rotY:0.0062, label:'WIRE · RED',     hex:'#d9484c', scale:1.00 },
+    { id:'superadobe',    color:[0.79,0.54,0.29], wire:0, rotY:0.0069, label:'SHADED · EARTH', hex:'#c98a4b', scale:1.20 },
+    { id:'about',    color:[0.42,0.31,0.64], wire:0, rotY:0.0075, label:'SHADED · PURPLE', hex:'#6b4ea3', scale:1.05 },
+    { id:'more',     color:[0.30,0.69,0.49], wire:1, rotY:0.0100, label:'WIRE · GREEN',    hex:'#4caf7d', scale:1.00 },
+    { id:'contact',  color:[0.30,0.66,0.85], wire:1, rotY:0.0130, label:'WIRE · CYAN',     hex:'#4ca8d8', scale:1.15 }
+  ];
+
+  const canvas = document.getElementById('scene-canvas');
+  const scene  = new THREE.Scene();
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const cam = new THREE.PerspectiveCamera(35, 1, 0.1, 200);
+  cam.position.set(0, 0, 14);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const key  = new THREE.DirectionalLight(0xfff2c8, 0.9);  key.position.set(4, 6, 8);   scene.add(key);
+  const fill = new THREE.DirectionalLight(0x6688aa, 0.45); fill.position.set(-6, -2, 4); scene.add(fill);
+  const rim  = new THREE.DirectionalLight(0xe8c547, 0.55); rim.position.set(0, 4, -8);   scene.add(rim);
+
+  const mat = new THREE.MeshStandardMaterial({
+    color: new THREE.Color(STATES[0].color[0], STATES[0].color[1], STATES[0].color[2]),
+    roughness: 0.45, metalness: 0.35,
+    flatShading: true, transparent: true, opacity: 0.92
+  });
+  const root = new THREE.Group();
+  scene.add(root);
+
+  /* Minimal glTF 2.0 reader — the Pythagoras Engine export is a single mesh with
+     embedded base64 buffers, so no external loader is needed. */
+  function gltfBuffer(uri){
+    const bin = atob(uri.split(',')[1]);
+    const u8 = new Uint8Array(bin.length);
+    for (let i=0;i<bin.length;i++) u8[i] = bin.charCodeAt(i);
+    return u8;
+  }
+  function gltfAccessor(json, bufs, index){
+    const acc = json.accessors[index];
+    const view = json.bufferViews[acc.bufferView];
+    const comps = { SCALAR:1, VEC2:2, VEC3:3, VEC4:4 }[acc.type];
+    const bytes = { 5120:1, 5121:1, 5122:2, 5123:2, 5125:4, 5126:4 }[acc.componentType];
+    const start = (view.byteOffset||0) + (acc.byteOffset||0);
+    /* copy out so the typed array is always correctly aligned */
+    const slice = bufs[view.buffer].slice(start, start + acc.count * comps * bytes);
+    const Ctor  = { 5120:Int8Array, 5121:Uint8Array, 5122:Int16Array,
+                    5123:Uint16Array, 5125:Uint32Array, 5126:Float32Array }[acc.componentType];
+    return new Ctor(slice.buffer, 0, acc.count * comps);
+  }
+  function parseGLTF(json){
+    const bufs = json.buffers.map(b => gltfBuffer(b.uri));
+    const prim = json.meshes[0].primitives[0];
+    const pos  = gltfAccessor(json, bufs, prim.attributes.POSITION);
+    const tris = prim.indices != null
+      ? Array.from(gltfAccessor(json, bufs, prim.indices))
+      : Array.from({ length: pos.length/3 }, (_, i) => i);
+    return { verts: Array.from(pos), tris };
+  }
+  function buildGeometry(parsed){
+    const positions = new Float32Array(parsed.tris.length*3);
+    for (let i=0;i<parsed.tris.length;i++){
+      const vi = parsed.tris[i]*3;
+      positions[i*3]   = parsed.verts[vi];
+      positions[i*3+1] = parsed.verts[vi+1];
+      positions[i*3+2] = parsed.verts[vi+2];
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.computeVertexNormals();
+    geo.computeBoundingBox();
+    const bb = geo.boundingBox;
+    const cx=(bb.min.x+bb.max.x)/2, cy=(bb.min.y+bb.max.y)/2, cz=(bb.min.z+bb.max.z)/2;
+    geo.translate(-cx,-cy,-cz);
+    const size = Math.max(bb.max.x-bb.min.x, bb.max.y-bb.min.y, bb.max.z-bb.min.z);
+    geo.scale(4.6/size, 4.6/size, 4.6/size);
+    geo.computeVertexNormals();
+    return geo;
+  }
+
+  fetch('/assets/models/pythagoras_m21.gltf')
+    .then(r=>r.json()).then(json=>{
+      const geo = buildGeometry(parseGLTF(json));
+      const mesh = new THREE.Mesh(geo, mat);
+      root.add(mesh);
+      const wireMat = new THREE.LineBasicMaterial({ color: mat.color.clone(), transparent:true, opacity:0 });
+      const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo), wireMat);
+      root.add(wire);
+      root.userData.wireMat = wireMat;
+    }).catch(e=>console.warn('OBJ load failed:', e));
+
+  function getSections(){
+    return STATES.map(s=>{
+      const sectEl = s.id==='hero' ? document.querySelector('.hero') : document.getElementById(s.id);
+      const railEl = sectEl ? sectEl.querySelector('.model-rail') : null;
+      return { sectEl, railEl };
+    });
+  }
+  let sections = getSections();
+
+  function activeIndex(){
+    const probe = window.scrollY + window.innerHeight*0.45;
+    let idx = 0;
+    for (let i=0;i<sections.length;i++){
+      const el = sections[i].sectEl;
+      if (el && (el.offsetTop || el.getBoundingClientRect().top + window.scrollY) <= probe) idx = i;
+    }
+    return idx;
+  }
+
+  function railWorldPos(railEl){
+    if (!railEl) return null;
+    const rect = railEl.getBoundingClientRect();
+    if (rect.width === 0) return null;
+    const cx = rect.left + rect.width*0.5;
+    const vh = window.innerHeight;
+    const span = Math.max(1, rect.height + vh);
+    const moved = vh - rect.top;
+    const progress = Math.min(1, Math.max(0, moved / span));
+    const railTop = rect.top + 24;
+    const railBottom = rect.bottom - 24;
+    const cy = railTop + (railBottom - railTop) * progress;
+    const ndcX =  (cx / window.innerWidth)  * 2 - 1;
+    const ndcY = -((cy / window.innerHeight) * 2 - 1);
+    const visH = 2 * Math.tan(cam.fov*0.5 * Math.PI/180) * cam.position.z;
+    const visW = visH * cam.aspect;
+    return { x: ndcX * visW * 0.5, y: ndcY * visH * 0.5 };
+  }
+  function fallbackPos(idx){
+    const xs = [0.45,-0.45,0.45,-0.45,0.45,-0.45,0];
+    const visH = 2 * Math.tan(cam.fov*0.5 * Math.PI/180) * cam.position.z;
+    const visW = visH * cam.aspect;
+    return { x: (xs[idx]||0) * visW * 0.5, y: 0 };
+  }
+
+  const cur = {
+    x:0, y:0,
+    r:STATES[0].color[0], g:STATES[0].color[1], b:STATES[0].color[2],
+    wire:0, rotY:STATES[0].rotY, yaw:0, pitch:0, scale:STATES[0].scale
+  };
+  const lerp = (a,b,t) => a+(b-a)*t;
+
+  const stateLbl = document.getElementById('scene-state-lbl');
+  const stateBox = document.getElementById('scene-state-hud');
+  let lastLabel = '';
+
+  let hasScrolled = false;
+  let autoYaw = 0;
+  window.addEventListener('scroll',    ()=>{ hasScrolled=true; }, { passive:true });
+  window.addEventListener('wheel',     ()=>{ hasScrolled=true; }, { passive:true, once:true });
+  window.addEventListener('touchmove', ()=>{ hasScrolled=true; }, { passive:true, once:true });
+
+  function scrollDrivenYaw(){
+    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    return -Math.min(1, Math.max(0, window.scrollY / max)) * Math.PI * 8;
+  }
+
+  function resize(){
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false);
+    cam.aspect = w/h;
+    cam.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', ()=>{ resize(); sections = getSections(); });
+
+  function tick(){
+    const isDay = document.body.classList.contains('day');
+    const idx = activeIndex();
+    const baseTgt = STATES[idx];
+    const tgt = (isDay && idx===0)
+      ? { color:[0.42,0.31,0.64], wire:baseTgt.wire, rotY:baseTgt.rotY, hex:'#6b4ea3', scale:baseTgt.scale, label:'SHADED · PURPLE' }
+      : baseTgt;
+    rim.color.set(isDay ? 0x6b4ea3 : 0xe8c547);
+
+    const k = 0.07;
+    cur.r     = lerp(cur.r,     tgt.color[0], k);
+    cur.g     = lerp(cur.g,     tgt.color[1], k);
+    cur.b     = lerp(cur.b,     tgt.color[2], k);
+    cur.wire  = lerp(cur.wire,  tgt.wire,     k);
+    cur.rotY  = lerp(cur.rotY,  tgt.rotY,     k);
+    cur.scale = lerp(cur.scale, tgt.scale,    k);
+    root.scale.setScalar(cur.scale);
+
+    let posTarget = railWorldPos(sections[idx].railEl);
+    if (!posTarget) posTarget = fallbackPos(idx);
+    cur.x = lerp(cur.x, posTarget.x, k);
+    cur.y = lerp(cur.y, posTarget.y, k);
+    root.position.x = cur.x;
+    root.position.y = cur.y;
+
+    if (!hasScrolled){
+      autoYaw += cur.rotY;
+      cur.yaw   = lerp(cur.yaw,   autoYaw,        0.2);
+      cur.pitch = lerp(cur.pitch, autoYaw * 0.32, 0.2);
+    } else {
+      const tgtYaw = scrollDrivenYaw();
+      cur.yaw   = lerp(cur.yaw,   tgtYaw,        0.10);
+      cur.pitch = lerp(cur.pitch, tgtYaw * 0.32, 0.10);
+    }
+    root.rotation.y = cur.yaw;
+    root.rotation.x = cur.pitch;
+
+    mat.color.setRGB(cur.r, cur.g, cur.b);
+    mat.opacity   = (1 - cur.wire) * 0.95 + 0.04;
+    mat.depthWrite = cur.wire < 0.5;
+    if (root.userData.wireMat){
+      root.userData.wireMat.color.setRGB(cur.r, cur.g, cur.b);
+      root.userData.wireMat.opacity = cur.wire * 0.85 + 0.06;
+    }
+
+    if (tgt.label !== lastLabel){
+      stateLbl.textContent = tgt.label;
+      stateBox.style.color = tgt.hex;
+      stateBox.style.borderColor = tgt.hex + '55';
+      lastLabel = tgt.label;
+    }
+
+    renderer.render(scene, cam);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+
+</body>
+</html>

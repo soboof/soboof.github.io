@@ -53,58 +53,72 @@ module.exports = [
   { from: '/abstract-space-vogel.html',     to: 'work/abstract-space-vogel/' },
 
   /* ── Pages ──────────────────────────────────────────────────────────── */
-  { from: '/gallery/',              to: 'gallery.html',  note: 'also the WooCommerce shop page' },
-  { from: '/about-me/',             to: 'about.html' },
-  { from: '/creatieve-workshop/',   to: 'workshop.html' },
-  { from: '/blog/',                 to: 'journal.html' },
-  { from: '/elementor-page-1790/',  to: 'workshop.html', note: 'the "services" page' },
+  { from: '/about-me/',             to: 'about/' },
+  { from: '/creatieve-workshop/',   to: 'workshop/' },
+  { from: '/blog/',                 to: 'journal/' },
+  { from: '/elementor-page-1790/',  to: 'workshop/', note: 'the "services" page' },
 
   /* ── Shop plumbing — no cart or checkout on a static site ───────────── */
-  { from: '/gallery/cart-page/',        to: 'gallery.html', note: 'cart is gone; land on the collection' },
-  { from: '/checkout/',                 to: 'gallery.html', note: 'checkout is gone; land on the collection' },
-  { from: '/terms-and-conditions/',     to: 'index.html',   note: 'NO EQUIVALENT PAGE — see README' },
+  { from: '/gallery/cart-page/',        to: 'mirbreak/', note: 'cart is gone; land on the collection' },
+  { from: '/checkout/',                 to: 'mirbreak/', note: 'checkout is gone; land on the collection' },
+  { from: '/terms-and-conditions/',     to: 'index.html', note: 'NO EQUIVALENT PAGE — see README' },
 
   /* ── Posts ──────────────────────────────────────────────────────────── */
-  { from: '/performance/death-culture/', to: 'printing-lab.html' },
-  { from: '/philosophizing/geometry-in-eyes-of-spinoza/', to: 'journal.html', note: 'post not migrated yet' },
-  { from: '/philosophizing/karl-jaspers-and-the-axial-age-the-birth-of-a-new-human-consciousness/', to: 'journal.html', note: 'post not migrated yet' },
-  { from: '/philosophizing/the-influence-of-the-triangle-in-axial-age-civilizations/', to: 'journal.html', note: 'post not migrated yet' },
+  { from: '/performance/death-culture/', to: 'printing-lab/' },
+  { from: '/philosophizing/geometry-in-eyes-of-spinoza/', to: 'journal/', note: 'post not migrated yet' },
+  { from: '/philosophizing/karl-jaspers-and-the-axial-age-the-birth-of-a-new-human-consciousness/', to: 'journal/', note: 'post not migrated yet' },
+  { from: '/philosophizing/the-influence-of-the-triangle-in-axial-age-civilizations/', to: 'journal/', note: 'post not migrated yet' },
 
   /* ── Product category archives ──────────────────────────────────────── */
-  { from: '/product-category/abstract/',                to: 'gallery.html' },
-  { from: '/product-category/animals/',                 to: 'gallery.html' },
-  { from: '/product-category/statue/',                  to: 'gallery.html' },
-  { from: '/product-category/statue/christmas-gifts/',  to: 'gallery.html' },
-  { from: '/product-category/furniture/',               to: 'gallery.html' },
-  { from: '/product-category/symmetrical/',             to: 'gallery.html' },
-  { from: '/product-category/uncategorized/',           to: 'gallery.html' },
+  { from: '/product-category/abstract/',                to: 'mirbreak/' },
+  { from: '/product-category/animals/',                 to: 'mirbreak/' },
+  { from: '/product-category/statue/',                  to: 'mirbreak/' },
+  { from: '/product-category/statue/christmas-gifts/',  to: 'mirbreak/' },
+  { from: '/product-category/furniture/',               to: 'mirbreak/' },
+  { from: '/product-category/symmetrical/',             to: 'mirbreak/' },
+  { from: '/product-category/uncategorized/',           to: 'mirbreak/' },
 
   /* ── Product tag archives ───────────────────────────────────────────── */
-  { from: '/product-tag/1st-edition/',      to: 'gallery.html' },
-  { from: '/product-tag/2end-edition/',     to: 'gallery.html' },
-  { from: '/product-tag/3rd-edition/',      to: 'gallery.html' },
-  { from: '/product-tag/abstract/',         to: 'gallery.html' },
-  { from: '/product-tag/experimental-art/', to: 'gallery.html' },
-  { from: '/product-tag/functional/',       to: 'gallery.html' },
-  { from: '/product-tag/geometrical/',      to: 'gallery.html' },
-  { from: '/product-tag/home-decor/',       to: 'gallery.html' },
-  { from: '/product-tag/one-of-a-kind/',    to: 'gallery.html' },
-  { from: '/product-tag/original-art/',     to: 'gallery.html' },
+  { from: '/product-tag/1st-edition/',      to: 'mirbreak/' },
+  { from: '/product-tag/2end-edition/',     to: 'mirbreak/' },
+  { from: '/product-tag/3rd-edition/',      to: 'mirbreak/' },
+  { from: '/product-tag/abstract/',         to: 'mirbreak/' },
+  { from: '/product-tag/experimental-art/', to: 'mirbreak/' },
+  { from: '/product-tag/functional/',       to: 'mirbreak/' },
+  { from: '/product-tag/geometrical/',      to: 'mirbreak/' },
+  { from: '/product-tag/home-decor/',       to: 'mirbreak/' },
+  { from: '/product-tag/one-of-a-kind/',    to: 'mirbreak/' },
+  { from: '/product-tag/original-art/',     to: 'mirbreak/' },
 
   /* ── Post category archives ─────────────────────────────────────────── */
-  { from: '/category/performance/',              to: 'printing-lab.html' },
-  { from: '/category/geometry/',                 to: 'journal.html' },
-  { from: '/category/philosophizing/',           to: 'journal.html' },
-  { from: '/category/philosophizing/mindset/',   to: 'journal.html' },
-  { from: '/category/philosophizing/mythology/', to: 'journal.html' },
-  { from: '/category/uncategorized/',            to: 'journal.html' },
+  { from: '/category/performance/',              to: 'printing-lab/' },
+  { from: '/category/geometry/',                 to: 'journal/' },
+  { from: '/category/philosophizing/',           to: 'journal/' },
+  { from: '/category/philosophizing/mindset/',   to: 'journal/' },
+  { from: '/category/philosophizing/mythology/', to: 'journal/' },
+  { from: '/category/uncategorized/',            to: 'journal/' },
 
   /* ── Pages this repo has moved since ────────────────────────────────
      `from` may end in ".html" instead of "/", which writes a single file
      rather than a directory index. Same redirect, same guards.           */
-  { from: '/death-culture.html', to: 'printing-lab.html', note: 'renamed: the page is now the Printing Lab, Death Culture the project inside it' },
+  { from: '/death-culture.html', to: 'printing-lab/', note: 'renamed: the page is now the Printing Lab, Death Culture the project inside it' },
 
   /* ── Deliberately NOT redirected ─────────────────────────────────────
      /global-styles/  — an Elementor artifact with no public value; let it 404.
      /                — the homepage already answers at the same URL.        */
+
+  /* ── Flat page URLs → folder URLs ───────────────────────────────────────
+     These were live on soboof.github.io before the pages moved into their own
+     directories, and are still in the wild, so they keep working.        */
+  { from: '/mirbreak.html', to: 'mirbreak/' },
+  { from: '/gallery.html', to: 'mirbreak/' },
+  { from: '/printing-lab.html', to: 'printing-lab/' },
+  { from: '/workshop.html', to: 'workshop/' },
+  { from: '/journal.html', to: 'journal/' },
+  { from: '/about.html', to: 'about/' },
+
+  /* ── The gallery, folded into Mirbreak ──────────────────────────────────
+     /gallery/ was the full catalogue on its own page; that catalogue is now
+     the Work section of /mirbreak/, filters and all.                     */
+  { from: '/gallery/', to: 'mirbreak/' },
 ];

@@ -1,0 +1,632 @@
+
+<canvas id="scene-canvas"></canvas>
+<div id="scene-state-hud"><span class="ssd"></span><span id="scene-state-lbl">SHADED · GOLD</span></div>
+
+<!-- Status & Theme toggle -->
+{{> chrome }}
+
+{{> header }}
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">SOBOOF · LEEUWARDEN, NL</div>
+    <div class="hero-headline">
+      {{> owl cls="hero-logo-bg" }}
+      <div class="hero-text">
+        <h1 style="font-weight: 500">
+          Think in<br>triangles.
+          <span class="line2" style="font-size: 44px">Bring in the light.</span>
+          <span class="line3">Reach meaning through forms.</span>
+        </h1>
+      </div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-desc">
+      These figures are reflections of ourselves and our surroundings. Hand-cut <strong>mirrored tiles</strong> are mounted on modular 3D-printed bodies using the centuries-old <strong>Ayeneh-Kari</strong> technique — each face captures a triangular fragment of reality, shifting with the viewer's point of view.
+    </div>
+    <div class="hero-actions">
+      <a href="#work" class="btn primary">See the work →</a>
+    </div>
+  </div>
+
+  <div class="model-rail" data-section="hero">
+    <span class="rail-tick top">· · · MIRROR ↑</span>
+    <span class="rail-tick bot">· · · MIRROR ↓</span>
+  </div>
+</div>
+
+<!-- ── MANIFEST STRIP ── -->
+<div class="manifest-wrap">
+  <div class="manifest">
+    <div class="eq-corner tl"></div><div class="eq-corner tr"></div>
+    <div class="eq-corner bl"></div><div class="eq-corner br"></div>
+    <div class="manifest-head">
+      <div class="manifest-id"><b>SYS::MIRBREAK</b><br>v2025 · ACTIVE</div>
+    </div>
+    <div class="manifest-eqs">
+      <div class="manifest-eq">
+        <div class="manifest-eq-k">Geometric primitive</div>
+        <div class="manifest-eq-v">△ + ☼</div>
+      </div>
+      <div class="manifest-eq">
+        <div class="manifest-eq-k">Studio rule</div>
+        <div class="manifest-eq-v">order → individuality</div>
+      </div>
+      <div class="manifest-eq">
+        <div class="manifest-eq-k">Output</div>
+        <div class="manifest-eq-v label">SCULPT · MIRROR · LIGHT</div>
+      </div>
+    </div>
+    <div class="manifest-foot">BY SOBOOF<br>MIRBREAK · MODULAR · LIVING</div>
+  </div>
+</div>
+
+
+<!-- ── WORK ── -->
+<section id="work" class="rail-right">
+  <div class="model-rail" data-section="work">
+    <span class="rail-tick top">· · · WORK ↑</span>
+    <span class="rail-tick bot">· · · WORK ↓</span>
+  </div>
+  <div class="sec-head">
+    <div>
+      <div class="sec-num">01 · Work</div>
+      <h2 class="sec-title">All <span class="accent">different</span>, <br>all <span class="mirror">relative</span>.</h2>
+    </div>
+    <div class="sec-sub">
+      Each piece is a fragment of architecture, a shard of cosmos, a reflection of the self. Limited and one-of-a-kind pieces, made by hand in Leeuwarden.
+    </div>
+  </div>
+
+  <div class="chips" id="work-chips" role="group" aria-label="Filter work by category">
+<!-- BUILD:work-chips -->
+<!-- /BUILD:work-chips -->
+  </div>
+
+  <div class="work-grid" id="work-grid">
+
+<!-- BUILD:home-grid -->
+    <!-- Space Fox -->
+    <a href="work/space-fox/" class="prod big">
+      <div class="prod-img">
+        <span class="prod-id">SBF · 001</span>
+        <span class="prod-edition">ONE OF A KIND</span>
+        <img src="/assets/img/space-fox-01.jpg" alt="Space Fox sculpture" loading="lazy">
+      </div>
+      <div class="prod-tags">Abstract · Animals · Statue</div>
+      <div class="prod-name">Space Fox</div>
+      <div class="prod-row">
+        <span class="prod-arrow">View piece →</span>
+      </div>
+    </a>
+
+    <!-- The Owl Statue -->
+    <a href="work/the-owl-statue/" class="prod std">
+      <div class="prod-img">
+        <span class="prod-id">SBF · 002</span>
+        <span class="prod-edition">ONE OF A KIND</span>
+        <img src="/assets/img/the-owl-statue-01.jpg" alt="The Owl Statue sculpture" loading="lazy">
+      </div>
+      <div class="prod-tags">Abstract · Animals · Statue</div>
+      <div class="prod-name">The Owl Statue</div>
+      <div class="prod-row">
+        <span class="prod-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Simorgh (Phoenix) -->
+    <a href="work/simorgh-phoenix/" class="prod std">
+      <div class="prod-img">
+        <span class="prod-id">SBF · 003</span>
+        <span class="prod-edition">1ST EDITION</span>
+        <img src="/assets/img/simorgh-phoenix-01.jpg" alt="Simorgh (Phoenix) sculpture" loading="lazy">
+      </div>
+      <div class="prod-tags">Animals · Statue · Symmetrical</div>
+      <div class="prod-name">Simorgh (Phoenix)</div>
+      <div class="prod-row">
+        <span class="prod-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Geometrical Mouse -->
+    <a href="work/geometrical-mouse/" class="prod big">
+      <div class="prod-img">
+        <span class="prod-id">SBF · 005</span>
+        <span class="prod-edition">3RD EDITION</span>
+        <img src="/assets/img/geometrical-mouse-01.jpg" alt="Geometrical Mouse sculpture" loading="lazy">
+      </div>
+      <div class="prod-tags">Animals · Home decor · Symmetrical</div>
+      <div class="prod-name">Geometrical Mouse</div>
+      <div class="prod-row">
+        <span class="prod-arrow">View piece →</span>
+      </div>
+    </a>
+
+    <!-- Abstract Table Lamp -->
+    <a href="work/abstract-table-lamp/" class="prod std">
+      <div class="prod-img">
+        <span class="prod-id">SBF · 009</span>
+        <span class="prod-edition">FUNCTIONAL · 1ST ED.</span>
+        <img src="/assets/img/abstract-table-lamp-01.jpg" alt="Abstract Table Lamp sculpture" loading="lazy">
+      </div>
+      <div class="prod-tags">Furniture · Symmetrical · Functional</div>
+      <div class="prod-name">Abstract Table Lamp</div>
+      <div class="prod-row">
+        <span class="prod-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Bird of Dawn -->
+    <a href="work/bird-of-dawn/" class="prod std">
+      <div class="prod-img">
+        <span class="prod-id">SBF · 010</span>
+        <span class="prod-edition">2ND EDITION</span>
+        <img src="/assets/img/bird-of-dawn-01.jpg" alt="Bird of Dawn sculpture" loading="lazy">
+      </div>
+      <div class="prod-tags">Animals · Statue</div>
+      <div class="prod-name">Bird of Dawn</div>
+      <div class="prod-row">
+        <span class="prod-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Adam -->
+    <a href="work/adam/" class="prod std">
+      <div class="prod-img">
+        <span class="prod-id">SBF · 011</span>
+        <span class="prod-edition">1ST EDITION</span>
+        <img src="/assets/img/adam-01.jpg" alt="Adam sculpture" loading="lazy">
+      </div>
+      <div class="prod-tags">Statue · Symmetrical</div>
+      <div class="prod-name">Adam</div>
+      <div class="prod-row">
+        <span class="prod-arrow">→</span>
+      </div>
+    </a>
+<!-- /BUILD:home-grid -->
+
+  </div>
+
+  <!-- Scrolled into view, this asks for the next batch. A real button, not a
+       sentinel div: it is then keyboard-reachable, and it doubles as the
+       fallback if IntersectionObserver never fires. Only shown once the script
+       has something left to reveal, so with JavaScript off the grid above is
+       simply the whole catalogue and nothing here appears. -->
+  <button type="button" class="work-more" id="work-sentinel" hidden>
+    <span class="work-more-dot"></span>
+    <span id="work-count"></span>
+  </button>
+  <p class="work-empty" id="work-empty">No pieces in that category yet.</p>
+</section>
+
+<!-- ── PROCESS — four chapters ── -->
+<section id="process" class="rail-left">
+  <div class="model-rail" data-section="process">
+    <span class="rail-tick top">· · · PROCESS ↑</span>
+    <span class="rail-tick bot">· · · PROCESS ↓</span>
+  </div>
+  <div class="sec-head">
+    <div>
+      <div class="sec-num">02 · Working method</div>
+      <h2 class="sec-title">Four <span class="accent">chapters</span></h2>
+    </div>
+    <div class="sec-sub">
+      Every Mirbreak sculpture moves through the same four stages — from a fixed modular logic into something organic, mirrored, and alive.
+    </div>
+  </div>
+
+  <div class="chapters">
+
+    <!-- I. Concept -->
+    <div class="chap">
+      <div class="chap-media">
+        <span class="chap-id">CH · I · CONCEPT</span>
+        <img data-failed="1" alt="Concept diagram" loading="lazy">
+      </div>
+      <div class="chap-body">
+        <div class="chap-num">CHAPTER · 01</div>
+        <h3 class="chap-title">Intersection of <span class="accent">geometry</span>, growth & reflection.</h3>
+        <div class="chap-kicker">Sacred architecture, Axial-Age philosophy, digital logic — collided.</div>
+        <p>Mirrored modular sculptures are created at the intersection of <strong>geometric abstract art</strong> and growth, order and individuality.</p>
+        <p>Inspired by Axial-Age philosophies, sacred architecture, and digital logic, repeated geometric forms are transformed into <em>hybrid organisms</em>; each sculpture conceived as a relic of algorithmic thought and a reflection of natural complexity.</p>
+      </div>
+    </div>
+
+    <!-- II. Process -->
+    <div class="chap flip">
+      <div class="chap-media">
+        <span class="chap-id">CH · II · FORMATION</span>
+        <img data-failed="1" alt="Mirbreak bird anatomy — formation process" loading="lazy">
+      </div>
+      <div class="chap-body">
+        <div class="chap-num">CHAPTER · 02</div>
+        <h3 class="chap-title">From modular <span class="accent">genesis</span> to organic emergence.</h3>
+        <div class="chap-kicker">Tetrahedrons. Pyramids. Dodecahedrons. Then everything they can become.</div>
+        <p>Each piece is initiated from a precise modular framework, composed of geometric units — <strong>tetrahedrons, pyramids, and dodecahedrons</strong>. These elemental shapes serve as the foundation, adhering to a fixed structural logic.</p>
+        <p>Through deliberate variation in orientation, connection, and scale, the modules evolve into branching, multi-directional formations — mimicking the organic logic of <em>roots, mycelial networks, or crystalline growth</em>. Rigid repetition becomes dynamic multiplicity: <strong>order as the seed of individuality</strong>.</p>
+      </div>
+    </div>
+
+    <!-- III. Materials -->
+    <div class="chap">
+      <div class="chap-media">
+        <span class="chap-id">CH · III · MATERIAL</span>
+        <img data-failed="1" alt="Material philosophy — mirrored modular sculpture" loading="lazy">
+      </div>
+      <div class="chap-body">
+        <div class="chap-num">CHAPTER · 03</div>
+        <h3 class="chap-title">Duality of <span class="accent">medium</span> and perception.</h3>
+        <div class="chap-kicker">Recycled plastic. Cut mirror. Black marble. Metal. A surface that is also a window.</div>
+        <p>Materials such as <strong>recycled 3D-printed plastic</strong>, <strong>mirrored glass</strong>, <strong>black marble</strong>, and <strong>metal</strong> are selected to embody this duality.</p>
+        <p>Mirrored surfaces reflect and fragment the surrounding environment, drawing viewers into a recursive experience. These works are not static objects — they are dynamic interfaces, <em>living systems</em> shaped by light, space, and perception.</p>
+      </div>
+    </div>
+
+    <!-- IV. Functionality -->
+    <div class="chap flip">
+      <div class="chap-media">
+        <span class="chap-id">CH · IV · FUNCTION</span>
+        <img data-failed="1" alt="Geometric abstract mirror lamp — functionality" loading="lazy">
+      </div>
+      <div class="chap-body">
+        <div class="chap-num">CHAPTER · 04</div>
+        <h3 class="chap-title">Collapsing the line between <span class="accent">design</span> & art.</h3>
+        <div class="chap-kicker">Mirror lamps. Modular structures. Architectural relics, future and ancient.</div>
+        <p>Many sculptures are designed to straddle the line between art and function: mirrored <strong>lamps</strong> and modular structures are assembled to suggest architectural remnants or future relics.</p>
+        <p>Through this <em>fusion of form and function</em>, the boundary between design and art is collapsed — resulting in objects that feel both ancient and futuristic.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- ── CONTACT ── -->
+<section id="contact" class="rail-right">
+  <div class="model-rail" data-section="contact">
+    <span class="rail-tick top">· · · SIGNAL ↑</span>
+    <span class="rail-tick bot">· · · SIGNAL ↓</span>
+  </div>
+  <div class="contact">
+    <div>
+      <h2>Have a <span class="accent">space</span><br>that needs <span class="mirror">light</span>?</h2>
+      <p>Commissions, gallery enquiries, press, and workshop bookings. If the brief is honest and the geometry is interesting, you'll hear back within a week.</p>
+    </div>
+    <div class="contact-channels">
+      <a href="mailto:mirbreak@soboof.com" class="channel">
+        <span class="channel-key">Email</span>
+        <span class="channel-val">mirbreak@soboof.com</span>
+      </a>
+      <a href="https://www.instagram.com/soboof/" class="channel" target="_blank" rel="noopener">
+        <span class="channel-key">Instagram</span>
+        <span class="channel-val">@soboof</span>
+      </a>
+      <a href="http://www.linkedin.com/in/soboof" class="channel" target="_blank" rel="noopener">
+        <span class="channel-key">LinkedIn</span>
+        <span class="channel-val">/in/soboof</span>
+      </a>
+      <a href="/journal/" class="channel">
+        <span class="channel-key">Journal</span>
+        <span class="channel-val">Notes from the studio</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+{{> footer }}
+
+<script>
+/* ── Work grid: filter chips + infinite scroll ──────────────────────────────
+   Every piece is already in the HTML — this only decides how many of them are
+   visible. That way the page works with JavaScript off (you get the whole
+   catalogue) and crawlers index all of it.
+
+   Batching is filter-aware: `shown` counts within the pieces matching the
+   active chip, not within the grid as a whole, so filtering to a category
+   that has four pieces shows four and retires the sentinel rather than
+   leaving it waiting for a seventh that will never come. */
+(function () {
+  const BATCH = 6;
+  const grid = document.getElementById('work-grid');
+  if (!grid) return;
+  const tiles    = [...grid.querySelectorAll('.prod')];
+  const chips    = [...document.querySelectorAll('#work-chips .chip')];
+  const sentinel = document.getElementById('work-sentinel');
+  const counter  = document.getElementById('work-count');
+  const empty    = document.getElementById('work-empty');
+
+  let active = 'all';
+  let shown  = BATCH;
+
+  const matches = t =>
+    active === 'all' || (t.dataset.cats || '').split(/\s+/).includes(active);
+
+  function render() {
+    const hits = tiles.filter(matches);
+    tiles.forEach(t => { t.hidden = true; });
+    hits.slice(0, shown).forEach(t => { t.hidden = false; });
+
+    const left = hits.length - Math.min(shown, hits.length);
+    sentinel.hidden = left <= 0;
+    if (left > 0) counter.textContent = `${left} more piece${left === 1 ? '' : 's'}`;
+    empty.classList.toggle('on', hits.length === 0);
+  }
+
+  /* Reveal the next batch when the sentinel comes into view. rootMargin lets
+     it fire just before the reader reaches the bottom, so the grid grows
+     under them rather than after a visible stall. */
+  const io = new IntersectionObserver(entries => {
+    if (!entries.some(e => e.isIntersecting) || sentinel.hidden) return;
+    shown += BATCH;
+    render();
+  }, { rootMargin: '240px 0px' });
+  io.observe(sentinel);
+
+  /* Clicking the sentinel does the same, for keyboard and pointer users who
+     get there before the observer fires. */
+  sentinel.addEventListener('click', () => { shown += BATCH; render(); });
+
+  chips.forEach(c => c.addEventListener('click', () => {
+    chips.forEach(o => o.classList.toggle('active', o === c));
+    active = c.dataset.filter;
+    shown  = BATCH;                     // a new filter starts from the top
+    render();
+  }));
+
+  render();
+})();
+
+/* Image fallback — soboof.com hotlinks fail cross-origin, so we mark them failed
+   and reveal the SVG mirror-shard background underneath. */
+(function(){
+  const zones = document.querySelectorAll('.prod-img, .chap-media, .hg-tile');
+  zones.forEach(zone => {
+    const img = zone.querySelector('img');
+    if (!img) return;
+    const onFail = () => {
+      img.setAttribute('data-failed','1');
+      if (!zone.querySelector('.ph')) {
+        const tag = document.createElement('span');
+        tag.className = 'ph';
+        const alt = (img.getAttribute('alt') || 'photo').trim();
+        tag.textContent = '◇ ' + alt + ' · drop image';
+        zone.appendChild(tag);
+      }
+    };
+    img.addEventListener('error', onFail);
+    /* If the image has already failed before this script ran */
+    if (img.complete && img.naturalWidth === 0) onFail();
+  });
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const STATES = [
+    { id:'hero',    color:[0.91,0.77,0.28], wire:0, rotY:0.0028, label:'SHADED · GOLD',   hex:'#e8c547', scale:1.85 },
+    { id:'work',    color:[0.81,0.84,0.86], wire:0, rotY:0.0040, label:'SHADED · MIRROR', hex:'#cfd6dc', scale:1.05 },
+    { id:'process', color:[0.85,0.49,0.35], wire:1, rotY:0.0055, label:'WIRE · COPPER',   hex:'#d97c5a', scale:1.00 },
+    { id:'contact', color:[0.30,0.66,0.85], wire:1, rotY:0.0130, label:'WIRE · CYAN',     hex:'#4ca8d8', scale:1.15 }
+  ];
+
+  const canvas = document.getElementById('scene-canvas');
+  const scene  = new THREE.Scene();
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const cam = new THREE.PerspectiveCamera(35, 1, 0.1, 200);
+  cam.position.set(0, 0, 14);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const key  = new THREE.DirectionalLight(0xfff2c8, 0.9);  key.position.set(4, 6, 8);   scene.add(key);
+  const fill = new THREE.DirectionalLight(0x6688aa, 0.45); fill.position.set(-6, -2, 4); scene.add(fill);
+  const rim  = new THREE.DirectionalLight(0xe8c547, 0.55); rim.position.set(0, 4, -8);   scene.add(rim);
+
+  const mat = new THREE.MeshStandardMaterial({
+    color: new THREE.Color(STATES[0].color[0], STATES[0].color[1], STATES[0].color[2]),
+    roughness: 0.45, metalness: 0.35,
+    flatShading: true, transparent: true, opacity: 0.92
+  });
+  const root = new THREE.Group();
+  scene.add(root);
+
+  /* Minimal glTF 2.0 reader — the Pythagoras Engine export is a single mesh with
+     embedded base64 buffers, so no external loader is needed. */
+  function gltfBuffer(uri){
+    const bin = atob(uri.split(',')[1]);
+    const u8 = new Uint8Array(bin.length);
+    for (let i=0;i<bin.length;i++) u8[i] = bin.charCodeAt(i);
+    return u8;
+  }
+  function gltfAccessor(json, bufs, index){
+    const acc = json.accessors[index];
+    const view = json.bufferViews[acc.bufferView];
+    const comps = { SCALAR:1, VEC2:2, VEC3:3, VEC4:4 }[acc.type];
+    const bytes = { 5120:1, 5121:1, 5122:2, 5123:2, 5125:4, 5126:4 }[acc.componentType];
+    const start = (view.byteOffset||0) + (acc.byteOffset||0);
+    /* copy out so the typed array is always correctly aligned */
+    const slice = bufs[view.buffer].slice(start, start + acc.count * comps * bytes);
+    const Ctor  = { 5120:Int8Array, 5121:Uint8Array, 5122:Int16Array,
+                    5123:Uint16Array, 5125:Uint32Array, 5126:Float32Array }[acc.componentType];
+    return new Ctor(slice.buffer, 0, acc.count * comps);
+  }
+  function parseGLTF(json){
+    const bufs = json.buffers.map(b => gltfBuffer(b.uri));
+    const prim = json.meshes[0].primitives[0];
+    const pos  = gltfAccessor(json, bufs, prim.attributes.POSITION);
+    const tris = prim.indices != null
+      ? Array.from(gltfAccessor(json, bufs, prim.indices))
+      : Array.from({ length: pos.length/3 }, (_, i) => i);
+    return { verts: Array.from(pos), tris };
+  }
+  function buildGeometry(parsed){
+    const positions = new Float32Array(parsed.tris.length*3);
+    for (let i=0;i<parsed.tris.length;i++){
+      const vi = parsed.tris[i]*3;
+      positions[i*3]   = parsed.verts[vi];
+      positions[i*3+1] = parsed.verts[vi+1];
+      positions[i*3+2] = parsed.verts[vi+2];
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.computeVertexNormals();
+    geo.computeBoundingBox();
+    const bb = geo.boundingBox;
+    const cx=(bb.min.x+bb.max.x)/2, cy=(bb.min.y+bb.max.y)/2, cz=(bb.min.z+bb.max.z)/2;
+    geo.translate(-cx,-cy,-cz);
+    const size = Math.max(bb.max.x-bb.min.x, bb.max.y-bb.min.y, bb.max.z-bb.min.z);
+    geo.scale(4.6/size, 4.6/size, 4.6/size);
+    geo.computeVertexNormals();
+    return geo;
+  }
+
+  fetch('/assets/models/pythagoras_m21.gltf')
+    .then(r=>r.json()).then(json=>{
+      const geo = buildGeometry(parseGLTF(json));
+      const mesh = new THREE.Mesh(geo, mat);
+      root.add(mesh);
+      const wireMat = new THREE.LineBasicMaterial({ color: mat.color.clone(), transparent:true, opacity:0 });
+      const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo), wireMat);
+      root.add(wire);
+      root.userData.wireMat = wireMat;
+    }).catch(e=>console.warn('OBJ load failed:', e));
+
+  function getSections(){
+    return STATES.map(s=>{
+      const sectEl = s.id==='hero' ? document.querySelector('.hero') : document.getElementById(s.id);
+      const railEl = sectEl ? sectEl.querySelector('.model-rail') : null;
+      return { sectEl, railEl };
+    });
+  }
+  let sections = getSections();
+
+  function activeIndex(){
+    const probe = window.scrollY + window.innerHeight*0.45;
+    let idx = 0;
+    for (let i=0;i<sections.length;i++){
+      const el = sections[i].sectEl;
+      if (el && (el.offsetTop || el.getBoundingClientRect().top + window.scrollY) <= probe) idx = i;
+    }
+    return idx;
+  }
+
+  function railWorldPos(railEl){
+    if (!railEl) return null;
+    const rect = railEl.getBoundingClientRect();
+    if (rect.width === 0) return null;
+    const cx = rect.left + rect.width*0.5;
+    const vh = window.innerHeight;
+    const span = Math.max(1, rect.height + vh);
+    const moved = vh - rect.top;
+    const progress = Math.min(1, Math.max(0, moved / span));
+    const railTop = rect.top + 24;
+    const railBottom = rect.bottom - 24;
+    const cy = railTop + (railBottom - railTop) * progress;
+    const ndcX =  (cx / window.innerWidth)  * 2 - 1;
+    const ndcY = -((cy / window.innerHeight) * 2 - 1);
+    const visH = 2 * Math.tan(cam.fov*0.5 * Math.PI/180) * cam.position.z;
+    const visW = visH * cam.aspect;
+    return { x: ndcX * visW * 0.5, y: ndcY * visH * 0.5 };
+  }
+  function fallbackPos(idx){
+    const xs = [0.45,-0.45,0.45,-0.45,0.45,-0.45,0];
+    const visH = 2 * Math.tan(cam.fov*0.5 * Math.PI/180) * cam.position.z;
+    const visW = visH * cam.aspect;
+    return { x: (xs[idx]||0) * visW * 0.5, y: 0 };
+  }
+
+  const cur = {
+    x:0, y:0,
+    r:STATES[0].color[0], g:STATES[0].color[1], b:STATES[0].color[2],
+    wire:0, rotY:STATES[0].rotY, yaw:0, pitch:0, scale:STATES[0].scale
+  };
+  const lerp = (a,b,t) => a+(b-a)*t;
+
+  const stateLbl = document.getElementById('scene-state-lbl');
+  const stateBox = document.getElementById('scene-state-hud');
+  let lastLabel = '';
+
+  let hasScrolled = false;
+  let autoYaw = 0;
+  window.addEventListener('scroll',    ()=>{ hasScrolled=true; }, { passive:true });
+  window.addEventListener('wheel',     ()=>{ hasScrolled=true; }, { passive:true, once:true });
+  window.addEventListener('touchmove', ()=>{ hasScrolled=true; }, { passive:true, once:true });
+
+  function scrollDrivenYaw(){
+    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    return -Math.min(1, Math.max(0, window.scrollY / max)) * Math.PI * 8;
+  }
+
+  function resize(){
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false);
+    cam.aspect = w/h;
+    cam.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', ()=>{ resize(); sections = getSections(); });
+
+  function tick(){
+    const isDay = document.body.classList.contains('day');
+    const idx = activeIndex();
+    const baseTgt = STATES[idx];
+    const tgt = (isDay && idx===0)
+      ? { color:[0.42,0.31,0.64], wire:baseTgt.wire, rotY:baseTgt.rotY, hex:'#6b4ea3', scale:baseTgt.scale, label:'SHADED · PURPLE' }
+      : baseTgt;
+    rim.color.set(isDay ? 0x6b4ea3 : 0xe8c547);
+
+    const k = 0.07;
+    cur.r     = lerp(cur.r,     tgt.color[0], k);
+    cur.g     = lerp(cur.g,     tgt.color[1], k);
+    cur.b     = lerp(cur.b,     tgt.color[2], k);
+    cur.wire  = lerp(cur.wire,  tgt.wire,     k);
+    cur.rotY  = lerp(cur.rotY,  tgt.rotY,     k);
+    cur.scale = lerp(cur.scale, tgt.scale,    k);
+    root.scale.setScalar(cur.scale);
+
+    let posTarget = railWorldPos(sections[idx].railEl);
+    if (!posTarget) posTarget = fallbackPos(idx);
+    cur.x = lerp(cur.x, posTarget.x, k);
+    cur.y = lerp(cur.y, posTarget.y, k);
+    root.position.x = cur.x;
+    root.position.y = cur.y;
+
+    if (!hasScrolled){
+      autoYaw += cur.rotY;
+      cur.yaw   = lerp(cur.yaw,   autoYaw,        0.2);
+      cur.pitch = lerp(cur.pitch, autoYaw * 0.32, 0.2);
+    } else {
+      const tgtYaw = scrollDrivenYaw();
+      cur.yaw   = lerp(cur.yaw,   tgtYaw,        0.10);
+      cur.pitch = lerp(cur.pitch, tgtYaw * 0.32, 0.10);
+    }
+    root.rotation.y = cur.yaw;
+    root.rotation.x = cur.pitch;
+
+    mat.color.setRGB(cur.r, cur.g, cur.b);
+    mat.opacity   = (1 - cur.wire) * 0.95 + 0.04;
+    mat.depthWrite = cur.wire < 0.5;
+    if (root.userData.wireMat){
+      root.userData.wireMat.color.setRGB(cur.r, cur.g, cur.b);
+      root.userData.wireMat.opacity = cur.wire * 0.85 + 0.06;
+    }
+
+    if (tgt.label !== lastLabel){
+      stateLbl.textContent = tgt.label;
+      stateBox.style.color = tgt.hex;
+      stateBox.style.borderColor = tgt.hex + '55';
+      lastLabel = tgt.label;
+    }
+
+    renderer.render(scene, cam);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+
+</body>
+</html>

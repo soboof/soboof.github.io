@@ -4,21 +4,25 @@
 
      node build.js
 
-   Reads  data/artworks.js + templates/artwork.html
-          data/prints.js   + templates/printing-lab.html
-          data/projects.js, data/redirects.js
-   and writes:
+   Source                            Output
+     src/pages/<name>.html             /            index.html
+       body copy, one file per page    /mirbreak/   /gallery/   /printing-lab/
+     src/partials/*.html               /workshop/   /journal/   /about/
+       head, header, footer, owl —     work/<slug>/  one page per artwork
+       shared by every page            sitemap.xml   every page above
+     src/templates/artwork.html        <old-wp-url>/ a redirect for every URL
+       the shell all 11 pieces use                   soboof.com serves today
+     data/*.js
+       artworks, prints, projects,
+       pages (SEO), redirects
 
-     work/<slug>/        one page per artwork
-     printing-lab.html   the print collections, counts derived
-     gallery.html        filter chips + piece grid   (between BUILD markers)
-     index.html          the four project sections   (same)
-     mirbreak.html       the Mirbreak work grid      (same)
-     sitemap.xml         every page, artworks included
-     <old-wp-url>/       a redirect for every URL soboof.com serves today
+   Every page is generated. The regions between <!-- BUILD:name --> markers in
+   a src/pages file are filled from data/, and the whole thing is then wrapped
+   in the shared chrome — so the header, footer and <head> exist once and
+   cannot drift between pages.
 
-   Nothing outside the BUILD markers is touched, so hand-written copy in
-   gallery.html, index.html and mirbreak.html survives a rebuild.
+   Every URL the build emits is root-relative (/assets/…, /gallery/), which is
+   what lets a page move between directories without rewriting its links.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const fs   = require('fs');
@@ -31,6 +35,7 @@ const ARTWORKS  = require('./data/artworks.js');
 const PRINTS    = require('./data/prints.js');
 const REDIRECTS = require('./data/redirects.js');
 const PROJECTS  = require('./data/projects.js');
+const PAGES     = require('./data/pages.js');
 
 /* ── helpers ───────────────────────────────────────────────────────────── */
 
@@ -46,26 +51,88 @@ const attr = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;')
   .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** Photo paths for a piece: prefix-01.jpg … prefix-0N.jpg */
+/** Photo URLs for a piece: prefix-01.jpg … prefix-0N.jpg */
 const photosOf = a => Array.from({ length: a.photos },
-  (_, i) => `assets/img/${a.imgPrefix}-${String(i + 1).padStart(2, '0')}.jpg`);
+  (_, i) => `/assets/img/${a.imgPrefix}-${String(i + 1).padStart(2, '0')}.jpg`);
 
 /* ── where an artwork page lives ───────────────────────────────────────────
-   Pieces are served from /work/<slug>/, so every artwork page sits two
-   directories below the site root and reaches shared assets through
-   ARTWORK_BASE. Everything that needs a piece's URL goes through these three,
-   so the layout is defined in exactly one place. */
+   Pieces are served from /work/<slug>/. Every URL the site emits is
+   root-relative, so a page can move up or down a directory without a single
+   link needing to be rewritten — which is what made moving the pages into
+   their own folders a data change rather than a search-and-replace. */
 const artworkFile = a => `work/${a.slug}/index.html`;   // file the build writes
-const artworkUrl  = a => `work/${a.slug}/`;             // URL, from the site root
-const ARTWORK_BASE = '../../';                          // site root, from a piece
-/** Rewrite a root-relative asset path for use inside an artwork page. */
-const asset = p => ARTWORK_BASE + p;
+const artworkUrl  = a => `work/${a.slug}/`;             // path from the site root
+/** The href to use in markup. Root-relative, because a grid of pieces is
+ *  rendered into pages at three different depths (/, /mirbreak/, /gallery/)
+ *  and a relative "work/…" would resolve differently in each. */
+const artworkHref = a => `/${artworkUrl(a)}`;
 
 const isOnSale   = a => Boolean(a.price && a.price.sale);
 const dimsLine   = a => `${a.dims.l} × ${a.dims.w} × ${a.dims.h} cm`;
 const badgeClass = a => (a.edition === 'ooak' ? ' ooak' : a.edition === 'sale' ? ' sale' : '');
 /** Filter keys a piece answers to — archetypes from the data, `sale` derived. */
 const filterKeys = a => (a.filters + (isOnSale(a) ? ' sale' : '')).trim();
+
+/* ── the hand-written pages ────────────────────────────────────────────────
+   A page is body content in src/pages/ plus a metadata block in data/pages.js,
+   wrapped in shared chrome from src/partials/. Before this the chrome was
+   pasted into all seven pages and had already drifted apart: three of them
+   still called the studio "Mirbreak · Mirrored Sculpture" under the logo, only
+   the homepage carried the SuperAdobe link, and the owl mark was duplicated 22
+   times for 61 KB. There is now one copy of each.
+
+   Two token shapes, deliberately distinguishable at a glance:
+     {{> name key="value" }}   an include, resolved from src/partials/name.html
+                               ("key" is substituted as {{key}} inside it)
+     {{TOKEN}}                 a page value from data/pages.js
+   Include arguments are lower-case and page tokens UPPER-CASE, so a partial
+   can carry page tokens through untouched. */
+
+/** Resolve includes depth-first, so a partial may include another. */
+function include(html, depth = 0) {
+  if (depth > 8) throw new Error('src/partials: include loop');
+  return html.replace(/\{\{>\s*([\w-]+)([^}]*)\}\}/g, (_, name, argstr) => {
+    const args = {};
+    for (const m of argstr.matchAll(/([\w-]+)="([^"]*)"/g)) args[m[1]] = m[2];
+    const body = read(`src/partials/${name}.html`).trimEnd()
+      /* Fill this include's own arguments; leave everything else for the page
+         pass, so {{TITLE}} inside a partial still reaches data/pages.js. */
+      .replace(/\{\{([a-z][\w-]*)\}\}/g, (whole, k) => (k in args ? args[k] : whole));
+    return include(body, depth + 1);
+  });
+}
+
+/** Wrap one page's body in the chrome and fill its metadata. */
+function renderPage(slug, page, body) {
+  const nav = ['MIRBREAK', 'PRINTING_LAB', 'WORKSHOP', 'JOURNAL'];
+  const tokens = {
+    TITLE: page.title, DESC: page.desc, CANONICAL: page.canonical,
+    OG_IMAGE: page.ogImage, OG_ALT: page.ogAlt, OG_TYPE: page.ogType, CSS: page.css,
+    JSONLD: page.jsonld || '', SYS: page.sys,
+    CTA_HREF: page.ctaHref, CTA_TEXT: page.ctaText,
+    EXTRA_OG: (page.extraOg || []).map(t => '\n' + t).join(''),
+  };
+  for (const n of nav) tokens[`CUR_${n}`] = page.current === n ? ' current' : '';
+
+  const html = include(`<!DOCTYPE html>
+<html lang="en">
+{{> head }}
+<body>
+${body.trimEnd()}
+</body>
+</html>
+`);
+  const left = [];
+  const out = html.replace(/\{\{([A-Z][\w]*)\}\}/g, (whole, k) => {
+    if (k in tokens) return tokens[k] == null ? '' : tokens[k];
+    left.push(k); return whole;
+  });
+  if (left.length) {
+    throw new Error(`src/pages/${page.out}: no value for ${[...new Set(left)].join(', ')} ` +
+      `— add it to data/pages.js`);
+  }
+  return out;
+}
 
 /** Replace the text between <!-- BUILD:name --> … <!-- /BUILD:name -->. */
 function fill(src, name, body, file) {
@@ -116,20 +183,19 @@ const RELATED_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 12
 /* ── the PRODUCT object each artwork page runs on ──────────────────────── */
 
 function productJs(a, all) {
-  const photos = photosOf(a).map(asset);
+  const photos = photosOf(a);
   const j = JSON.stringify;
 
-  /* Related pieces: the next three in the catalogue, wrapping around. Each one is a
-     sibling directory under /work/, so the link only has to climb one level. */
+  /* Related pieces: the next three in the catalogue, wrapping around. */
   const here = all.indexOf(a);
   const related = [1, 2, 3].map(n => {
     const r = all[(here + n) % all.length];
     return {
       id:   r.code,
-      img:  asset(photosOf(r)[0]),
+      img:  photosOf(r)[0],
       name: r.name,
       tags: r.categories.join(' · '),
-      href: `../${r.slug}/`,
+      href: artworkHref(r),
     };
   });
 
@@ -174,10 +240,10 @@ const PRODUCT = {
 
   /* ── Breadcrumb ── */
   breadcrumbCategory:     ${j(a.categories[0])},
-  breadcrumbCategoryHref: ${j(asset('gallery.html'))},
+  breadcrumbCategoryHref: ${j('/gallery/')},
 
   /* ── Gallery ── */
-  modelPath:   ${j(asset('assets/models/pythagoras.obj'))},
+  modelPath:   ${j('/assets/models/pythagoras.obj')},
   photos:      ${j(photos)},
   gallerySvg:  PLACEHOLDER_SVG,
   thumbSvgs:   [],
@@ -225,7 +291,7 @@ function jsonLd(a) {
       name: a.name,
       description: a.schemaDesc,
       url,
-      image: photosOf(a).slice(0, 3).map(p => `${SITE}/${p}`),
+      image: photosOf(a).slice(0, 3).map(p => `${SITE}${p}`),
       creator: {
         '@type': 'Person',
         name: 'Soby Farahat',
@@ -272,12 +338,19 @@ function jsonLd(a) {
 /* ── page renderers ────────────────────────────────────────────────────── */
 
 function artworkPage(template, a, all) {
-  return template
+  /* An artwork page carries the same header and footer as everything else, so
+     it takes them from src/partials/ too — otherwise the nav on these eleven
+     pages drifts away from the other six, which is exactly what happened when
+     the gallery was retired. No nav item corresponds to a piece, so nothing is
+     marked current; the CTA matches the rest of the site. */
+  return include(template)
+    .replace(/\{\{CUR_\w+\}\}/g, '')
+    .replace(/\{\{CTA_HREF\}\}/g, '#contact')
+    .replace(/\{\{CTA_TEXT\}\}/g, 'Contact')
     .replace(/\{\{META_TITLE\}\}/g,  attr(a.metaTitle))
     .replace(/\{\{META_DESC\}\}/g,   attr(a.metaDesc))
-    .replace(/\{\{BASE\}\}/g,        ARTWORK_BASE)
     .replace(/\{\{CANONICAL\}\}/g,   `${SITE}/${artworkUrl(a)}`)
-    .replace(/\{\{OG_IMAGE\}\}/g,    `${SITE}/${photosOf(a)[0]}`)
+    .replace(/\{\{OG_IMAGE\}\}/g,    `${SITE}${photosOf(a)[0]}`)
     .replace(/\{\{OG_IMAGE_ALT\}\}/g, attr(`${a.name} — mirrored sculpture by Soboof`))
     .replace(/\{\{JSONLD\}\}/g,      () => jsonLd(a))
     .replace(/\{\{H1\}\}/g,          attr(a.name))
@@ -309,7 +382,7 @@ function galleryGrid(all) {
     const feature = a.featured === 'big' ? ' feature' : '';
     const photo   = photosOf(a)[0];
     return `    <!-- ${i + 1}. ${a.name} -->
-    <a href="${artworkUrl(a)}" class="piece${feature}" data-cats="${attr(filterKeys(a))}">
+    <a href="${artworkHref(a)}" class="piece${feature}" data-cats="${attr(filterKeys(a))}">
       <div class="piece-img">
         <span class="piece-id">${attr(a.code)}</span>
         <span class="piece-badge${badgeClass(a)}">${attr(a.galleryBadge)}</span>
@@ -328,12 +401,23 @@ function galleryGrid(all) {
   }).join('\n\n');
 }
 
+/* ── the work grid ────────────────────────────────────────────────────────
+   The whole catalogue, in one mosaic. This used to be the featured pieces
+   only, with the rest living on a separate gallery page; that page is now
+   folded in here, so `featured` no longer decides *whether* a piece appears —
+   only how big its tile is.
+
+   Every piece is written into the HTML, so a crawler and a reader with no
+   JavaScript both see the full catalogue. The batching is a display layer the
+   page's script puts on top: it hides everything past the first batch and
+   reveals six more each time the sentinel scrolls into view. `data-cats`
+   carries the filter keys so the chips can work on the same tiles. */
 function homeGrid(all) {
-  return all.filter(a => a.featured).map(a => {
+  return all.map(a => {
     const big   = a.featured === 'big';
     const photo = photosOf(a)[0];
     return `    <!-- ${a.name} -->
-    <a href="${artworkUrl(a)}" class="prod ${big ? 'big' : 'std'}">
+    <a href="${artworkHref(a)}" class="prod ${big ? 'big' : 'std'}" data-cats="${attr(filterKeys(a))}">
       <div class="prod-img">
         <span class="prod-id">${attr(a.code)}</span>
         <span class="prod-edition">${attr(a.editionLabel)}</span>
@@ -349,14 +433,14 @@ function homeGrid(all) {
 }
 
 function sitemap(all) {
+  /* Priorities by slug; the URLs themselves come from data/pages.js, so a page
+     that moves cannot leave a stale entry behind here. */
+  const priority = { index: '1.0', mirbreak: '0.9',
+                     'printing-lab': '0.8', workshop: '0.8',
+                     about: '0.7', journal: '0.7' };
   const pages = [
-    ['',                   '1.0'],
-    ['mirbreak.html',      '0.9'],
-    ['gallery.html',       '0.9'],
-    ['printing-lab.html',  '0.8'],
-    ['workshop.html',      '0.8'],
-    ['about.html',         '0.7'],
-    ['journal.html',       '0.7'],
+    ...Object.entries(PAGES).map(([slug, p]) =>
+      [p.url.replace(/^\//, ''), priority[slug] || '0.7']),
     ...all.map(a => [artworkUrl(a), '0.6']),
   ];
   return '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -371,7 +455,7 @@ function sitemap(all) {
 
 /** Photo path for sheet `i` (0-based) of a print set. */
 const printPath = (set, i) =>
-  `assets/img/death-culture/${set.prefix}-${String(i + 1).padStart(2, '0')}.jpg`;
+  `/assets/img/death-culture/${set.prefix}-${String(i + 1).padStart(2, '0')}.jpg`;
 
 const allPrints = p => p.sets.reduce((n, s) => n + s.prints.length, 0);
 
@@ -434,7 +518,7 @@ function deathCulturePage(template, p) {
 }
 
 /* ── Pythagoras Engine: geometry → static SVG wireframe ────────────────────
-   The PE examples are drawn from the real model files in assets/models/ and
+   The PE examples are drawn from the real model files in /assets/models/ and
    baked into the page at build time. No WebGL, no runtime cost, and the stroke
    inherits `currentColor` so the drawing follows the theme. ─────────────── */
 
@@ -680,14 +764,32 @@ function domeSVG(spec) {
 
 /* ── the four projects (landing page intro) ────────────────────────────── */
 
-/** Inline a project's mark. The .svg in assets/img/ is the master and uses
+/** Inline a project's mark. The .svg in /assets/img/ is the master and uses
     fill="currentColor", so the drawing takes the section tint and follows the
     night/day theme — the same rule the owl logo is inlined under. */
-function inlineMark(file) {
+function inlineMark(file, cls) {
   return read(`assets/img/${file}`).trim()
     .replace(/^<\?xml[^>]*\?>\s*/, '')
-    .replace(/<svg\b/, '<svg class="sec-mark" aria-hidden="true"')
+    .replace(/<svg\b/, `<svg class="${cls}" aria-hidden="true"`)
     .replace(/\s*\n\s*/g, ' ');
+}
+
+/** The marks in a line under the hero, each linking to the project it stands
+    for. Anything in data/projects.js with a `logo` shows up here, so the row
+    follows the data rather than being kept in step by hand. Only the two
+    software tools have a logotype today; Mirbreak and Death Culture have none
+    and are reached from their sections instead. */
+function heroMarks(projects) {
+  const marked = projects.filter(p => p.logo);
+  if (!marked.length) return '';
+  const links = marked.map(p =>
+    `    <a href="${attr(p.href)}" class="hero-tool" style="--proj:${p.accent}"` +
+    `${p.external ? ' target="_blank" rel="noopener"' : ''}>` +
+    `${inlineMark(p.logo, 'tool-mark')}<span>${attr(p.name)}</span></a>`).join('\n');
+  return `  <div class="hero-tools">
+    <span class="hero-tools-k">Tools</span>
+${links}
+  </div>`;
 }
 
 function projectCards(projects, artworks, prints) {
@@ -740,7 +842,7 @@ function exampleCards(p, artworks, prints) {
     }
     if (p.source === 'artworks') {
       const a = artworks.find(a => a.slug === ex.slug);
-      return `        <a href="${artworkUrl(a)}" class="ex ex-art">
+      return `        <a href="${artworkHref(a)}" class="ex ex-art">
           <div class="ex-media"><img src="${photosOf(a)[0]}" alt="${attr(a.name)} sculpture" loading="lazy" decoding="async"></div>
           <div class="ex-body">
             <div class="ex-title">${attr(a.name)}</div>
@@ -750,8 +852,8 @@ function exampleCards(p, artworks, prints) {
         </a>`;
     }
     const caption = printCaption(prints, ex.img);
-    return `        <a href="printing-lab.html" class="ex ex-print">
-          <div class="ex-media"><img src="assets/img/death-culture/${ex.img}.jpg" alt="${attr(caption)}" loading="lazy" decoding="async"></div>
+    return `        <a href="/printing-lab/" class="ex ex-print">
+          <div class="ex-media"><img src="/assets/img/death-culture/${ex.img}.jpg" alt="${attr(caption)}" loading="lazy" decoding="async"></div>
           <div class="ex-body">
             <div class="ex-title">${attr(printSetName(prints, ex.img))}</div>
             <div class="ex-spec">Lino relief · A4</div>
@@ -785,7 +887,7 @@ function projectSections(projects, artworks, prints) {
        abbreviation, the eyebrow above the heading takes the field — the name
        itself is the heading now, so repeating it above would say it twice. */
     const [abbr, ...rest] = p.key.split(' · ');
-    const mark = p.logo ? inlineMark(p.logo) : '';
+    const mark = p.logo ? `      ${inlineMark(p.logo, 'sec-mark')}\n` : '';
     return `<!-- ── PROJECT · ${p.name.toUpperCase()} ── -->
 <section id="${attr(p.id)}" class="${side} proj-sec" style="--proj:${p.accent}">
   <div class="model-rail" data-section="${attr(p.id)}">
@@ -793,9 +895,9 @@ function projectSections(projects, artworks, prints) {
     <span class="rail-tick bot">· · · ${attr(abbr)} ↓</span>
   </div>
   <div class="sec-head">
-    <div>
-      <div class="sec-num">${String(i + 1).padStart(2, '0')} · ${attr(rest.join(' · ') || p.name)}</div>
-      <h2 class="sec-title">${mark}${attr(p.name)}</h2>
+    <div class="sec-id">
+${mark}      <div class="sec-num">${String(i + 1).padStart(2, '0')} · ${attr(rest.join(' · ') || p.name)}</div>
+      <h2 class="sec-title">${attr(p.name)}</h2>
       <div class="sec-role">${attr(p.role)}</div>
     </div>
     <div class="sec-sub">${sub(attr(p.body))}</div>
@@ -832,8 +934,8 @@ function checkProjects(projects, artworks, prints) {
       const where = `${at} example ${n + 1}`;
       if (p.source === 'models') {
         if (!e.file) problems.push(`${where}: missing "file"`);
-        else if (!fs.existsSync(path.join(ROOT, 'assets/models', e.file))) {
-          problems.push(`${where}: assets/models/${e.file} does not exist`);
+        else if (!fs.existsSync(path.join(ROOT, '/assets/models', e.file))) {
+          problems.push(`${where}: /assets/models/${e.file} does not exist`);
         }
         if (!e.label) problems.push(`${where}: missing "label"`);
         if (!e.note)  problems.push(`${where}: missing "note"`);
@@ -858,8 +960,8 @@ function checkProjects(projects, artworks, prints) {
         if (!set) problems.push(`${where}: "${e.img}" is not a print in any set`);
         else if (!set.prints[parseInt(m[2], 10) - 1]) {
           problems.push(`${where}: ${set.name} has no print ${m[2]}`);
-        } else if (!fs.existsSync(path.join(ROOT, 'assets/img/death-culture', e.img + '.jpg'))) {
-          problems.push(`${where}: assets/img/death-culture/${e.img}.jpg is missing`);
+        } else if (!fs.existsSync(path.join(ROOT, '/assets/img/death-culture', e.img + '.jpg'))) {
+          problems.push(`${where}: /assets/img/death-culture/${e.img}.jpg is missing`);
         }
       }
     });
@@ -871,8 +973,8 @@ function checkProjects(projects, artworks, prints) {
       problems.push(`${at}: key "${p.key}" must read "<ABBREVIATION> · <FIELD>"`);
     }
     /* A mark is optional, but a named one has to be on disk. */
-    if (p.logo && !fs.existsSync(path.join(ROOT, 'assets/img', p.logo))) {
-      problems.push(`${at}: logo assets/img/${p.logo} does not exist`);
+    if (p.logo && !fs.existsSync(path.join(ROOT, '/assets/img', p.logo))) {
+      problems.push(`${at}: logo /assets/img/${p.logo} does not exist`);
     }
     if (p.accent && !ok.has(p.accent)) {
       problems.push(`${at}: accent "${p.accent}" is not a colour index.html defines ` +
@@ -954,11 +1056,11 @@ function checkRedirects(list, artworks) {
   const seen = new Set();
 
   /* Real pages a redirect must never shadow, compared without a trailing slash.
-     Pieces live at /work/<slug>/ now; the old flat /<slug>.html URLs are no longer
-     pages, which is exactly why the map is allowed to redirect them. */
+     Pieces live at /work/<slug>/ and pages at /<name>/ now; the old flat
+     /<slug>.html and /<name>.html URLs are no longer pages, which is exactly
+     why the map is allowed to redirect them. */
   const own = new Set(['', ...artworks.map(a => `/${artworkUrl(a)}`.replace(/\/$/, '')),
-    '/index.html', '/mirbreak.html', '/gallery.html', '/printing-lab.html',
-    '/workshop.html', '/about.html', '/journal.html', '/404.html']);
+    ...Object.values(PAGES).map(p => p.url.replace(/\/$/, '')), '/404.html']);
 
   /* Directories the redirect tree legitimately owns — a redirect nested inside
      another (e.g. /gallery/animals/ inside /gallery/) is expected, not a clash. */
@@ -1014,8 +1116,8 @@ function checkRedirects(list, artworks) {
  *  checkout. A target counts if the build produces it or it is already there. */
 function willExist(artworks) {
   return new Set([
-    'index.html', 'mirbreak.html', 'gallery.html', 'printing-lab.html',
-    'workshop.html', 'about.html', 'journal.html', '404.html',
+    ...Object.values(PAGES).map(p => p.out),
+    '404.html',
     ...artworks.map(artworkFile),
   ]);
 }
@@ -1094,36 +1196,44 @@ function main() {
     process.exit(1);
   }
 
-  const template = read('templates/artwork.html');
+  const template = read('src/templates/artwork.html');
   for (const a of ARTWORKS) {
     write(artworkFile(a), artworkPage(template, a, ARTWORKS));
     console.log(`  ✓ ${artworkUrl(a)}`);
   }
 
-  write('printing-lab.html', deathCulturePage(read('templates/printing-lab.html'), PRINTS));
-  console.log('  ✓ printing-lab.html');
+  /* Each page's body is assembled first — generated regions filled in, tokens
+     resolved — then wrapped in the shared chrome. */
+  const bodyOf = {
+    'printing-lab': () => deathCulturePage(read('src/pages/printing-lab.html'), PRINTS),
+    gallery: () => {
+      let g = read('src/pages/gallery.html');
+      g = fill(g, 'gallery-chips', galleryChips(ARTWORKS), 'gallery.html');
+      return fill(g, 'gallery-grid', galleryGrid(ARTWORKS), 'gallery.html');
+    },
+    index: () => {
+      let i = read('src/pages/index.html');
+      i = fill(i, 'hero-tools', heroMarks(PROJECTS), 'index.html');
+      return fill(i, 'projects', projectSections(PROJECTS, ARTWORKS, PRINTS), 'index.html');
+    },
+    mirbreak: () => {
+      let m = read('src/pages/mirbreak.html');
+      m = fill(m, 'work-chips', galleryChips(ARTWORKS), 'mirbreak.html');
+      return fill(m, 'home-grid', homeGrid(ARTWORKS), 'mirbreak.html');
+    },
+  };
 
-  let gallery = read('gallery.html');
-  gallery = fill(gallery, 'gallery-chips', galleryChips(ARTWORKS), 'gallery.html');
-  gallery = fill(gallery, 'gallery-grid',  galleryGrid(ARTWORKS),  'gallery.html');
-  write('gallery.html', gallery);
-  console.log('  ✓ gallery.html');
-
-  let index = read('index.html');
-  index = fill(index, 'projects',  projectSections(PROJECTS, ARTWORKS, PRINTS), 'index.html');
-  write('index.html', index);
-  console.log('  ✓ index.html');
-
-  let mirbreak = read('mirbreak.html');
-  mirbreak = fill(mirbreak, 'home-grid', homeGrid(ARTWORKS), 'mirbreak.html');
-  write('mirbreak.html', mirbreak);
-  console.log('  ✓ mirbreak.html');
-
+  const built = {};
+  for (const [slug, page] of Object.entries(PAGES)) {
+    const body = (bodyOf[slug] || (() => read(`src/pages/${slug}.html`)))();
+    built[slug] = renderPage(slug, page, body);
+    write(page.out, built[slug]);
+    console.log(`  ✓ ${page.out}`);
+  }
   /* Anchors are checked after generation, because the sections they point at
      are themselves generated. */
-  const dead = [...checkAnchors(index, 'index.html'),
-                ...checkAnchors(mirbreak, 'mirbreak.html'),
-                ...checkAnchors(gallery, 'gallery.html')];
+  const dead = Object.entries(built)
+    .flatMap(([slug, html]) => checkAnchors(html, PAGES[slug].out));
   if (dead.length) {
     console.error('\nBroken in-page links:');
     dead.forEach(d => console.error('  ! ' + d));

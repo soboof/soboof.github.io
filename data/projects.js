@@ -80,31 +80,6 @@ module.exports = [
     ],
   },
   {
-    id:     'superadobe',
-    key:    'SA · PROCEDURAL DESIGN',
-    status: 'FREE · OPEN SOURCE',
-    name:   'SuperAdobe Generator',
-    role:   'Earthbag dome designer & material calculator',
-    body:   'Procedural design at building scale. Lay out a complex of domes, ' +
-            'vaults and cylinders on a scan of your own land, watch it rise course by ' +
-            'course, and get back the sack, wire, fill and plaster it will take.',
-    meta:   ['WEB', 'EARTHBAG', 'FREE'],
-    href:   'https://soboof.com/superadobe-generator/',
-    cta:    'Open the generator',
-    accent: 'var(--earth)',
-    logo:   'superadobe-logo.svg',
-    external: true,
-    source: 'domes',
-    examples: [
-      { type: 'dome',     span: 5,   label: 'Dome',
-        note: 'Struck the conventional way — compass on the outer edge of the base sack, rr = 2·rb + sw.' },
-      { type: 'vault',    span: 3.5, length: 7, label: 'Vault',
-        note: 'The same wall run along a length, closing on the catenary a barrel stands in.' },
-      { type: 'cylinder', span: 4,   height: 2.4, label: 'Cylinder',
-        note: 'A straight drum, left open at the top for a roof or a second storey.' },
-    ],
-  },
-  {
     id:     'mirbreak',
     key:    'MB · SCULPTURE',
     status: '{{ARTWORKS}} PIECES',
@@ -143,6 +118,31 @@ module.exports = [
       { img: 'death-culture-04' },
       { img: 'sky-bodybags-09' },
       { img: 'sky-bodybags-01' },
+    ],
+  },
+  {
+    id:     'superadobe',
+    key:    'SA · PROCEDURAL DESIGN',
+    status: 'FREE · OPEN SOURCE',
+    name:   'SuperAdobe Generator',
+    role:   'Earthbag dome designer & material calculator',
+    body:   'Procedural design at building scale. Lay out a complex of domes, ' +
+            'vaults and cylinders on a scan of your own land, watch it rise course by ' +
+            'course, and get back the sack, wire, fill and plaster it will take.',
+    meta:   ['WEB', 'EARTHBAG', 'FREE'],
+    href:   'https://soboof.com/superadobe-generator/',
+    cta:    'Open the generator',
+    accent: 'var(--earth)',
+    logo:   'superadobe-logo.svg',
+    external: true,
+    source: 'domes',
+    examples: [
+      { type: 'dome',     span: 5,   label: 'Dome',
+        note: 'Struck the conventional way — compass on the outer edge of the base sack, rr = 2·rb + sw.' },
+      { type: 'vault',    span: 3.5, length: 7, label: 'Vault',
+        note: 'The same wall run along a length, closing on the catenary a barrel stands in.' },
+      { type: 'cylinder', span: 4,   height: 2.4, label: 'Cylinder',
+        note: 'A straight drum, left open at the top for a roof or a second storey.' },
     ],
   },
 ];

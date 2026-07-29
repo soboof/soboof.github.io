@@ -676,3 +676,62 @@ body.day .model-rail .rail-tick{color:rgba(107,78,163,.4) !important}
 }
 body.day .brand svg{filter:drop-shadow(0 1px 6px rgba(107,78,163,.4))}
 body.day .brand-sub{color:rgba(107,78,163,.4)}
+
+/* ── Work: filter chips + batched reveal ───────────────────────────────────
+   Ported from the gallery page when its catalogue was folded into this
+   section. The tiles themselves are the existing .prod mosaic — only how many
+   of them are visible changes. */
+.chips{
+  display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:14px;margin-bottom:24px;position:relative;overflow:hidden;
+}
+.chips::before{
+  content:'';position:absolute;top:0;left:8%;right:8%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(232,197,71,.4),transparent);
+}
+.chip{
+  font-family:var(--ff-m);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--card-inner);border:1px solid var(--border);color:var(--muted);
+  padding:7px 12px;border-radius:5px;cursor:pointer;transition:all .14s;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.chip:hover{border-color:rgba(232,197,71,.45);color:var(--accent)}
+.chip .n{
+  font-size:9px;color:var(--accent);background:rgba(232,197,71,.08);
+  padding:1px 6px;border-radius:99px;font-weight:500;letter-spacing:.04em;
+}
+.chip.active{background:rgba(232,197,71,.1);border-color:var(--accent);color:var(--accent)}
+.chip.active .n{background:rgba(232,197,71,.16)}
+
+/* A grid item still lays out when hidden, so this has to beat .prod's display. */
+.work-grid .prod[hidden]{display:none !important}
+
+/* The sentinel. Scrolling it into view asks for the next six; it is also
+   clickable, for anyone who gets here by keyboard before the observer fires. */
+.work-more{
+  width:100%;background:none;font:inherit;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:22px;padding:16px;cursor:pointer;
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);border:1px dashed var(--border);border-radius:8px;
+  transition:color .16s,border-color .16s;
+}
+.work-more:hover{color:var(--accent);border-color:rgba(232,197,71,.45)}
+.work-more[hidden]{display:none}
+.work-more-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--accent);
+  animation:pulse 2s ease-in-out infinite;
+}
+.work-empty{
+  display:none;margin-top:22px;padding:28px;text-align:center;
+  font-family:var(--ff-m);font-size:12px;color:var(--muted);
+  border:1px solid var(--border);border-radius:8px;
+}
+.work-empty.on{display:block}
+
+body.day .chip:hover{border-color:rgba(107,78,163,.45)}
+body.day .chip .n{background:rgba(107,78,163,.08)}
+body.day .chip.active{background:rgba(107,78,163,.1)}
+body.day .chip.active .n{background:rgba(107,78,163,.16)}
+body.day .work-more:hover{border-color:rgba(107,78,163,.45)}
