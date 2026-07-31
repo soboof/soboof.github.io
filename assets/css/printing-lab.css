@@ -110,9 +110,13 @@ body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
     display:none;position:absolute;top:100%;left:0;right:0;
     flex-direction:column;align-items:stretch;gap:6px;
     padding:14px 22px 20px;
-    background:var(--glass);border-bottom:1px solid var(--border);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    /* Thinner than the header's --glass on purpose: at .78 the tint hid
+       the blur, and the point of the panel is the page going soft under it. */
+    background:rgba(12,10,8,.58);border-bottom:1px solid var(--border);
+    backdrop-filter:blur(30px) saturate(150%);
+    -webkit-backdrop-filter:blur(30px) saturate(150%);
   }
+  body.day .nav-links{background:rgba(236,233,225,.7)}
   .nav-links.open{display:flex}
   .nav-link{font-size:11px;padding:12px 14px;border-color:var(--border)}
   .nav-link.tool{padding:12px 14px}
@@ -147,10 +151,18 @@ body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
    themes while the black ink flips to paper cream on the dark one. */
 .hero-art{margin:-8px 0 0;pointer-events:none}
 .hero-plate{position:relative;max-width:900px;margin:0 auto;container-type:inline-size}
-.hero-plate img{display:block;width:100%;height:auto}
-.hero-plate .day{display:none}
-body.day .hero-plate .night{display:none}
-body.day .hero-plate .day{display:block}
+.hero-plate img{display:none;width:100%;height:auto}
+/* Two axes: day/night (theme) and wide/narrow (viewport). Exactly one of the
+   four images is ever shown. */
+.hero-plate .wide.night{display:block}
+body.day .hero-plate .wide.night{display:none}
+body.day .hero-plate .wide.day{display:block}
+@media(max-width:700px){
+  .hero-plate .wide{display:none !important}
+  .hero-plate .narrow.night{display:block}
+  body.day .hero-plate .narrow.night{display:none}
+  body.day .hero-plate .narrow.day{display:block}
+}
 
 /* The title sits on the gold band, so it is sized off the plate rather than the
    viewport — the lockup then holds at any width. Left of ~37% the band is clear
@@ -398,12 +410,14 @@ footer{border-top:1px solid var(--border);margin-top:48px;background:var(--glass
   section{padding:36px 22px}
   .counter{max-width:540px;margin-left:auto;margin-right:auto;width:100%}
 }
-/* Too small for type on the band — the title steps back above the print. */
+/* Below 700px the hero swaps to the full proof-sheet print (dc-hero-01, the
+   "narrow" images above). Its upper gold field (x 28.8%–94.8%, y 4.5%–23.4%
+   of the plate) still holds the title. The quote no longer tries to fit the
+   lower field — it reads as plain text after the image instead. */
 @media(max-width:700px){
-  .hero-lockup{position:static;width:auto;margin-bottom:16px}
-  .hero-lockup h1{font-size:clamp(32px,9vw,48px);color:var(--accent)}
-  .hero-lockup h1 .mirror{color:var(--mirror);font-size:.5em;margin-top:12px}
-  .hero-quote{position:static;width:auto;margin:0 0 20px}
+  .hero-lockup{left:31cqw;top:8cqw;width:32cqw}
+  .hero-lockup h1{font-size:7cqw}
+  .hero-quote{position:static;width:auto;margin:16px 0 0}
   .hero-quote p{font-size:15px;text-align:left;color:var(--text)}
   .hero-quote .hl{color:var(--rose,#d97c5a)}
 }
@@ -428,7 +442,7 @@ body.day .hero-tag::before{background:rgba(107,78,163,.5) !important}
 body.day .hero-logo-bg{filter:drop-shadow(0 4px 24px rgba(107,78,163,.32)) !important}
 body.day .hero h1{text-shadow:0 0 50px rgba(107,78,163,.16) !important}
 /* no purple halo where the title lies on the gold band */
-@media(min-width:701px){body.day .hero-lockup h1{text-shadow:none !important}}
+body.day .hero-lockup h1{text-shadow:none !important}
 body.day .hero-divider{background:linear-gradient(90deg,rgba(107,78,163,.36),rgba(107,78,163,.02)) !important}
 body.day .btn.primary{box-shadow:0 2px 18px rgba(107,78,163,.22) !important}
 body.day .btn.primary:hover{background:#7a5cb3 !important}
