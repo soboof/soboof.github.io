@@ -110,9 +110,13 @@ body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
     display:none;position:absolute;top:100%;left:0;right:0;
     flex-direction:column;align-items:stretch;gap:6px;
     padding:14px 22px 20px;
-    background:var(--glass);border-bottom:1px solid var(--border);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    /* Thinner than the header's --glass on purpose: at .78 the tint hid
+       the blur, and the point of the panel is the page going soft under it. */
+    background:rgba(12,10,8,.58);border-bottom:1px solid var(--border);
+    backdrop-filter:blur(30px) saturate(150%);
+    -webkit-backdrop-filter:blur(30px) saturate(150%);
   }
+  body.day .nav-links{background:rgba(236,233,225,.7)}
   .nav-links.open{display:flex}
   .nav-link{font-size:11px;padding:12px 14px;border-color:var(--border)}
   .nav-link.tool{padding:12px 14px}
