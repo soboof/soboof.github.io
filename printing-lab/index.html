@@ -130,72 +130,91 @@
       </div>
     </a>
     <div class="nav-spacer"></div>
-    <div class="nav-links">
+    <button id="nav-toggle" class="nav-toggle" type="button"
+            aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="nav-links">
       <a href="/mirbreak/" class="nav-link">Mirbreak</a>
       <a href="/printing-lab/" class="nav-link current">Printing Lab</a>
       <a href="/workshop/" class="nav-link">Workshop</a>
       <a href="/journal/" class="nav-link">Journal</a>
-      <a href="https://pythagorasengine.com/builder" class="nav-link pe" target="_blank" rel="noopener">&#9651; Builder</a>
-      <a href="https://soboof.com/superadobe-generator/" class="nav-link sa" target="_blank" rel="noopener">&#11041; SuperAdobe</a>
+      <!-- The two tools are marks only on desktop: the name is kept for screen
+           readers and as the hover tooltip, and shown again in the menu. -->
+      <a href="https://pythagorasengine.com/builder" class="nav-link pe tool"
+         target="_blank" rel="noopener" title="Pythagoras Engine Builder"
+        ><span class="tool-ico" aria-hidden="true">&#9651;</span><span class="tool-name">Builder</span></a>
+      <a href="https://soboof.com/superadobe-generator/" class="nav-link sa tool"
+         target="_blank" rel="noopener" title="SuperAdobe Generator"
+        ><span class="tool-ico" aria-hidden="true">&#11041;</span><span class="tool-name">SuperAdobe</span></a>
       <a href="index.html#contact" class="nav-link cta">Contact</a>
     </div>
   </div>
 </header>
-
-<div class="breadcrumb">
-  <a href="/">Soboof</a>
-  <span class="sep">›</span>
-  <span class="here">Printing Lab</span>
-</div>
+<script src="/assets/js/nav.js" defer></script>
 
 <!-- Hero -->
 <div class="hero">
-  <div class="hero-content">
-    <div class="hero-tag">SOBOOF · PRINTING LAB · PERFORMANCE</div>
-    <div class="hero-headline">
-      <div class="hero-text">
+  <div class="hero-tag">SOBOOF · PRINTING LAB · PERFORMANCE</div>
+
+  <div class="hero-art">
+    <div class="hero-plate">
+      <div class="hero-lockup">
         <h1>
           Printing<br>Lab.
           <span class="mirror">A press that travels.</span>
         </h1>
       </div>
-    </div>
-    <div class="hero-divider"></div>
-    <div class="hero-desc">
-      The third strand of the studio, worked in <strong>ink and cut lino</strong> rather than mirror.
-      A press, a table and a stack of paper, set up wherever the lab is hosted. The current project is
-      <strong>Death Culture</strong>, by <strong>Soby Farahat</strong> and <strong>Ju Bergman</strong>:
-      six carved stamps — cypress, hound, bird of prey, mountain, flame, cloud — printed live, over and
-      over, while visitors help place the body bags on the paper.
-      <br><br>
-      The work is about the <strong>banality of chanting death for the other</strong>, and about the
-      fog of propaganda that makes it sayable. It draws its images from <strong>Iran</strong>, where
-      footage of the protests showed the dead lying in the street in black body bags. The quantity
-      matters here. So does who does the printing.
-    </div>
-    <div class="hero-actions">
-      <a href="#prints" class="btn primary">See the prints →</a>
-      <a href="#statement" class="btn">Read the statement</a>
+
+      <div class="hero-quote">
+        <p><strong class="hl">Death culture</strong> is the absolute absence of tolerance:
+        the banality of chanting death for the &ldquo;high-contrast other,&rdquo; and
+        justifying it in the name of any ideology.</p>
+      </div>
+      <img class="night" src="/assets/img/death-culture/dc-hero-night.png"
+           alt="Death Culture: the mountain stamp printed in black under a gold band" width="1016" height="607">
+      <img class="day" src="/assets/img/death-culture/dc-hero-day.png"
+           alt="" aria-hidden="true" width="1016" height="607">
     </div>
   </div>
 
-  <!-- Counter card -->
-  <div class="counter">
-    <div class="eq-corner tl"></div><div class="eq-corner tr"></div>
-    <div class="eq-corner bl"></div><div class="eq-corner br"></div>
-    <div class="counter-head"><b>DC::INDEX</b> · ONGOING</div>
-    <div class="counter-big">43<span class="lbl">prints<br>documented</span></div>
-    <div class="counter-rows">
+  <div class="hero-divider"></div>
+
+  <div class="hero-lower">
+    <div>
+      <div class="hero-desc">
+        The studio's third strand, worked in <strong>ink and cut lino</strong> rather than mirror:
+        a press, a table and a stack of paper, set up wherever the lab is hosted. The current project
+        is <strong>Death Culture</strong>, with <strong>Ju Bergman</strong>: six carved stamps,
+        printed live while visitors place the body bags on the paper.
+        <br><br>
+        It takes its images from <strong>Iran</strong>. The quantity matters here.
+        So does who does the printing.
+      </div>
+      <div class="hero-actions">
+        <a href="#prints" class="btn primary">See the prints →</a>
+        <a href="#statement" class="btn">Read the statement</a>
+      </div>
+    </div>
+
+    <!-- Counter card -->
+    <div class="counter">
+      <div class="eq-corner tl"></div><div class="eq-corner tr"></div>
+      <div class="eq-corner bl"></div><div class="eq-corner br"></div>
+      <div class="counter-head"><b>DC::INDEX</b> · ONGOING</div>
+      <div class="counter-big">43<span class="lbl">prints<br>documented</span></div>
+      <div class="counter-rows">
       <div class="counter-row"><span class="cat">Death Culture</span><span class="cnt">09</span></div>
       <div class="counter-row"><span class="cat">Bodybags</span><span class="cnt">18</span></div>
       <div class="counter-row"><span class="cat">Sky Bodybags</span><span class="cnt">16</span></div>
       <div class="counter-row"><span class="cat">Posters on site</span><span class="cnt">30–40</span></div>
       <div class="counter-row"><span class="cat">Technique</span><span class="cnt">LINO</span></div>
       <div class="counter-row"><span class="cat">Status</span><span class="cnt">LIVE</span></div>
-    </div>
-    <div class="counter-foot">
-      <span>PERFORMANCE · KIOSK</span>
-      <span>SBF · DC</span>
+      </div>
+      <div class="counter-foot">
+        <span>PERFORMANCE · KIOSK</span>
+        <span>SBF · DC</span>
+      </div>
     </div>
   </div>
 </div>
@@ -222,29 +241,16 @@
   </dl>
 
   <div class="dc-statement">
-    <p class="dc-lede">
-      Death culture is the absolute absence of tolerance: the banality of chanting death for the
-      “high-contrast other,” and justifying it in the name of any ideology.
-    </p>
-
     <p>
       Beyond the fog of propaganda lie body bags of cedars, mountains filled with missiles, and birds
       carrying instruments of war; everything here smells like death.
     </p>
-
-    <div class="dc-pull">
-      If we impose war, war will be imposed on us; if we implant death, we will harvest death.
-    </div>
 
     <p>
       This performance showcases death, and the justification of it, in the high-contrast societies
       surrounded by the fog of propaganda, <strong>specifically in Iran</strong>. The quantity of
       work and the visitors' interaction matter here, because of the high number of people who lost
       their lives during all the protests and wars.
-    </p>
-
-    <p class="dc-lede" style="margin-top:30px;margin-bottom:0">
-      So be it, until we conclude that the high-contrast other has the right to live.
     </p>
 
     <div class="dc-sign"><b>Soby Farahat</b> · Soboof · Leeuwarden</div>
@@ -276,7 +282,7 @@
           </div>
           <div class="print-cap">The recurring cast laid out as a proof sheet: cypress stamps, a gold field, a running dog.</div>
         </button>
-        <button class="print" type="button" data-full="/assets/img/death-culture/death-culture-02.jpg" data-cap="A mountain range cut in a single block, printed against a gold column.">
+        <button class="print landscape" type="button" data-full="/assets/img/death-culture/death-culture-02.jpg" data-cap="A mountain range cut in a single block, printed against a gold column.">
           <div class="print-img">
             <span class="print-n">02</span>
             <img src="/assets/img/death-culture/death-culture-02.jpg" alt="A mountain range cut in a single block, printed against a gold column." loading="lazy">
@@ -297,7 +303,7 @@
           </div>
           <div class="print-cap">Bird of prey, ornamented hound and mountains, layered in grey and gold over a printed field.</div>
         </button>
-        <button class="print" type="button" data-full="/assets/img/death-culture/death-culture-05.jpg" data-cap="Overprinted cypress and mountain blocks, the ink built up until the forms crowd each other.">
+        <button class="print landscape" type="button" data-full="/assets/img/death-culture/death-culture-05.jpg" data-cap="Overprinted cypress and mountain blocks, the ink built up until the forms crowd each other.">
           <div class="print-img">
             <span class="print-n">05</span>
             <img src="/assets/img/death-culture/death-culture-05.jpg" alt="Overprinted cypress and mountain blocks, the ink built up until the forms crowd each other." loading="lazy">
@@ -335,6 +341,8 @@
     </div>
   </div>
 
+  <div class="dc-pull dc-pull-sets">If we impose war, war will be imposed on us; if we implant death, we will harvest death.</div>
+
   <div class="dc-set">
     <div class="dc-set-head">
       <span class="dc-set-name">Bodybags</span>
@@ -348,7 +356,7 @@
           </div>
           <div class="print-cap">A circuit-grown cypress topped with a skull, beside a dense grid of tree-stamp panels and a single red flame stamp.</div>
         </button>
-        <button class="print" type="button" data-full="/assets/img/death-culture/bodybags-02.jpg" data-cap="Twin flame-skull cypresses in white flank a black circuit cypress, the whole sheet inked red edge to edge.">
+        <button class="print rotate" type="button" data-full="/assets/img/death-culture/bodybags-02.jpg" data-cap="Twin flame-skull cypresses in white flank a black circuit cypress, the whole sheet inked red edge to edge.">
           <div class="print-img">
             <span class="print-n">02</span>
             <img src="/assets/img/death-culture/bodybags-02.jpg" alt="Twin flame-skull cypresses in white flank a black circuit cypress, the whole sheet inked red edge to edge." loading="lazy">
@@ -376,7 +384,7 @@
           </div>
           <div class="print-cap">A white flame-skull cypress on red, beside nine black tree-stamp panels printed edge to edge.</div>
         </button>
-        <button class="print" type="button" data-full="/assets/img/death-culture/bodybags-06.jpg" data-cap="A flame-skull cypress and a circuit-skull cypress printed side by side across a mottled grey-and-red ground.">
+        <button class="print rotate" type="button" data-full="/assets/img/death-culture/bodybags-06.jpg" data-cap="A flame-skull cypress and a circuit-skull cypress printed side by side across a mottled grey-and-red ground.">
           <div class="print-img">
             <span class="print-n">06</span>
             <img src="/assets/img/death-culture/bodybags-06.jpg" alt="A flame-skull cypress and a circuit-skull cypress printed side by side across a mottled grey-and-red ground." loading="lazy">
@@ -661,6 +669,15 @@
       <a href="mailto:mirbreak@soboof.com?subject=Death%20Culture%3A%20kiosk%20enquiry" class="btn primary">Enquire about the kiosk →</a>
       <a href="/mirbreak/#work" class="btn">See the sculptures</a>
     </div>
+  </div>
+</section>
+
+<!-- Closing line -->
+<section>
+  <div class="dc-statement" style="max-width:640px;padding:0;text-align:center">
+    <p class="dc-lede" style="margin-bottom:0">
+      So be it, until we conclude that the high-contrast other has the right to live.
+    </p>
   </div>
 </section>
 

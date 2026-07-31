@@ -116,17 +116,28 @@
       </div>
     </a>
     <div class="nav-spacer"></div>
-    <div class="nav-links">
+    <button id="nav-toggle" class="nav-toggle" type="button"
+            aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="nav-links">
       <a href="/mirbreak/" class="nav-link">Mirbreak</a>
       <a href="/printing-lab/" class="nav-link">Printing Lab</a>
       <a href="/workshop/" class="nav-link">Workshop</a>
       <a href="/journal/" class="nav-link">Journal</a>
-      <a href="https://pythagorasengine.com/builder" class="nav-link pe" target="_blank" rel="noopener">&#9651; Builder</a>
-      <a href="https://soboof.com/superadobe-generator/" class="nav-link sa" target="_blank" rel="noopener">&#11041; SuperAdobe</a>
+      <!-- The two tools are marks only on desktop: the name is kept for screen
+           readers and as the hover tooltip, and shown again in the menu. -->
+      <a href="https://pythagorasengine.com/builder" class="nav-link pe tool"
+         target="_blank" rel="noopener" title="Pythagoras Engine Builder"
+        ><span class="tool-ico" aria-hidden="true">&#9651;</span><span class="tool-name">Builder</span></a>
+      <a href="https://soboof.com/superadobe-generator/" class="nav-link sa tool"
+         target="_blank" rel="noopener" title="SuperAdobe Generator"
+        ><span class="tool-ico" aria-hidden="true">&#11041;</span><span class="tool-name">SuperAdobe</span></a>
       <a href="#contact" class="nav-link cta">Contact</a>
     </div>
   </div>
 </header>
+<script src="/assets/js/nav.js" defer></script>
 
 <!-- ── HERO ── -->
 <div class="hero">

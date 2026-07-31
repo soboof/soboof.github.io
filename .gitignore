@@ -7,6 +7,7 @@ Desktop.ini
 # Editors
 .vscode/
 .idea/
+.claude/
 *.swp
 
 # Working files that don't belong on the live site

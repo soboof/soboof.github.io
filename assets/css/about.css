@@ -95,6 +95,57 @@ header{
 .nav-link.pe:hover{border-color:var(--mirror);background:rgba(207,214,220,.09);text-decoration:none}
 body.day .nav-link.pe{border-color:rgba(30,122,69,.4)}
 body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
+/* The second tool sits beside the builder, tinted the way its section is. */
+.nav-link.sa{border-color:rgba(201,138,75,.34);color:#c98a4b}
+.nav-link.sa:hover{border-color:#c98a4b;background:rgba(201,138,75,.11);text-decoration:none}
+
+/* Tools — the builder and the generator carry their mark only on wide screens.
+   The name stays in the DOM for screen readers and in the title attribute for
+   the hover tooltip, and the menu shows it again where there is room. */
+.nav-link.tool{display:inline-flex;align-items:center;gap:8px;padding:7px 10px}
+.nav-link.tool .tool-ico{font-size:14px;line-height:1}
+.nav-link.tool .tool-name{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* Hamburger — hidden until the bar runs out of room (see the 980px block) */
+.nav-toggle{
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  width:38px;height:32px;padding:0;
+  background:transparent;border:1px solid var(--border);border-radius:5px;
+  color:var(--accent);cursor:pointer;transition:all .14s;
+}
+.nav-toggle:hover{border-color:var(--accent)}
+.nav-toggle span{
+  display:block;width:16px;height:1.5px;background:currentColor;
+  transition:transform .18s,opacity .18s;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+
+/* Mobile: the whole bar folds into a panel under the header. It used to just
+   hide, leaving the sections unreachable on a phone. */
+@media(max-width:980px){
+  .nav-toggle{display:flex}
+  .nav-links{
+    display:none;position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;align-items:stretch;gap:6px;
+    padding:14px 22px 20px;
+    background:var(--glass);border-bottom:1px solid var(--border);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  }
+  .nav-links.open{display:flex}
+  .nav-link{font-size:11px;padding:12px 14px;border-color:var(--border)}
+  .nav-link.tool{padding:12px 14px}
+  .nav-link.tool .tool-name{
+    position:static;width:auto;height:auto;margin:0;
+    overflow:visible;clip:auto;white-space:normal;
+  }
+  .nav-link.cta{text-align:center}
+}
+
 .nav-link.current{color:var(--accent);background:rgba(232,197,71,.06);border-color:var(--border)}
 .status-dot{
   width:7px;height:7px;border-radius:50%;background:var(--green);
@@ -468,7 +519,6 @@ footer{border-top:1px solid var(--border);margin-top:40px}
   .skills-grid{grid-template-columns:1fr}
   .values{grid-template-columns:1fr}
   .manifest-eqs{grid-template-columns:1fr}
-  .nav-links .nav-link:not(.cta){display:none}
   .quote-block{padding:24px}
 }
 

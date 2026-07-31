@@ -4,55 +4,63 @@
 
 {{> header }}
 
-<div class="breadcrumb">
-  <a href="/">Soboof</a>
-  <span class="sep">›</span>
-  <span class="here">Printing Lab</span>
-</div>
-
 <!-- Hero -->
 <div class="hero">
-  <div class="hero-content">
-    <div class="hero-tag">SOBOOF · PRINTING LAB · PERFORMANCE</div>
-    <div class="hero-headline">
-      <div class="hero-text">
+  <div class="hero-tag">SOBOOF · PRINTING LAB · PERFORMANCE</div>
+
+  <div class="hero-art">
+    <div class="hero-plate">
+      <div class="hero-lockup">
         <h1>
           Printing<br>Lab.
           <span class="mirror">A press that travels.</span>
         </h1>
       </div>
-    </div>
-    <div class="hero-divider"></div>
-    <div class="hero-desc">
-      The third strand of the studio, worked in <strong>ink and cut lino</strong> rather than mirror.
-      A press, a table and a stack of paper, set up wherever the lab is hosted. The current project is
-      <strong>Death Culture</strong>, by <strong>Soby Farahat</strong> and <strong>Ju Bergman</strong>:
-      six carved stamps — cypress, hound, bird of prey, mountain, flame, cloud — printed live, over and
-      over, while visitors help place the body bags on the paper.
-      <br><br>
-      The work is about the <strong>banality of chanting death for the other</strong>, and about the
-      fog of propaganda that makes it sayable. It draws its images from <strong>Iran</strong>, where
-      footage of the protests showed the dead lying in the street in black body bags. The quantity
-      matters here. So does who does the printing.
-    </div>
-    <div class="hero-actions">
-      <a href="#prints" class="btn primary">See the prints →</a>
-      <a href="#statement" class="btn">Read the statement</a>
+
+      <div class="hero-quote">
+        <p><strong class="hl">Death culture</strong> is the absolute absence of tolerance:
+        the banality of chanting death for the &ldquo;high-contrast other,&rdquo; and
+        justifying it in the name of any ideology.</p>
+      </div>
+      <img class="night" src="/assets/img/death-culture/dc-hero-night.png"
+           alt="Death Culture: the mountain stamp printed in black under a gold band" width="1016" height="607">
+      <img class="day" src="/assets/img/death-culture/dc-hero-day.png"
+           alt="" aria-hidden="true" width="1016" height="607">
     </div>
   </div>
 
-  <!-- Counter card -->
-  <div class="counter">
-    <div class="eq-corner tl"></div><div class="eq-corner tr"></div>
-    <div class="eq-corner bl"></div><div class="eq-corner br"></div>
-    <div class="counter-head"><b>DC::INDEX</b> · ONGOING</div>
-    <div class="counter-big">{{PRINT_COUNT}}<span class="lbl">prints<br>documented</span></div>
-    <div class="counter-rows">
-{{COUNTER_ROWS}}
+  <div class="hero-divider"></div>
+
+  <div class="hero-lower">
+    <div>
+      <div class="hero-desc">
+        The studio's third strand, worked in <strong>ink and cut lino</strong> rather than mirror:
+        a press, a table and a stack of paper, set up wherever the lab is hosted. The current project
+        is <strong>Death Culture</strong>, with <strong>Ju Bergman</strong>: six carved stamps,
+        printed live while visitors place the body bags on the paper.
+        <br><br>
+        It takes its images from <strong>Iran</strong>. The quantity matters here.
+        So does who does the printing.
+      </div>
+      <div class="hero-actions">
+        <a href="#prints" class="btn primary">See the prints →</a>
+        <a href="#statement" class="btn">Read the statement</a>
+      </div>
     </div>
-    <div class="counter-foot">
-      <span>PERFORMANCE · KIOSK</span>
-      <span>SBF · DC</span>
+
+    <!-- Counter card -->
+    <div class="counter">
+      <div class="eq-corner tl"></div><div class="eq-corner tr"></div>
+      <div class="eq-corner bl"></div><div class="eq-corner br"></div>
+      <div class="counter-head"><b>DC::INDEX</b> · ONGOING</div>
+      <div class="counter-big">{{PRINT_COUNT}}<span class="lbl">prints<br>documented</span></div>
+      <div class="counter-rows">
+{{COUNTER_ROWS}}
+      </div>
+      <div class="counter-foot">
+        <span>PERFORMANCE · KIOSK</span>
+        <span>SBF · DC</span>
+      </div>
     </div>
   </div>
 </div>
@@ -79,29 +87,16 @@
   </dl>
 
   <div class="dc-statement">
-    <p class="dc-lede">
-      Death culture is the absolute absence of tolerance: the banality of chanting death for the
-      “high-contrast other,” and justifying it in the name of any ideology.
-    </p>
-
     <p>
       Beyond the fog of propaganda lie body bags of cedars, mountains filled with missiles, and birds
       carrying instruments of war; everything here smells like death.
     </p>
-
-    <div class="dc-pull">
-      If we impose war, war will be imposed on us; if we implant death, we will harvest death.
-    </div>
 
     <p>
       This performance showcases death, and the justification of it, in the high-contrast societies
       surrounded by the fog of propaganda, <strong>specifically in Iran</strong>. The quantity of
       work and the visitors' interaction matter here, because of the high number of people who lost
       their lives during all the protests and wars.
-    </p>
-
-    <p class="dc-lede" style="margin-top:30px;margin-bottom:0">
-      So be it, until we conclude that the high-contrast other has the right to live.
     </p>
 
     <div class="dc-sign"><b>Soby Farahat</b> · Soboof · Leeuwarden</div>
@@ -192,6 +187,15 @@
       <a href="mailto:mirbreak@soboof.com?subject=Death%20Culture%3A%20kiosk%20enquiry" class="btn primary">Enquire about the kiosk →</a>
       <a href="/mirbreak/#work" class="btn">See the sculptures</a>
     </div>
+  </div>
+</section>
+
+<!-- Closing line -->
+<section>
+  <div class="dc-statement" style="max-width:640px;padding:0;text-align:center">
+    <p class="dc-lede" style="margin-bottom:0">
+      So be it, until we conclude that the high-contrast other has the right to live.
+    </p>
   </div>
 </section>
 

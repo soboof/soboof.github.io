@@ -71,27 +71,67 @@ header{
 .nav-link.pe:hover{border-color:var(--mirror);background:rgba(207,214,220,.09);text-decoration:none}
 body.day .nav-link.pe{border-color:rgba(30,122,69,.4)}
 body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
+/* The second tool sits beside the builder, tinted the way its section is. */
+.nav-link.sa{border-color:rgba(201,138,75,.34);color:#c98a4b}
+.nav-link.sa:hover{border-color:#c98a4b;background:rgba(201,138,75,.11);text-decoration:none}
+
+/* Tools — the builder and the generator carry their mark only on wide screens.
+   The name stays in the DOM for screen readers and in the title attribute for
+   the hover tooltip, and the menu shows it again where there is room. */
+.nav-link.tool{display:inline-flex;align-items:center;gap:8px;padding:7px 10px}
+.nav-link.tool .tool-ico{font-size:14px;line-height:1}
+.nav-link.tool .tool-name{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* Hamburger — hidden until the bar runs out of room (see the 980px block) */
+.nav-toggle{
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  width:38px;height:32px;padding:0;
+  background:transparent;border:1px solid var(--border);border-radius:5px;
+  color:var(--accent);cursor:pointer;transition:all .14s;
+}
+.nav-toggle:hover{border-color:var(--accent)}
+.nav-toggle span{
+  display:block;width:16px;height:1.5px;background:currentColor;
+  transition:transform .18s,opacity .18s;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+
+/* Mobile: the whole bar folds into a panel under the header. It used to just
+   hide, leaving the sections unreachable on a phone. */
+@media(max-width:980px){
+  .nav-toggle{display:flex}
+  .nav-links{
+    display:none;position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;align-items:stretch;gap:6px;
+    padding:14px 22px 20px;
+    background:var(--glass);border-bottom:1px solid var(--border);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  }
+  .nav-links.open{display:flex}
+  .nav-link{font-size:11px;padding:12px 14px;border-color:var(--border)}
+  .nav-link.tool{padding:12px 14px}
+  .nav-link.tool .tool-name{
+    position:static;width:auto;height:auto;margin:0;
+    overflow:visible;clip:auto;white-space:normal;
+  }
+  .nav-link.cta{text-align:center}
+}
+
 .nav-link.current{color:var(--accent);background:rgba(232,197,71,.06);border-color:var(--border)}
 .status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(76,175,125,.7);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
 
-/* Breadcrumb */
-.breadcrumb{
-  max-width:1320px;margin:0 auto;padding:88px 28px 0;
-  font-family:var(--ff-m);font-size:10px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;
-  display:flex;align-items:center;gap:10px;
-}
-.breadcrumb a{color:var(--muted)}.breadcrumb a:hover{color:var(--accent);text-decoration:none}
-.breadcrumb .sep{color:rgba(232,197,71,.35)}.breadcrumb .here{color:var(--accent)}
-
 /* Hero */
 .hero{
-  position:relative;max-width:1320px;margin:0 auto;padding:32px 28px 48px;
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.7fr);gap:48px;align-items:center;
+  position:relative;max-width:1320px;margin:0 auto;padding:88px 28px 48px;
 }
 .hero-tag{font-family:var(--ff-m);font-size:10px;letter-spacing:.24em;color:rgba(232,197,71,.6);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:22px}
 .hero-tag::before{content:'';width:24px;height:1px;background:rgba(232,197,71,.5)}
-.hero-headline{display:flex;align-items:flex-start;gap:22px;margin-bottom:6px}
 .hero-logo-bg{flex:0 0 auto;width:clamp(64px,7vw,96px);height:auto;filter:drop-shadow(0 4px 24px rgba(232,197,71,.32))}
 .hero-logo-bg path,.hero-logo-bg circle{fill:var(--accent);stroke:var(--accent)}
 .hero h1{
@@ -100,7 +140,35 @@ body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
   color:var(--accent);text-shadow:0 0 50px rgba(232,197,71,.16);
 }
 .hero h1 .mirror{color:var(--mirror);display:block;font-weight:600;font-style:italic;font-size:.5em;letter-spacing:.02em;margin-top:14px}
+
+/* Hero print: the mountain stamp, turned on its side, background knocked out.
+   Two files rather than a CSS filter — the gold band has to stay gold in both
+   themes while the black ink flips to paper cream on the dark one. */
+.hero-art{margin:-8px 0 0;pointer-events:none}
+.hero-plate{position:relative;max-width:900px;margin:0 auto;container-type:inline-size}
+.hero-plate img{display:block;width:100%;height:auto}
+.hero-plate .day{display:none}
+body.day .hero-plate .night{display:none}
+body.day .hero-plate .day{display:block}
+
+/* The title sits on the gold band, so it is sized off the plate rather than the
+   viewport — the lockup then holds at any width. Left of ~37% the band is clear
+   of peaks in both prints; keep the block inside that. */
+/* Gold band, measured off the print itself: x 6.1%–93.8%, y 9.6%–42.0% of the
+   plate. Both blocks below sit a clear margin inside that, not flush to it. */
+.hero-lockup{position:absolute;left:12cqw;top:8cqw;width:25cqw;z-index:2}
+.hero-lockup h1{font-size:4.7cqw;line-height:.88;color:#17150f;text-shadow:none}
+.hero-lockup h1 .mirror{color:rgba(23,21,15,.7);font-size:.4em;margin-top:1.4cqw}
+
+/* The statement's opening line, set opposite the title on the same gold band.
+   Right side only, sized to close well above ~25cqw down — past that the
+   mountain's peaks start breaking the surface even out at this edge. */
+.hero-quote{position:absolute;right:9cqw;top:10cqw;width:23cqw;z-index:2}
+.hero-quote p{font-family:var(--ff-h);font-style:italic;font-weight:500;font-size:1.4cqw;line-height:1.46;color:#17150f;text-align:right}
+.hero-quote .hl{font-style:normal;font-weight:800;color:#8a2a1f}
+
 .hero-divider{width:100%;height:1px;margin:26px 0;background:linear-gradient(90deg,rgba(232,197,71,.36),rgba(232,197,71,.02))}
+.hero-lower{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.7fr);gap:48px;align-items:start}
 .hero-desc{font-family:var(--ff-m);font-size:14px;line-height:1.8;color:var(--text);max-width:560px}
 .hero-desc strong{color:var(--accent);font-weight:500}
 .hero-desc em{color:var(--mirror);font-style:normal}
@@ -324,15 +392,22 @@ footer{border-top:1px solid var(--border);margin-top:48px;background:var(--glass
 
 /* Responsive */
 @media(max-width:980px){
-  .hero{grid-template-columns:1fr;gap:32px;padding:24px 22px 32px}
-  .nav-links{display:none}
+  .hero{padding:84px 22px 32px}
+  .hero-lower{grid-template-columns:1fr;gap:32px}
   section{padding:36px 22px}
-  .breadcrumb{padding:84px 22px 0}
   .counter{max-width:540px;margin-left:auto;margin-right:auto;width:100%}
 }
+/* Too small for type on the band — the title steps back above the print. */
+@media(max-width:700px){
+  .hero-lockup{position:static;width:auto;margin-bottom:16px}
+  .hero-lockup h1{font-size:clamp(32px,9vw,48px);color:var(--accent)}
+  .hero-lockup h1 .mirror{color:var(--mirror);font-size:.5em;margin-top:12px}
+  .hero-quote{position:static;width:auto;margin:0 0 20px}
+  .hero-quote p{font-size:15px;text-align:left;color:var(--text)}
+  .hero-quote .hl{color:var(--rose,#d97c5a)}
+}
 @media(max-width:560px){
-  .hero-headline{flex-direction:column;gap:14px}
-  .hero h1{font-size:clamp(32px,9vw,48px)}
+  .hero-art{margin-top:4px}
   .filters{padding:10px}
   .filter-label{display:none}
   .foot{flex-direction:column;align-items:flex-start;gap:8px}
@@ -347,11 +422,12 @@ body.day .brand-sub{color:rgba(107,78,163,.4) !important}
 body.day .nav-link.cta{background:rgba(107,78,163,.05) !important}
 body.day .nav-link.cta:hover{background:rgba(107,78,163,.13) !important}
 body.day .nav-link.current{background:rgba(107,78,163,.06) !important}
-body.day .breadcrumb .sep{color:rgba(107,78,163,.35) !important}
 body.day .hero-tag{color:rgba(107,78,163,.6) !important}
 body.day .hero-tag::before{background:rgba(107,78,163,.5) !important}
 body.day .hero-logo-bg{filter:drop-shadow(0 4px 24px rgba(107,78,163,.32)) !important}
 body.day .hero h1{text-shadow:0 0 50px rgba(107,78,163,.16) !important}
+/* no purple halo where the title lies on the gold band */
+@media(min-width:701px){body.day .hero-lockup h1{text-shadow:none !important}}
 body.day .hero-divider{background:linear-gradient(90deg,rgba(107,78,163,.36),rgba(107,78,163,.02)) !important}
 body.day .btn.primary{box-shadow:0 2px 18px rgba(107,78,163,.22) !important}
 body.day .btn.primary:hover{background:#7a5cb3 !important}
@@ -412,11 +488,24 @@ body.day .cta-strip::before{background:linear-gradient(90deg,transparent,rgba(10
 .dc-set-meta{font-family:var(--ff-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .dc-set+.dc-set{margin-top:52px}
 
+/* The statement's pull-quote, reused as a caesura between two collections
+   rather than beside statement prose — centred, no rail, on its own line. */
+.dc-pull-sets{
+  margin:44px auto;max-width:640px;padding:0;border-left:none;background:none;
+  text-align:center;color:var(--accent);font-style:italic;
+}
+
 .print-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:16px}
 .print{border:1px solid var(--border);background:var(--panel);padding:9px;cursor:zoom-in;transition:border-color .16s,transform .16s;display:block;text-align:left;width:100%;font:inherit;color:inherit}
 .print:hover{border-color:var(--accent);transform:translateY(-2px)}
 .print-img{position:relative;aspect-ratio:1/1.414;background:#f4f2ec;overflow:hidden}
 .print-img img{width:100%;height:100%;object-fit:contain;display:block}
+/* A few sheets read better sideways in the grid. */
+.print.landscape .print-img{aspect-ratio:1.414/1}
+/* A few sheets were pulled on a landscape sheet but belong upright in the
+   grid — the scan is rotated in place rather than left to float small and
+   sideways inside the standard portrait card. */
+.print.rotate .print-img img{transform:rotate(90deg)}
 .print-n{position:absolute;top:0;left:0;font-family:var(--ff-m);font-size:8.5px;letter-spacing:.18em;color:#15140f;background:rgba(255,255,255,.82);padding:3px 7px;z-index:2}
 .print-cap{font-family:var(--ff-m);font-size:10.5px;line-height:1.55;color:var(--muted);padding:9px 2px 2px}
 

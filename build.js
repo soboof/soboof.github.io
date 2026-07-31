@@ -484,11 +484,21 @@ function counterRows(p) {
 }
 
 function printSets(p) {
-  return p.sets.map(set => {
+  if (p.pull && !p.sets.some(s => s.name === p.pull.after)) {
+    throw new Error(`prints.js: pull.after '${p.pull.after}' matches no set name`);
+  }
+  const blocks = p.sets.map(set => {
+    for (const k of Object.keys(set.orient || {})) {
+      if (!(k >= 1 && k <= set.prints.length)) {
+        throw new Error(`prints.js: ${set.name} orient key ${k} is out of range`);
+      }
+    }
     const cards = set.prints.map((cap, i) => {
       const n = String(i + 1).padStart(2, '0');
       const file = printPath(set, i);
-      return `        <button class="print" type="button" data-full="${file}" data-cap="${attr(cap)}">\n` +
+      const orient = set.orient && set.orient[i + 1];
+      const cls = orient ? ` ${orient}` : '';
+      return `        <button class="print${cls}" type="button" data-full="${file}" data-cap="${attr(cap)}">\n` +
              `          <div class="print-img">\n` +
              `            <span class="print-n">${n}</span>\n` +
              `            <img src="${file}" alt="${attr(cap)}" loading="lazy">\n` +
@@ -497,14 +507,20 @@ function printSets(p) {
              `        </button>`;
     }).join('\n');
 
-    return `  <div class="dc-set">\n` +
+    let block = `  <div class="dc-set">\n` +
            `    <div class="dc-set-head">\n` +
            `      <span class="dc-set-name">${attr(set.name)}</span>\n` +
            `      <span class="dc-set-meta">${String(set.prints.length).padStart(2, '0')} sheets · ${set.meta}</span>\n` +
            `    </div>\n` +
            `    <div class="print-grid">\n${cards}\n    </div>\n` +
            `  </div>`;
+
+    if (p.pull && p.pull.after === set.name) {
+      block += `\n\n  <div class="dc-pull dc-pull-sets">${p.pull.text}</div>`;
+    }
+    return block;
   }).join('\n\n');
+  return blocks;
 }
 
 function deathCulturePage(template, p) {

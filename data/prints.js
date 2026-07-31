@@ -69,12 +69,23 @@ module.exports = {
     },
   ],
 
+  /* ── One line from the statement, set as a caesura between two collections.
+        `after` is the name of the set it follows. Drop the whole block to
+        remove it; the sets close up on their own. ── */
+  pull: {
+    after: 'Death Culture',
+    text:  'If we impose war, war will be imposed on us; if we implant death, we will harvest death.',
+  },
+
   /* ── The collections ── */
   sets: [
     {
       name:   'Death Culture',
       prefix: 'death-culture',
       meta:   'black &amp; gold · A4',
+      /* Poster number -> thumbnail shape, where it differs from the set's
+         default (upright, matching the A4 sheet). */
+      orient: { 2: 'landscape', 5: 'landscape' },
       prints: [
         'The recurring cast laid out as a proof sheet: cypress stamps, a gold field, a running dog.',
         'A mountain range cut in a single block, printed against a gold column.',
@@ -91,6 +102,10 @@ module.exports = {
       name:   'Bodybags',
       prefix: 'bodybags',
       meta:   'black, white &amp; red · A3',
+      /* 02 and 06 were pulled on landscape sheets; the scan itself is rotated
+         90° in the grid so the artwork reads upright, same as the rest of
+         the set, instead of just floating small inside a tall card. */
+      orient: { 2: 'rotate', 6: 'rotate' },
       prints: [
         'A circuit-grown cypress topped with a skull, beside a dense grid of tree-stamp panels and a single red flame stamp.',
         'Twin flame-skull cypresses in white flank a black circuit cypress, the whole sheet inked red edge to edge.',
