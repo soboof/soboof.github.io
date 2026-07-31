@@ -3,7 +3,7 @@
   color-scheme:dark;
   --bg:#15140f;--panel:#0e0d0a;--border:#2e2b28;
   --text:#ebe6dc;--muted:#7a7368;--surface:#1c1a16;--surface2:#23211c;
-  --accent:#e8c547;--mirror:#cfd6dc;--green:#4caf7d;
+  --accent:#e8c547;--mirror:#cfd6dc;--green:#4caf7d;--earth:#c98a4b;
   --ff-h:'Syne',sans-serif;--ff-m:'DM Mono',monospace;
   --glass:rgba(12,10,8,.78);
   --manifest-bg:#070503;
@@ -16,6 +16,7 @@ body.day{
   --text:#0a0908;--muted:#3c3a34;--surface:#dcd7ca;--surface2:#cac4b8;
   --accent:#6b4ea3;
   --mirror:#1e7a45;
+  --earth:#8a5a22; /* same treatment — and it must stay clear of --mirror's day green */
   --glass:rgba(236,233,225,.86);--manifest-bg:#f2eee5;--scan:rgba(0,0,0,.04);
   --card-inner:rgba(236,233,225,.5);
 }
@@ -96,14 +97,14 @@ header{
 body.day .nav-link.pe{border-color:rgba(30,122,69,.4)}
 body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
 /* The second tool sits beside the builder, tinted the way its section is. */
-.nav-link.sa{border-color:rgba(201,138,75,.34);color:#c98a4b}
-.nav-link.sa:hover{border-color:#c98a4b;background:rgba(201,138,75,.11);text-decoration:none}
+.nav-link.sa{border-color:rgba(201,138,75,.34);color:var(--earth)}
+.nav-link.sa:hover{border-color:var(--earth);background:rgba(201,138,75,.11);text-decoration:none}
 
 /* Tools — the builder and the generator carry their mark only on wide screens.
    The name stays in the DOM for screen readers and in the title attribute for
    the hover tooltip, and the menu shows it again where there is room. */
 .nav-link.tool{display:inline-flex;align-items:center;gap:8px;padding:7px 10px}
-.nav-link.tool .tool-ico{font-size:14px;line-height:1}
+.nav-link.tool .tool-ico{height:15px;width:auto;display:block;flex:none}
 .nav-link.tool .tool-name{
   position:absolute;width:1px;height:1px;margin:-1px;padding:0;
   overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;

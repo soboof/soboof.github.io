@@ -110,7 +110,7 @@ body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
    The name stays in the DOM for screen readers and in the title attribute for
    the hover tooltip, and the menu shows it again where there is room. */
 .nav-link.tool{display:inline-flex;align-items:center;gap:8px;padding:7px 10px}
-.nav-link.tool .tool-ico{font-size:14px;line-height:1}
+.nav-link.tool .tool-ico{height:15px;width:auto;display:block;flex:none}
 .nav-link.tool .tool-name{
   position:absolute;width:1px;height:1px;margin:-1px;padding:0;
   overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
