@@ -83,9 +83,12 @@ module.exports = {
       name:   'Death Culture',
       prefix: 'death-culture',
       meta:   'black &amp; gold · A4',
-      /* Poster number -> thumbnail shape, where it differs from the set's
-         default (upright, matching the A4 sheet). */
-      orient: { 2: 'landscape', 5: 'landscape' },
+      /* Sheets 2 and 6 are portrait scans that read better sideways: the
+         pixels turn a quarter and the card follows, landscape-shaped, so the
+         full poster lands in the grid rather than a portrait-card crop.
+         Sheet 7 was scanned the wrong way up — the cypress hangs by its
+         crown and the hounds run on their backs. Turned half a circle. */
+      orient: { 2: 'turn', 6: 'turn', 7: 'flip' },
       prints: [
         'The recurring cast laid out as a proof sheet: cypress stamps, a gold field, a running dog.',
         'A mountain range cut in a single block, printed against a gold column.',
@@ -102,10 +105,11 @@ module.exports = {
       name:   'Bodybags',
       prefix: 'bodybags',
       meta:   'black, white &amp; red · A3',
-      /* 02 and 06 were pulled on landscape sheets; the scan itself is rotated
-         90° in the grid so the artwork reads upright, same as the rest of
-         the set, instead of just floating small inside a tall card. */
-      orient: { 2: 'rotate', 6: 'rotate' },
+      /* The only two landscape scans in the catalogue. A landscape card, not
+         a rotated fit into a portrait one, so the full poster shows. Keys
+         count within this set, not across the page: 2 and 6 here are
+         sheets 11 and 15. */
+      orient: { 2: 'landscape', 6: 'landscape' },
       prints: [
         'A circuit-grown cypress topped with a skull, beside a dense grid of tree-stamp panels and a single red flame stamp.',
         'Twin flame-skull cypresses in white flank a black circuit cypress, the whole sheet inked red edge to edge.',

@@ -510,17 +510,38 @@ body.day .cta-strip::before{background:linear-gradient(90deg,transparent,rgba(10
   text-align:center;color:var(--accent);font-style:italic;
 }
 
-.print-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:16px}
+/* Modular: cards aren't all one shape. A landscape sheet gets a landscape
+   card, so `align-items:start` stops it stretching to match a taller
+   portrait neighbour in the same row — it just sits at its own height with
+   open space below, instead of the image being cropped or letterboxed to
+   fill a card built for a different shape. */
+.print-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:16px;align-items:start}
 .print{border:1px solid var(--border);background:var(--panel);padding:9px;cursor:zoom-in;transition:border-color .16s,transform .16s;display:block;text-align:left;width:100%;font:inherit;color:inherit}
 .print:hover{border-color:var(--accent);transform:translateY(-2px)}
 .print-img{position:relative;aspect-ratio:1/1.414;background:#f4f2ec;overflow:hidden}
 .print-img img{width:100%;height:100%;object-fit:contain;display:block}
-/* A few sheets read better sideways in the grid. */
+/* Sheets that are themselves landscape (Bodybags 02/06) get a landscape card
+   — the full poster, uncropped, at the same width as its portrait
+   neighbours. Aspect ratios are true A-series (1:√2), so `contain` leaves no
+   visible letterboxing. */
 .print.landscape .print-img{aspect-ratio:1.414/1}
-/* A few sheets were pulled on a landscape sheet but belong upright in the
-   grid — the scan is rotated in place rather than left to float small and
-   sideways inside the standard portrait card. */
-.print.rotate .print-img img{transform:rotate(90deg)}
+/* Sheets that are portrait scans but read better sideways (Death Culture
+   02/06): the pixels turn a quarter *and* the card follows, landscape-
+   shaped, so the rotated artwork lands full-frame rather than shrunk inside
+   a card still built for the unrotated, portrait scan. The image box is laid
+   out at the card's dimensions swapped (70.7% wide by 141.4% tall — the turn
+   card is 1.414:1) so that once it turns a quarter it fills the card exactly,
+   the same trick as the `landscape` card but run in reverse. Counter-
+   clockwise: these scans were fed into the scanner head-left. */
+.print.turn .print-img{aspect-ratio:1.414/1}
+.print.turn .print-img img{
+  position:absolute;top:50%;left:50%;
+  width:70.711%;height:141.421%;
+  transform:translate(-50%,-50%) rotate(-90deg);
+}
+/* A sheet that went through the scanner the wrong way up. Half a turn keeps
+   the card's proportions, so no resizing is needed here. */
+.print.flip .print-img img{transform:rotate(180deg)}
 .print-n{position:absolute;top:0;left:0;font-family:var(--ff-m);font-size:8.5px;letter-spacing:.18em;color:#15140f;background:rgba(255,255,255,.82);padding:3px 7px;z-index:2}
 .print-cap{font-family:var(--ff-m);font-size:10.5px;line-height:1.55;color:var(--muted);padding:9px 2px 2px}
 

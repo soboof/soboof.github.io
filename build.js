@@ -487,6 +487,10 @@ function printSets(p) {
   if (p.pull && !p.sets.some(s => s.name === p.pull.after)) {
     throw new Error(`prints.js: pull.after '${p.pull.after}' matches no set name`);
   }
+  /* The sheet number runs straight through the catalogue rather than
+     restarting inside each set: 01–43 across all three collections, so the
+     badge on a card matches its place in the lightbox counter. */
+  let sheetNo = 0;
   const blocks = p.sets.map(set => {
     for (const k of Object.keys(set.orient || {})) {
       if (!(k >= 1 && k <= set.prints.length)) {
@@ -494,7 +498,7 @@ function printSets(p) {
       }
     }
     const cards = set.prints.map((cap, i) => {
-      const n = String(i + 1).padStart(2, '0');
+      const n = String(++sheetNo).padStart(2, '0');
       const file = printPath(set, i);
       const orient = set.orient && set.orient[i + 1];
       const cls = orient ? ` ${orient}` : '';
