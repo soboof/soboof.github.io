@@ -86,9 +86,13 @@ module.exports = {
       /* Sheets 2 and 6 are portrait scans that read better sideways: the
          pixels turn a quarter and the card follows, landscape-shaped, so the
          full poster lands in the grid rather than a portrait-card crop.
-         Sheet 7 was scanned the wrong way up — the cypress hangs by its
-         crown and the hounds run on their backs. Turned half a circle. */
-      orient: { 2: 'turn', 6: 'turn', 7: 'flip' },
+         Sheet 6 turns clockwise, the set's default. Sheet 2 keeps its
+         original counter-clockwise turn (`turn-rev`) — its established
+         orientation, left as is on request even after 6 was found upside
+         down and the default direction got corrected. Sheet 7 was scanned
+         the wrong way up — the cypress hangs by its crown and the hounds
+         run on their backs. Turned half a circle. */
+      orient: { 2: 'turn turn-rev', 6: 'turn', 7: 'flip' },
       prints: [
         'The recurring cast laid out as a proof sheet: cypress stamps, a gold field, a running dog.',
         'A mountain range cut in a single block, printed against a gold column.',
@@ -105,11 +109,12 @@ module.exports = {
       name:   'Bodybags',
       prefix: 'bodybags',
       meta:   'black, white &amp; red · A3',
-      /* The only two landscape scans in the catalogue. A landscape card, not
-         a rotated fit into a portrait one, so the full poster shows. Keys
-         count within this set, not across the page: 2 and 6 here are
-         sheets 11 and 15. */
-      orient: { 2: 'landscape', 6: 'landscape' },
+      /* The only two landscape scans in the catalogue, turned upright to
+         stand with the rest of the grid. Both get an extra half turn
+         (`rotate-180`) on request, on top of the set's default. Keys count
+         within this set, not across the page: 2 and 6 here are sheets 11
+         and 15. */
+      orient: { 2: 'rotate rotate-180', 6: 'rotate rotate-180' },
       prints: [
         'A circuit-grown cypress topped with a skull, beside a dense grid of tree-stamp panels and a single red flame stamp.',
         'Twin flame-skull cypresses in white flank a black circuit cypress, the whole sheet inked red edge to edge.',

@@ -390,14 +390,20 @@ body.list-view .piece-desc{-webkit-line-clamp:5;line-clamp:5}
 .cat-cell .lbl{font-family:var(--ff-m);font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
 .cat-cell:hover .lbl{color:var(--accent)}
 
+/* Host-the-kiosk and the manifesto card, side by side on desktop. Each item
+   keeps its card's own look (cta-strip's gold surface, dc-ref's plain
+   border); the grid only handles the row. */
+.kiosk-cards{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+@media(max-width:900px){.kiosk-cards{grid-template-columns:1fr}}
+
 /* CTA strip */
 .cta-strip{
   background:var(--surface);border:1px solid var(--border);border-radius:10px;
-  padding:36px;display:grid;grid-template-columns:minmax(0,1.3fr) auto;gap:28px;
-  position:relative;overflow:hidden;align-items:center;
+  padding:36px;display:grid;grid-template-columns:1fr;gap:20px;
+  position:relative;overflow:hidden;align-items:start;
 }
+@media(max-width:480px){.cta-strip{padding:26px}}
 .cta-strip::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(232,197,71,.5),transparent)}
-@media(max-width:720px){.cta-strip{grid-template-columns:1fr;padding:26px}}
 .cta-strip h3{font-family:var(--ff-h);font-weight:700;font-size:30px;line-height:1.05;color:var(--text);letter-spacing:-.005em;margin-bottom:8px}
 .cta-strip h3 .accent{color:var(--accent)}
 .cta-strip p{font-family:var(--ff-m);font-size:12.5px;color:var(--muted);max-width:60ch;line-height:1.65}
@@ -498,6 +504,18 @@ body.day .cta-strip::before{background:linear-gradient(90deg,transparent,rgba(10
 .dc-gloss dd{margin:0 0 16px;font-size:13.5px;line-height:1.7;color:var(--muted)}
 .dc-gloss dd:last-child{margin-bottom:0}
 
+/* The outside source the kiosk's method is drawn from — the manifesto is
+   someone else's text, so it is credited on the page rather than absorbed
+   into the statement. The whole card is the anchor, so it takes the same
+   hover treatment as a print card: border to accent, a small lift. */
+.dc-ref{display:block;padding:20px 24px;border:1px solid var(--border);border-radius:8px;background:var(--card-inner);text-decoration:none;transition:border-color .16s,transform .16s}
+.dc-ref:hover{border-color:var(--accent);transform:translateY(-2px)}
+.dc-ref-kicker{font-family:var(--ff-m);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.dc-ref-title{font-family:var(--ff-h);font-weight:700;font-size:19px;line-height:1.25;color:var(--text);margin:0 0 11px}
+.dc-ref-body{margin:0;font-size:13.5px;line-height:1.7;color:var(--muted)}
+.dc-ref-src{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-family:var(--ff-m);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.dc-ref-src .go{color:var(--accent)}
+
 .dc-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin:0 0 8px}
 .dc-fact{background:var(--panel);padding:18px 16px}
 .dc-fact .k{display:block;font-family:var(--ff-m);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
@@ -527,25 +545,37 @@ body.day .cta-strip::before{background:linear-gradient(90deg,transparent,rgba(10
 .print:hover{border-color:var(--accent);transform:translateY(-2px)}
 .print-img{position:relative;aspect-ratio:1/1.414;background:#f4f2ec;overflow:hidden}
 .print-img img{width:100%;height:100%;object-fit:contain;display:block}
-/* Sheets that are themselves landscape (Bodybags 02/06) get a landscape card
-   — the full poster, uncropped, at the same width as its portrait
-   neighbours. Aspect ratios are true A-series (1:√2), so `contain` leaves no
-   visible letterboxing. */
-.print.landscape .print-img{aspect-ratio:1.414/1}
+/* Bodybags 02/06 (sheets 11 and 15) are the two landscape scans in the
+   catalogue, turned upright to stand with the rest of the grid. The image
+   box is laid out at the card's dimensions swapped (141.4% wide by 70.7%
+   tall — the card is 1:1.414) so that once it turns a quarter it fills the
+   card exactly, edge to edge, at the same size as every unrotated sheet.
+   Clockwise: the left edge of the scan is the top of the artwork. */
+.print.rotate .print-img img{
+  position:absolute;top:50%;left:50%;
+  width:141.421%;height:70.711%;
+  transform:translate(-50%,-50%) rotate(90deg);
+}
+/* Sheet 11 only: an extra half turn on top of the set's default. */
+.print.rotate-180 .print-img img{transform:translate(-50%,-50%) rotate(270deg)}
 /* Sheets that are portrait scans but read better sideways (Death Culture
    02/06): the pixels turn a quarter *and* the card follows, landscape-
    shaped, so the rotated artwork lands full-frame rather than shrunk inside
    a card still built for the unrotated, portrait scan. The image box is laid
    out at the card's dimensions swapped (70.7% wide by 141.4% tall — the turn
    card is 1.414:1) so that once it turns a quarter it fills the card exactly,
-   the same trick as the `landscape` card but run in reverse. Counter-
-   clockwise: these scans were fed into the scanner head-left. */
+   the same trick run in reverse. Clockwise: the left edge of the scan is the
+   top of the artwork (same convention as `.rotate` above — confirmed against
+   sheet 2, whose mountain peaks sit on the scan's left edge). */
 .print.turn .print-img{aspect-ratio:1.414/1}
 .print.turn .print-img img{
   position:absolute;top:50%;left:50%;
   width:70.711%;height:141.421%;
-  transform:translate(-50%,-50%) rotate(-90deg);
+  transform:translate(-50%,-50%) rotate(90deg);
 }
+/* Sheet 2 only: its established turn direction, kept as is rather than
+   switched to the corrected default above. */
+.print.turn-rev .print-img img{transform:translate(-50%,-50%) rotate(-90deg)}
 /* A sheet that went through the scanner the wrong way up. Half a turn keeps
    the card's proportions, so no resizing is needed here. */
 .print.flip .print-img img{transform:rotate(180deg)}
