@@ -34,7 +34,8 @@ body.day #theme-toggle .sun{display:block}
 body.day #theme-toggle .moon{display:none}
 #sys-state{position:fixed;bottom:14px;left:14px;z-index:9000;font-family:var(--ff-m);font-size:9px;letter-spacing:.18em;color:rgba(232,197,71,.55);text-transform:uppercase;background:var(--card-inner);border:1px solid var(--border);padding:5px 10px;border-radius:4px;backdrop-filter:blur(6px);display:flex;align-items:center;gap:8px}
 #sys-state .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
-header{position:fixed;top:0;left:0;right:0;z-index:50;background:var(--glass);border-bottom:1px solid var(--border);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+header{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top);background:var(--glass);border-bottom:1px solid var(--border);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+header::before{content:'';position:absolute;top:-50vh;left:0;right:0;height:50vh;background:var(--bg);z-index:-1}
 .nav{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:13px 28px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .brand svg{width:26px;height:22px;color:var(--accent);filter:drop-shadow(0 1px 6px rgba(232,197,71,.4))}

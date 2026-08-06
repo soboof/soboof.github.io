@@ -64,8 +64,15 @@ body.day #theme-toggle .moon{display:none}
 /* Header */
 header{
   position:fixed;top:0;left:0;right:0;z-index:50;
+  padding-top:env(safe-area-inset-top);
   background:var(--glass);border-bottom:1px solid var(--border);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+/* Solid backer above the bar — covers the notch/status-bar strip and the
+   sliver iOS reveals above position:fixed elements on rubber-band scroll. */
+header::before{
+  content:'';position:absolute;top:-50vh;left:0;right:0;height:50vh;
+  background:var(--bg);z-index:-1;
 }
 .nav{
   max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:16px;
