@@ -104,7 +104,7 @@ function include(html, depth = 0) {
 
 /** Wrap one page's body in the chrome and fill its metadata. */
 function renderPage(slug, page, body) {
-  const nav = ['MIRBREAK', 'PRINTING_LAB', 'WORKSHOP', 'JOURNAL'];
+  const nav = ['MIRBREAK', 'PRINTING_LAB', 'WORKSHOP'];
   const tokens = {
     TITLE: page.title, DESC: page.desc, CANONICAL: page.canonical,
     OG_IMAGE: page.ogImage, OG_ALT: page.ogAlt, OG_TYPE: page.ogType, CSS: page.css,
@@ -407,13 +407,18 @@ function galleryGrid(all) {
    folded in here, so `featured` no longer decides *whether* a piece appears —
    only how big its tile is.
 
+   Newest piece first: entries are still appended to the end of ARTWORKS as
+   they're added (per the "TO ADD A PIECE" note at the top of that file), so
+   the grid reverses the array rather than asking anyone to remember to
+   insert at the top of a long list.
+
    Every piece is written into the HTML, so a crawler and a reader with no
    JavaScript both see the full catalogue. The batching is a display layer the
    page's script puts on top: it hides everything past the first batch and
-   reveals six more each time the sentinel scrolls into view. `data-cats`
+   reveals more each time the sentinel scrolls into view. `data-cats`
    carries the filter keys so the chips can work on the same tiles. */
 function homeGrid(all) {
-  return all.map(a => {
+  return all.slice().reverse().map(a => {
     const big   = a.featured === 'big';
     const photo = photosOf(a)[0];
     return `    <!-- ${a.name} -->
@@ -426,7 +431,7 @@ function homeGrid(all) {
       <div class="prod-tags">${attr(a.categories.join(' · '))}</div>
       <div class="prod-name">${attr(a.name)}</div>
       <div class="prod-row">
-        <span class="prod-arrow">${big ? 'View piece →' : '→'}</span>
+        <span class="prod-arrow">View piece →</span>
       </div>
     </a>`;
   }).join('\n\n');
@@ -437,7 +442,7 @@ function sitemap(all) {
      that moves cannot leave a stale entry behind here. */
   const priority = { index: '1.0', mirbreak: '0.9',
                      'printing-lab': '0.8', workshop: '0.8',
-                     about: '0.7', journal: '0.7' };
+                     about: '0.7' };
   const pages = [
     ...Object.entries(PAGES).map(([slug, p]) =>
       [p.url.replace(/^\//, ''), priority[slug] || '0.7']),
@@ -908,28 +913,36 @@ function projectSections(projects, artworks, prints) {
        itself is the heading now, so repeating it above would say it twice. */
     const [abbr, ...rest] = p.key.split(' · ');
     const mark = p.logo ? `      ${inlineMark(p.logo, 'sec-mark')}\n` : '';
+    /* A project with source:'image' shows its one picture beside the
+       heading — square, in the header row — rather than below in the
+       three-up grid, so it skips ex-grid entirely. */
+    const isImage = p.source === 'image';
+    const shot = isImage
+      ? `\n    <div class="sec-shot"><img src="/assets/img/${p.examples[0].img}" alt="${attr(p.examples[0].alt)}" loading="lazy" decoding="async"></div>`
+      : '';
+    const grid = isImage ? '' : `  <div class="ex-grid">
+${exampleCards(p, artworks, prints)}
+  </div>
+  `;
     return `<!-- ── PROJECT · ${p.name.toUpperCase()} ── -->
 <section id="${attr(p.id)}" class="${side} proj-sec" style="--proj:${p.accent}">
   <div class="model-rail" data-section="${attr(p.id)}">
     <span class="rail-tick top">· · · ${attr(abbr)} ↑</span>
     <span class="rail-tick bot">· · · ${attr(abbr)} ↓</span>
   </div>
-  <div class="sec-head">
+  <div class="sec-head${isImage ? ' sec-head-img' : ''}">
     <div class="sec-id">
 ${mark}      <div class="sec-num">${String(i + 1).padStart(2, '0')} · ${attr(rest.join(' · ') || p.name)}</div>
       <h2 class="sec-title">${attr(p.name)}</h2>
       <div class="sec-role">${attr(p.role)}</div>
     </div>
-    <div class="sec-sub">${sub(attr(p.body))}</div>
+    <div class="sec-sub">${sub(attr(p.body))}</div>${shot}
   </div>
   <div class="proj-bar">
     <div class="proj-meta">${meta}</div>
     <span class="proj-status">${attr(sub(p.status))}</span>
   </div>
-  <div class="ex-grid">
-${exampleCards(p, artworks, prints)}
-  </div>
-  <a href="${attr(p.href)}" class="btn primary proj-go"${rel}>${attr(p.cta)} &rarr;</a>
+${grid}  <a href="${attr(p.href)}" class="btn primary proj-go"${rel}>${attr(p.cta)} &rarr;</a>
 </section>`;
   }).join('\n\n');
 }
@@ -945,11 +958,13 @@ function checkProjects(projects, artworks, prints) {
     else if (ids.has(p.id)) problems.push(`${at}: duplicate id "${p.id}"`);
     ids.add(p.id);
 
-    /* Three examples, each resolvable. */
+    /* Three examples, each resolvable — except 'image', which shows one
+       picture in place of the grid rather than three drawn/photographed ones. */
     const ex = p.examples || [];
-    if (ex.length !== 3) problems.push(`${at}: needs exactly 3 examples, has ${ex.length}`);
-    if (!['models', 'domes', 'artworks', 'prints'].includes(p.source)) {
-      problems.push(`${at}: source must be "models", "domes", "artworks" or "prints"`);
+    const wantEx = p.source === 'image' ? 1 : 3;
+    if (ex.length !== wantEx) problems.push(`${at}: needs exactly ${wantEx} example${wantEx === 1 ? '' : 's'}, has ${ex.length}`);
+    if (!['models', 'domes', 'artworks', 'prints', 'image'].includes(p.source)) {
+      problems.push(`${at}: source must be "models", "domes", "artworks", "prints" or "image"`);
     } else ex.forEach((e, n) => {
       const where = `${at} example ${n + 1}`;
       if (p.source === 'models') {
@@ -974,6 +989,12 @@ function checkProjects(projects, artworks, prints) {
         if (!artworks.some(a => a.slug === e.slug)) {
           problems.push(`${where}: no artwork with slug "${e.slug}"`);
         }
+      } else if (p.source === 'image') {
+        if (!e.img) problems.push(`${where}: missing "img"`);
+        else if (!fs.existsSync(path.join(ROOT, '/assets/img', e.img))) {
+          problems.push(`${where}: /assets/img/${e.img} does not exist`);
+        }
+        if (!e.alt) problems.push(`${where}: missing "alt"`);
       } else {
         const m = String(e.img || '').match(/^(.*)-(\d+)$/);
         const set = m && prints.sets.find(s => s.prefix === m[1]);

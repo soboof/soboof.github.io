@@ -88,23 +88,6 @@ module.exports = {
     "ogType": "website",
     "url": "/workshop/"
   },
-  "journal": {
-    "out": "journal/index.html",
-    "title": "Soboof · Journal — Field Notes from the Studio",
-    "desc": "The Soboof journal: short writing on geometry, philosophy, mirror craft, and the thinking behind modular form. New entries when something is worth saying.",
-    "canonical": "https://soboof.com/journal/",
-    "ogImage": "https://soboof.com/assets/img/geometrical-mouse-01.jpg",
-    "ogAlt": "Geometrical Mouse — mirrored sculpture by Soboof",
-    "css": "journal.css",
-    "current": "JOURNAL",
-    "sys": "JOURNAL · ONGOING",
-    "ctaHref": "#contact",
-    "ctaText": "Contact",
-    "jsonld": "<script type=\"application/ld+json\">\r\n{\r\n  \"@context\": \"https://schema.org\",\r\n  \"@graph\": [\r\n    {\r\n      \"@type\": \"Blog\",\r\n      \"name\": \"Soboof Journal\",\r\n      \"url\": \"https://soboof.com/journal.html\",\r\n      \"description\": \"Short writing on geometry, philosophy, mirror craft and modular form.\",\r\n      \"publisher\": {\r\n        \"@id\": \"https://soboof.com/#studio\"\r\n      },\r\n      \"author\": {\r\n        \"@type\": \"Person\",\r\n        \"name\": \"Soby Farahat\",\r\n        \"alternateName\": \"Soboof\",\r\n        \"jobTitle\": \"Artist and designer\",\r\n        \"url\": \"https://soboof.com/about.html\",\r\n        \"email\": \"mirbreak@soboof.com\",\r\n        \"address\": {\r\n          \"@type\": \"PostalAddress\",\r\n          \"addressLocality\": \"Leeuwarden\",\r\n          \"addressCountry\": \"NL\"\r\n        },\r\n        \"sameAs\": [\r\n          \"https://www.instagram.com/soboof/\",\r\n          \"https://www.linkedin.com/in/soboof\",\r\n          \"https://www.facebook.com/sobooof\"\r\n        ]\r\n      },\r\n      \"inLanguage\": \"en\"\r\n    },\r\n    {\r\n      \"@type\": \"BreadcrumbList\",\r\n      \"itemListElement\": [\r\n        {\r\n          \"@type\": \"ListItem\",\r\n          \"position\": 1,\r\n          \"name\": \"Soboof\",\r\n          \"item\": \"https://soboof.com/\"\r\n        },\r\n        {\r\n          \"@type\": \"ListItem\",\r\n          \"position\": 2,\r\n          \"name\": \"Journal\",\r\n          \"item\": \"https://soboof.com/journal.html\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}\r\n</script>",
-    "extraOg": [],
-    "ogType": "website",
-    "url": "/journal/"
-  },
   "about": {
     "out": "about/index.html",
     "title": "Soboof · About — Soby Farahat and the Design Studio",

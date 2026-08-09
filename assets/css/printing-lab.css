@@ -177,7 +177,7 @@ body.day .hero-plate .wide.day{display:block}
 /* Gold band, measured off the print itself: x 6.1%–93.8%, y 9.6%–42.0% of the
    plate. Both blocks below sit a clear margin inside that, not flush to it. */
 .hero-lockup{position:absolute;left:12cqw;top:8cqw;width:25cqw;z-index:2}
-.hero-lockup h1{font-size:4.7cqw;line-height:.88;color:#17150f;text-shadow:none}
+.hero-lockup h1{font-size:4.7cqw;line-height:1.1;color:#17150f;text-shadow:none}
 .hero-lockup h1 .mirror{color:rgba(23,21,15,.7);font-size:.4em;margin-top:1.4cqw}
 
 /* The statement's opening line, set opposite the title on the same gold band.
@@ -242,6 +242,10 @@ section{max-width:1320px;margin:0 auto;padding:48px 28px;position:relative}
 .sec-title .accent{color:var(--accent)}
 .sec-title .mirror{color:var(--mirror)}
 .sec-sub{font-family:var(--ff-m);font-size:13px;line-height:1.7;color:var(--muted);max-width:420px}
+/* Three words plus a compound run wider than the other two section titles at
+   the same clamp, so this one alone reads oversized. Scoped to #statement —
+   the other two headings weren't too big. */
+#statement .sec-title{font-size:clamp(28px,3.8vw,44px)}
 
 /* Filter chips */
 .filters{
@@ -393,8 +397,7 @@ body.list-view .piece-desc{-webkit-line-clamp:5;line-clamp:5}
 /* Host-the-kiosk and the manifesto card, side by side on desktop. Each item
    keeps its card's own look (cta-strip's gold surface, dc-ref's plain
    border); the grid only handles the row. */
-.kiosk-cards{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
-@media(max-width:900px){.kiosk-cards{grid-template-columns:1fr}}
+.dc-ref.solo{max-width:640px;margin:0 auto}
 
 /* CTA strip */
 .cta-strip{
@@ -521,6 +524,13 @@ body.day .cta-strip::before{background:linear-gradient(90deg,transparent,rgba(10
 .dc-fact .k{display:block;font-family:var(--ff-m);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
 .dc-fact .v{font-family:var(--ff-h);font-weight:700;font-size:15px;line-height:1.25;color:var(--text)}
 .dc-fact .v.accent{color:var(--accent)}
+
+.kiosk-row{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:start}
+.kiosk-copy .sec-head{margin-bottom:20px}
+.kiosk-copy .cta-strip{margin-top:26px}
+.kiosk-photos{display:flex;flex-direction:column;gap:16px}
+.kiosk-photos img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center 30%;border:1px solid var(--border);border-radius:10px;display:block}
+@media (max-width:900px){.kiosk-row{grid-template-columns:1fr}}
 
 
 .dc-set-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid var(--border)}

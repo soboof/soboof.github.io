@@ -48,6 +48,8 @@
                            all come from there.
      source: 'prints'    → an image basename from assets/img/death-culture/.
                            The caption comes from data/prints.js.
+     source: 'image'     → a single { img, alt } in assets/img/, shown as a
+                           square beside the heading instead of the ex-grid.
 
    The build fails if a model file, slug, print image or logo is missing.
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -106,9 +108,10 @@ module.exports = [
     status: 'ONGOING',
     name:   'Death Culture',
     role:   'Hand-printing kiosk · with Ju Bergman',
-    body:   'Six carved lino stamps: cypress, hound, bird of prey, mountain, flame, ' +
-            'cloud. They are printed live on site while visitors help place the body ' +
-            'bags on the paper. {{PRINTS}} sheets documented so far, across two collections.',
+    body:   'Death Culture traces the line from intolerance to a culture of death: stories ' +
+            'of dying, carved into six lino stamps and printed live while visitors help ' +
+            'place the body bags themselves. Making people part of the story, not an ' +
+            'audience to it, is the project\'s way out of totalitarianism.',
     meta:   ['LINO', 'A4', 'LIVE'],
     href:   'printing-lab.html',
     cta:    'See the prints',
@@ -135,14 +138,11 @@ module.exports = [
     accent: 'var(--earth)',
     logo:   'superadobe-logo.svg',
     external: true,
-    source: 'domes',
+    source: 'image',
     examples: [
-      { type: 'dome',     span: 5,   label: 'Dome',
-        note: 'Struck the conventional way — compass on the outer edge of the base sack, rr = 2·rb + sw.' },
-      { type: 'vault',    span: 3.5, length: 7, label: 'Vault',
-        note: 'The same wall run along a length, closing on the catenary a barrel stands in.' },
-      { type: 'cylinder', span: 4,   height: 2.4, label: 'Cylinder',
-        note: 'A straight drum, left open at the top for a roof or a second storey.' },
+      { img: 'superadobe-generator-screenshot.png',
+        alt: 'The SuperAdobe Generator laying out a two-dome earthbag complex, with sack, ' +
+             'wire, fill and plaster totals computed alongside it.' },
     ],
   },
 ];
