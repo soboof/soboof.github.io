@@ -141,13 +141,13 @@ body.day .nav-link.pe:hover{background:rgba(30,122,69,.08)}
     display:none;position:absolute;top:100%;left:0;right:0;
     flex-direction:column;align-items:stretch;gap:6px;
     padding:14px 22px 20px;
-    /* Thinner than the header's --glass on purpose: at .78 the tint hid
-       the blur, and the point of the panel is the page going soft under it. */
-    background:rgba(12,10,8,.58);border-bottom:1px solid var(--border);
+    /* Near-solid on purpose: at lower alpha the page content behind it (photos,
+       text) fought with the link labels and made the panel hard to read. */
+    background:rgba(7,5,3,.985);border-bottom:1px solid var(--border);
     backdrop-filter:blur(30px) saturate(150%);
     -webkit-backdrop-filter:blur(30px) saturate(150%);
   }
-  body.day .nav-links{background:rgba(236,233,225,.7)}
+  body.day .nav-links{background:rgba(214,209,197,.96)}
   .nav-links.open{display:flex}
   .nav-link{font-size:11px;padding:12px 14px;border-color:var(--border)}
   .nav-link.tool{padding:12px 14px}
