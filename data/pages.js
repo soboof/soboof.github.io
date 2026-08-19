@@ -19,11 +19,11 @@
 module.exports = {
   "index": {
     "out": "index.html",
-    "title": "Soboof — 3D, Graphics &amp; Fabrication Design Studio · Leeuwarden",
-    "desc": "A Leeuwarden design studio working in 3D, 2D graphics and fabrication — outside-the-box work made to be built with rather than bought.",
+    "title": "Soboof · 3D, Graphics &amp; Fabrication Design Studio · Leeuwarden",
+    "desc": "A Leeuwarden design studio working in 3D, 2D graphics and fabrication: outside-the-box work made to be built with rather than bought.",
     "canonical": "https://soboof.com/",
     "ogImage": "https://soboof.com/assets/img/space-fox-01.jpg",
-    "ogAlt": "Space Fox — a mirrored modular sculpture by Soboof",
+    "ogAlt": "Space Fox, a mirrored modular sculpture by Soboof",
     "css": "index.css",
     "current": null,
     "sys": "SOBOOF · STUDIO · LIVE",
