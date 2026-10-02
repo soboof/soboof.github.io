@@ -533,4 +533,40 @@ module.exports = [
     manifestPrimitive: 'FOLDED<br>FORM',
   },
 
+  {
+    slug:      'labyrinth-fox',
+    code:      'SBF · 015',
+    name:      'Labyrinth Fox',
+    subtitle:  'A mirror fox covered in hand-drawn mazes.',
+    imgPrefix: 'labyrinth-fox',
+    photos:    10,
+
+    edition:      'ooak',
+    editionLabel: 'ONE OF A KIND',
+    galleryBadge: 'ONE OF A KIND',
+    editionSpec:  'One of a kind',
+    availability: 'One of a kind · Enquire for availability',
+
+    categories: ['Abstract', 'Animals', 'Statue'],
+    filters:    'abstract animals statue',
+    featured:   'std',
+
+    dims:   { l: 20, w: 15, h: 22, weight: 1 },
+    price:  { regular: '', sale: '' },
+
+    metaTitle: 'Labyrinth Fox — Mirror Fox Sculpture with Maze Drawings | Soboof',
+    metaDesc:  'Labyrinth Fox by Soboof. A one-of-a-kind geometric mirror fox whose panels are covered in hand-drawn mazes, spirals and cracks. Leeuwarden, NL.',
+
+    cardDesc: 'A folded mirror fox whose every panel carries a hand-drawn maze: spirals, dead ends and paths that run from one face to the next.',
+
+    description: `A fox you can get lost in. Labyrinth Fox is folded from large mirror panels, and every one of them is drawn on by hand: <strong>mazes, square spirals</strong> and branching cracks that run off one face and carry on across the next. The lines sit on top of the reflection, so the room you see in the mirror is always caught inside a maze. A thin copper seam runs down the chest. Turn it and the fox comes apart into <strong>a star of triangles</strong>, then folds back into ears and a muzzle.`,
+
+    schemaDesc: 'One-of-a-kind geometric mirror fox sculpture with hand-drawn maze and spiral lines on every panel.',
+
+    keywords: ['geometric fox sculpture', 'mirror fox statue', 'labyrinth art', 'maze drawing sculpture', 'chrome decor', 'statement sculpture', 'contemporary Dutch art'],
+
+    formTags: ['Folding', 'Line drawing', 'Spirals', 'Reflection doubling'],
+    manifestPrimitive: 'MAZE<br>FORM',
+  },
+
 ];

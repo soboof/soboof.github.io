@@ -76,4 +76,8 @@
     <loc>https://soboof.com/work/origami-fox/</loc>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://soboof.com/work/labyrinth-fox/</loc>
+    <priority>0.6</priority>
+  </url>
 </urlset>
