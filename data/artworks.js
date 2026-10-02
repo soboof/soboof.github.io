@@ -435,4 +435,38 @@ module.exports = [
     manifestPrimitive: 'DANCING<br>FORM',
   },
 
+  {
+    slug:      'gnomon',
+    code:      'SBF · 013',
+    name:      'Gnomon',
+    subtitle:  'A column of mirrors that carries a working sundial.',
+    imgPrefix: 'gnomon',
+    photos:    5,
+
+    edition:      'ooak',
+    editionLabel: 'ONE OF A KIND',
+    galleryBadge: 'ONE OF A KIND',
+    editionSpec:  'One of a kind',
+    availability: 'One of a kind · Enquire for availability',
+
+    categories: ['Abstract', 'Statue'],
+    filters:    'abstract statue',
+    featured:   'std',
+
+    dims:   { l: 40, w: 30, h: 60, weight: 3 },
+    price:  { regular: '', sale: '' },
+
+    metaTitle: 'Gnomon — Mirrored Sundial Sculpture | Soboof',
+    metaDesc:  'Gnomon by Soboof. A one-of-a-kind column of silver and copper mirror that twists upward to hold a bronze sundial. Hand-cut Ayeneh-Kari. Leeuwarden, NL.',
+
+    cardDesc: 'A column of silver and copper mirror that bends, reaches out an arm and straightens again to hold a bronze sundial up to the light.',
+
+    description: `A gnomon is the part of a sundial that casts the shadow. Here the whole sculpture becomes one: a column of faceted mirror, hand-tiled in Persian <strong>Ayeneh-Kari</strong>, that bends, reaches out an arm and straightens again to lift a <strong>bronze sundial</strong> into the light. Silver and copper mirrors alternate up the body, and a few faces carry an engraved triangular spiral. The dial needs sun to tell the time; the mirrors need the same light to show anything at all. Stand still and the piece is a clock. Walk around it and it <strong>turns into a figure</strong>.`,
+
+    schemaDesc: 'One-of-a-kind mirrored column sculpture in silver and copper Ayeneh-Kari, topped with a bronze sundial.',
+
+    formTags: ['Branching growth', 'Faceting', 'Stacking', 'Modular repetition'],
+    manifestPrimitive: 'COLUMN<br>FORM',
+  },
+
 ];

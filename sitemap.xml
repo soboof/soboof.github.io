@@ -68,4 +68,8 @@
     <loc>https://soboof.com/work/mata-hari/</loc>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://soboof.com/work/gnomon/</loc>
+    <priority>0.6</priority>
+  </url>
 </urlset>
