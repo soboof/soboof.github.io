@@ -467,7 +467,7 @@ module.exports = [
     name:      'Gnomon',
     subtitle:  'A column of mirrors that carries a working sundial.',
     imgPrefix: 'gnomon',
-    photos:    5,
+    photos:    10,
 
     edition:      'ooak',
     editionLabel: 'ONE OF A KIND',
