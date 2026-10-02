@@ -407,7 +407,7 @@ module.exports = [
     name:      'Mata Hari',
     subtitle:  'Made for 150 years of Mata Hari: a dancer of mirrors above a music box.',
     imgPrefix: 'mata-hari',
-    photos:    4,
+    photos:    5,
 
     edition:      'ooak',
     editionLabel: 'ONE OF A KIND',
