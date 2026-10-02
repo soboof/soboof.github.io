@@ -21,6 +21,8 @@
    edition     'ooak' | 'ltd' | 'sale' | null  — styles the badge
    featured    'big' | 'std' | null — place and size on the homepage grid
    filters     space-separated keys the gallery filter buttons match
+   keywords    search phrases, most important first — the first one also
+               becomes the image alt text
    price       kept in sync with WooCommerce for reference only; the
                portfolio deliberately does not display prices
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -57,6 +59,8 @@ module.exports = [
 
     schemaDesc: 'One-of-a-kind mirrored sculpture: hand-cut Ayeneh-Kari tiles on a 3D-printed modular body.',
 
+    keywords: ['black mirror fox sculpture', 'geometric fox statue', 'chrome decor', 'Neo Deco sculpture', 'gold and black mirror art', 'statement sculpture', 'Ayeneh-Kari mirror mosaic'],
+
     formTags: ['Branching growth', 'Crystallization', 'Lattices', 'Modular repetition'],
     manifestPrimitive: 'MODULAR<br>FORM',
   },
@@ -90,6 +94,8 @@ module.exports = [
     description: `The Owl perches in <strong>quiet vigilance</strong>, a guardian of thresholds between knowledge and mystery. Its body, sculpted from faceted surfaces, captures and refracts light — turning stillness into a subtle geometry of shadows and reflections. Each angle reveals new facets: hidden patterns, whispered truths, fragmented visions of the world. It reminds us that <strong>seeing is never passive</strong>; understanding emerges through reflection, patience and attentiveness.`,
 
     schemaDesc: 'One-of-a-kind mirrored owl sculpture: hand-cut Ayeneh-Kari tiles on a 3D-printed modular body.',
+
+    keywords: ['mirrored owl sculpture', 'geometric owl statue', 'chrome decor', 'silver owl decor', 'sculptural mirror art', 'Ayeneh-Kari mirror mosaic', 'statement shelf decor'],
 
     formTags: ['Faceting', 'Radial symmetry', 'Lattices', 'Modular repetition'],
     manifestPrimitive: 'FACETED<br>MASS',
@@ -125,6 +131,8 @@ module.exports = [
 
     schemaDesc: 'Mirrored phoenix sculpture: hand-cut Ayeneh-Kari tiles on a 3D-printed symmetrical body.',
 
+    keywords: ['Simorgh sculpture', 'Persian phoenix art', 'mirrored bird sculpture', 'Iranian mirror mosaic', 'chrome decor', 'Ayeneh-Kari mirror art', 'Persian mythology art'],
+
     formTags: ['Bilateral symmetry', 'Crystallization', 'Feathered facets', 'Modular repetition'],
     manifestPrimitive: 'WINGED<br>FORM',
   },
@@ -158,6 +166,8 @@ module.exports = [
     description: `Space Vogel is a sculptural exploration of <strong>geometry, reflection and transformation</strong>. Rising from a mirrored pedestal, its faceted black crystalline body captures both the organic and the cosmic — sharp angular forms echoing constellations, meteorites and digital fragmentation. The glossy surfaces catch and bend light, creating shifting reflections that blur the line between physical presence and illusion. Placed atop a reflective cube, the piece <strong>doubles itself in perception</strong>.`,
 
     schemaDesc: 'One-of-a-kind mirrored bird sculpture on a reflective pedestal, hand-tiled in Ayeneh-Kari.',
+
+    keywords: ['abstract bird sculpture', 'geometric mirror bird', 'chrome decor', 'Neo Deco sculpture', 'sculptural object', 'Ayeneh-Kari mirror mosaic', 'modern art Leeuwarden'],
 
     formTags: ['Crystallization', 'Faceting', 'Reflection doubling', 'Modular repetition'],
     manifestPrimitive: 'CRYSTAL<br>FORM',
@@ -193,6 +203,8 @@ module.exports = [
 
     schemaDesc: 'Mirrored geometric mouse sculpture for the home: hand-cut Ayeneh-Kari on a 3D-printed body.',
 
+    keywords: ['geometric mouse sculpture', 'mirrored animal statue', 'chrome decor', 'playful sculptural decor', 'mirror mosaic art', 'Ayeneh-Kari', 'gift for art lovers'],
+
     formTags: ['Modular repetition', 'Bilateral symmetry', 'Parametric geometry', 'Lattices'],
     manifestPrimitive: 'MODULAR<br>FORM',
   },
@@ -226,6 +238,8 @@ module.exports = [
     description: `The geometrical cat series transforms the familiar feline form into a work of <strong>abstract geometry and generative design</strong>. Clean lines, mirrored polygons and modular symmetry hold organic curve and mathematical precision in balance. Inspired by parametric algorithms and minimalist abstraction, it keeps the playful yet mysterious essence of the cat while bringing a <strong>modern, architectural edge</strong> to animal portraiture.`,
 
     schemaDesc: 'Mirrored geometric cat sculpture for the home: hand-cut Ayeneh-Kari on a 3D-printed body.',
+
+    keywords: ['geometric cat sculpture', 'mirrored cat statue', 'chrome cat decor', 'gift for cat lovers', 'sculptural mirror art', 'Ayeneh-Kari mirror mosaic', 'modern cat art'],
 
     formTags: ['Modular repetition', 'Bilateral symmetry', 'Parametric geometry', 'Faceting'],
     manifestPrimitive: 'MODULAR<br>FORM',
@@ -261,6 +275,8 @@ module.exports = [
 
     schemaDesc: 'One-of-a-kind mirrored fox sculpture on a reflective pedestal, hand-tiled in Ayeneh-Kari.',
 
+    keywords: ['black crystal fox sculpture', 'abstract fox statue', 'dark chrome decor', 'Neo Deco sculpture', 'faceted mirror art', 'Ayeneh-Kari mirror mosaic', 'statement sculpture'],
+
     formTags: ['Crystallization', 'Faceting', 'Reflection doubling', 'Modular repetition'],
     manifestPrimitive: 'CRYSTAL<br>FORM',
   },
@@ -294,6 +310,8 @@ module.exports = [
     description: `A study in <strong>stillness and intent</strong> — a creature frozen at the edge of decision. Constructed from MirBreak modular elements and hand-tiled with Persian <strong>Ayeneh-Kari</strong> mirrorwork, its faceted geometry refracts light into a living pelt of reflections. Each triangular shard is cut and set with the pop-break technique, contrasting bright catching surfaces against muted, shadowed planes. The fox is both trickster and guide: part geometry, part ghost, all gaze.`,
 
     schemaDesc: 'Mirrored geometric fox sculpture: hand-cut Ayeneh-Kari tiles on a 3D-printed modular body.',
+
+    keywords: ['geometric fox sculpture', 'mirrored fox statue', 'chrome decor', 'low poly fox art', 'sculptural mirror art', 'Ayeneh-Kari mirror mosaic', 'fox gift'],
 
     formTags: ['Branching growth', 'Faceting', 'Pop-break shards', 'Modular repetition'],
     manifestPrimitive: 'MODULAR<br>FORM',
@@ -329,6 +347,8 @@ module.exports = [
 
     schemaDesc: 'Sculptural mirrored table lamp: hand-cut Ayeneh-Kari tiles over a 3D-printed body with concealed bulb.',
 
+    keywords: ['sculptural table lamp', 'mirror table lamp', 'chrome lamp', 'statement lighting', 'Neo Deco lamp', 'geometric lamp', 'Ayeneh-Kari mirror mosaic'],
+
     formTags: ['Radial symmetry', 'Crystallization', 'Light diffusion', 'Modular repetition'],
     manifestPrimitive: 'FUNCTIONAL<br>FORM',
   },
@@ -362,6 +382,8 @@ module.exports = [
     description: `A <strong>quiet sentinel at the edge of night</strong>, Bird of Dawn perches in stillness, its faceted body a mosaic of light and shadow. Built from mirrored geometries, it catches the last breath of darkness and the first tremor of day, holding both in a <strong>suspended equilibrium</strong>.`,
 
     schemaDesc: 'Mirrored bird sculpture: hand-cut Ayeneh-Kari tiles on a 3D-printed modular body.',
+
+    keywords: ['mirrored bird sculpture', 'geometric bird statue', 'chrome decor', 'silver bird decor', 'sculptural mirror art', 'Ayeneh-Kari mirror mosaic', 'statement shelf decor'],
 
     formTags: ['Bilateral symmetry', 'Faceting', 'Crystallization', 'Modular repetition'],
     manifestPrimitive: 'WINGED<br>FORM',
@@ -397,6 +419,8 @@ module.exports = [
 
     schemaDesc: 'Mirrored figurative statue built from modular fragments, hand-tiled in Ayeneh-Kari.',
 
+    keywords: ['mirrored figure sculpture', 'abstract human statue', 'chrome decor', 'modular sculpture', 'sculptural mirror art', 'Ayeneh-Kari mirror mosaic', 'contemporary Dutch art'],
+
     formTags: ['Modular repetition', 'Bilateral symmetry', 'Fragmentation', 'Lattices'],
     manifestPrimitive: 'FIGURE<br>FORM',
   },
@@ -431,6 +455,8 @@ module.exports = [
 
     schemaDesc: 'One-of-a-kind mirrored sculpture made for 150 years of Mata Hari: hand-cut Ayeneh-Kari tiles above a hand-painted music box.',
 
+    keywords: ['Mata Hari sculpture', '150 jaar Mata Hari', 'Mata Hari art Leeuwarden', 'Mata Hari 150 years 2026', 'mirror sculpture music box', 'REFRAMED exhibition Leeuwarden', 'chrome decor', 'Ayeneh-Kari mirror mosaic'],
+
     formTags: ['Branching growth', 'Faceting', 'Reflection doubling', 'Modular repetition'],
     manifestPrimitive: 'DANCING<br>FORM',
   },
@@ -464,6 +490,8 @@ module.exports = [
     description: `A gnomon is the part of a sundial that casts the shadow. Here the whole sculpture becomes one: a column of faceted mirror, hand-tiled in Persian <strong>Ayeneh-Kari</strong>, that bends, reaches out an arm and straightens again to lift a <strong>bronze sundial</strong> into the light. Silver and copper mirrors alternate up the body, and a few faces carry an engraved triangular spiral. The dial needs sun to tell the time; the mirrors need the same light to show anything at all. Stand still and the piece is a clock. Walk around it and it <strong>turns into a figure</strong>.`,
 
     schemaDesc: 'One-of-a-kind mirrored column sculpture in silver and copper Ayeneh-Kari, topped with a bronze sundial.',
+
+    keywords: ['sundial sculpture', 'mirror sundial', 'sundial art piece', 'copper and silver mirror sculpture', 'chrome decor', 'statement sculpture', 'Ayeneh-Kari mirror mosaic'],
 
     formTags: ['Branching growth', 'Faceting', 'Stacking', 'Modular repetition'],
     manifestPrimitive: 'COLUMN<br>FORM',

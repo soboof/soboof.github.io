@@ -141,7 +141,7 @@ function artworkEntry(a) {
     description: \`${bt(a.description)}\`,
 
     schemaDesc: '${q(a.schemaDesc)}',
-
+${a.keywords.length ? `    keywords: [${a.keywords.map(k => `'${q(k)}'`).join(', ')}],\n` : ''}
     formTags: [${tags}],
     manifestPrimitive: '${q(a.manifestPrimitive)}',
   },`;
@@ -291,6 +291,7 @@ const routes = {
       price: { regular: String(f.price?.regular || ''), sale: String(f.price?.sale || '') },
       metaTitle: f.metaTitle, metaDesc: f.metaDesc, cardDesc: f.cardDesc,
       description: f.description, schemaDesc: f.schemaDesc,
+      keywords: Array.isArray(f.keywords) ? f.keywords.map(String) : [],
       formTags: f.formTags, manifestPrimitive: f.manifestPrimitive || 'MODULAR<br>FORM',
     };
 

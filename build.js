@@ -72,6 +72,18 @@ const dimsLine   = a => `${a.dims.l} × ${a.dims.w} × ${a.dims.h} cm`;
 const badgeClass = a => (a.edition === 'ooak' ? ' ooak' : a.edition === 'sale' ? ' sale' : '');
 /** Filter keys a piece answers to — archetypes from the data, `sale` derived. */
 const filterKeys = a => (a.filters + (isOnSale(a) ? ' sale' : '')).trim();
+/** Search keywords, most important first. A piece without its own list falls
+ *  back to the studio-wide terms, so an older entry still gets sensible tags. */
+const DEFAULT_KEYWORDS = ['mirror sculpture', 'geometric sculpture', 'Ayeneh-Kari mirror mosaic', 'chrome decor', 'handmade art Netherlands'];
+const keywordsOf = a => (a.keywords && a.keywords.length ? a.keywords : DEFAULT_KEYWORDS);
+/** Image alt text: the name plus the piece's lead search phrase, without
+ *  saying the name twice when the phrase already carries it. */
+const altOf = a => {
+  const kw = keywordsOf(a)[0];
+  return kw.toLowerCase().includes(a.name.toLowerCase())
+    ? `${kw} by Soboof`
+    : `${a.name}, ${kw} by Soboof`;
+};
 
 /* ── the hand-written pages ────────────────────────────────────────────────
    A page is body content in src/pages/ plus a metadata block in data/pages.js,
@@ -232,6 +244,7 @@ const PRODUCT = {
   name:     ${j(a.name)},
   subtitle: ${j(a.subtitle)},
   metaDesc: ${j(a.metaDesc)},
+  alt:      ${j(altOf(a))},
 
   status: 'AVAILABLE',
 
@@ -290,6 +303,7 @@ function jsonLd(a) {
       '@type': 'VisualArtwork',
       name: a.name,
       description: a.schemaDesc,
+      keywords: keywordsOf(a).join(', '),
       url,
       image: photosOf(a).slice(0, 3).map(p => `${SITE}${p}`),
       creator: {
@@ -315,8 +329,8 @@ function jsonLd(a) {
       artworkSurface: 'Hand-cut mirror mosaic (Ayeneh-Kari)',
       material: 'PLA and glass mirror',
       width:  { '@type': 'QuantitativeValue', value: a.dims.l, unitCode: 'CMT' },
-      height: { '@type': 'QuantitativeValue', value: a.dims.w, unitCode: 'CMT' },
-      depth:  { '@type': 'QuantitativeValue', value: a.dims.h, unitCode: 'CMT' },
+      depth:  { '@type': 'QuantitativeValue', value: a.dims.w, unitCode: 'CMT' },
+      height: { '@type': 'QuantitativeValue', value: a.dims.h, unitCode: 'CMT' },
       weight: { '@type': 'QuantitativeValue', value: a.dims.weight, unitCode: 'KGM' },
       inLanguage: 'en',
     },
@@ -351,7 +365,8 @@ function artworkPage(template, a, all) {
     .replace(/\{\{META_DESC\}\}/g,   attr(a.metaDesc))
     .replace(/\{\{CANONICAL\}\}/g,   `${SITE}/${artworkUrl(a)}`)
     .replace(/\{\{OG_IMAGE\}\}/g,    `${SITE}${photosOf(a)[0]}`)
-    .replace(/\{\{OG_IMAGE_ALT\}\}/g, attr(`${a.name} — mirrored sculpture by Soboof`))
+    .replace(/\{\{OG_IMAGE_ALT\}\}/g, attr(altOf(a)))
+    .replace(/\{\{KEYWORDS\}\}/g,    attr(keywordsOf(a).join(', ')))
     .replace(/\{\{JSONLD\}\}/g,      () => jsonLd(a))
     .replace(/\{\{H1\}\}/g,          attr(a.name))
     .replace(/\{\{SUBTITLE\}\}/g,    attr(a.subtitle))
@@ -386,7 +401,7 @@ function galleryGrid(all) {
       <div class="piece-img">
         <span class="piece-id">${attr(a.code)}</span>
         <span class="piece-badge${badgeClass(a)}">${attr(a.galleryBadge)}</span>
-        <img src="${photo}" alt="${attr(a.name)}" loading="lazy">
+        <img src="${photo}" alt="${attr(altOf(a))}" loading="lazy">
       </div>
       <div class="piece-body">
         <div class="piece-tags">${attr(a.categories.join(' · '))}</div>
@@ -426,7 +441,7 @@ function homeGrid(all) {
       <div class="prod-img">
         <span class="prod-id">${attr(a.code)}</span>
         <span class="prod-edition">${attr(a.editionLabel)}</span>
-        <img src="${photo}" alt="${attr(a.name)} sculpture" loading="lazy">
+        <img src="${photo}" alt="${attr(altOf(a))}" loading="lazy">
       </div>
       <div class="prod-tags">${attr(a.categories.join(' · '))}</div>
       <div class="prod-name">${attr(a.name)}</div>
@@ -868,7 +883,7 @@ function exampleCards(p, artworks, prints) {
     if (p.source === 'artworks') {
       const a = artworks.find(a => a.slug === ex.slug);
       return `        <a href="${artworkHref(a)}" class="ex ex-art">
-          <div class="ex-media"><img src="${photosOf(a)[0]}" alt="${attr(a.name)} sculpture" loading="lazy" decoding="async"></div>
+          <div class="ex-media"><img src="${photosOf(a)[0]}" alt="${attr(altOf(a))}" loading="lazy" decoding="async"></div>
           <div class="ex-body">
             <div class="ex-title">${attr(a.name)}</div>
             <div class="ex-spec">${attr(a.editionSpec)} · ${a.dims.l}×${a.dims.w}×${a.dims.h} cm</div>
