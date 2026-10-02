@@ -430,7 +430,7 @@ module.exports = [
     slug:      'mata-hari',
     code:      'SBF · 012',
     name:      'Mata Hari',
-    subtitle:  'Made for 150 years of Mata Hari: a dancer of mirrors above a music box.',
+    subtitle:  'A dancer of mirrors on a Hindeloopen music box, made for 150 years of Mata Hari.',
     imgPrefix: 'mata-hari',
     photos:    5,
 
@@ -448,15 +448,15 @@ module.exports = [
     price:  { regular: '', sale: '' },
 
     metaTitle: 'Mata Hari — Mirrored Sculpture for 150 Years Mata Hari | Soboof',
-    metaDesc:  'Mata Hari by Soboof. A one-of-a-kind mirrored sculpture made for 150 years of Mata Hari, poised on a hand-painted music box. Leeuwarden, NL.',
+    metaDesc:  'Mata Hari by Soboof. A mirror sculpture for 150 jaar Mata Hari on a Hindeloopen-painted music box, about women\'s freedom and men\'s control. Leeuwarden, NL.',
 
-    cardDesc: 'Made for 150 years of Mata Hari: faceted mirror bodies unfolding like a dancer’s arms above a hand-painted music box, a tiny ballerina turning inside.',
+    cardDesc: 'Made for 150 years of Mata Hari: mirror bodies unfolding like a dancer’s arms above a Hindeloopen-painted Frisian music box, a tiny ballerina turning inside.',
 
-    description: `Made for <strong>150 jaar Mata Hari</strong>, the REFRAMED exhibition in Leeuwarden marking 150 years since the dancer was born in the city. Faceted mirror bodies, hand-tiled in Persian <strong>Ayeneh-Kari</strong>, unfold from a single point like arms mid-gesture, each one catching a different angle of the room. They rest on a hand-painted Frisian-red music box, where a small ballerina turns inside. Mata Hari built a self from reflections: the dancer, the courtesan, the spy. The sculpture does the same, never showing <strong>one face twice</strong> as you walk around it.`,
+    description: `Made for <strong>150 jaar Mata Hari</strong>, the REFRAMED exhibition in Leeuwarden marking 150 years since Margaretha Zelle was born in the city. Faceted mirror bodies, hand-tiled in Persian <strong>Ayeneh-Kari</strong>, unfold from a single point like arms mid-gesture. They rest on a music box painted in the <strong>Hindeloopen</strong> style, the Frisian folk tradition of deep red grounds and stylised flowers, where a small ballerina turns inside. Mata Hari's story is that of a woman who refused the place men had set for her: she chose her own name, her own body and her own stage, and was punished for it. The sculpture holds on to that challenge to <strong>men's control over women</strong>, and to where that control is still at its harshest today, in places like Afghanistan, where women are shut out of school, work and public life. Persian mirrorwork on a Frisian box: two traditions, one question about who is allowed to be seen.`,
 
-    schemaDesc: 'One-of-a-kind mirrored sculpture made for 150 years of Mata Hari: hand-cut Ayeneh-Kari tiles above a hand-painted music box.',
+    schemaDesc: 'One-of-a-kind mirrored sculpture made for 150 years of Mata Hari: hand-cut Ayeneh-Kari tiles above a Hindeloopen-painted Frisian music box.',
 
-    keywords: ['Mata Hari sculpture', '150 jaar Mata Hari', 'Mata Hari art Leeuwarden', 'Mata Hari 150 years 2026', 'mirror sculpture music box', 'REFRAMED exhibition Leeuwarden', 'chrome decor', 'Ayeneh-Kari mirror mosaic'],
+    keywords: ['Mata Hari sculpture', '150 jaar Mata Hari', 'Mata Hari art Leeuwarden', 'Hindeloopen painting', 'Hindelooper schilderwerk', 'Frisian folk art', 'feminist art', 'women\'s rights art', 'REFRAMED exhibition Leeuwarden', 'Ayeneh-Kari mirror mosaic'],
 
     formTags: ['Branching growth', 'Faceting', 'Reflection doubling', 'Modular repetition'],
     manifestPrimitive: 'DANCING<br>FORM',
