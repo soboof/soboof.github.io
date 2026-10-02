@@ -515,7 +515,7 @@ module.exports = [
     filters:    'abstract animals statue',
     featured:   'std',
 
-    dims:   { l: 15, w: 10, h: 11, weight: 1 },
+    dims:   { l: 15, w: 10, h: 11, weight: 0.4 },
     price:  { regular: '', sale: '' },
 
     metaTitle: 'Origami Fox — Minimal Mirror Fox Sculpture | Soboof',
@@ -551,7 +551,7 @@ module.exports = [
     filters:    'abstract animals statue',
     featured:   'std',
 
-    dims:   { l: 15, w: 10, h: 11, weight: 1 },
+    dims:   { l: 15, w: 10, h: 11, weight: 0.4 },
     price:  { regular: '', sale: '' },
 
     metaTitle: 'Labyrinth Fox — Mirror Fox Sculpture with Maze Drawings | Soboof',
@@ -587,7 +587,7 @@ module.exports = [
     filters:    'abstract animals statue',
     featured:   'std',
 
-    dims:   { l: 15, w: 10, h: 11, weight: 1 },
+    dims:   { l: 15, w: 10, h: 11, weight: 0.4 },
     price:  { regular: '', sale: '' },
 
     metaTitle: 'Ember Fox — Copper Mirror Fox Sculpture | Soboof',
