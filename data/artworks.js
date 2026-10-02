@@ -20,6 +20,7 @@
    photos      how many photos exist (imgPrefix-01 … -0N)
    edition     'ooak' | 'ltd' | 'sale' | null  — styles the badge
    featured    'big' | 'std' | null — place and size on the homepage grid
+   pinned      true to put the piece first in the Work grid (optional)
    filters     space-separated keys the gallery filter buttons match
    keywords    search phrases, most important first — the first one also
                becomes the image alt text
@@ -478,6 +479,7 @@ module.exports = [
     categories: ['Abstract', 'Statue'],
     filters:    'abstract statue',
     featured:   'std',
+    pinned:     true,
 
     dims:   { l: 35, w: 15, h: 45, weight: 3 },
     price:  { regular: '', sale: '' },

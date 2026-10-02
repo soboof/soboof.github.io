@@ -425,7 +425,8 @@ function galleryGrid(all) {
    Newest piece first: entries are still appended to the end of ARTWORKS as
    they're added (per the "TO ADD A PIECE" note at the top of that file), so
    the grid reverses the array rather than asking anyone to remember to
-   insert at the top of a long list.
+   insert at the top of a long list. A piece marked `pinned: true` jumps the
+   queue and sits first, ahead of the newest.
 
    Every piece is written into the HTML, so a crawler and a reader with no
    JavaScript both see the full catalogue. The batching is a display layer the
@@ -433,7 +434,9 @@ function galleryGrid(all) {
    reveals more each time the sentinel scrolls into view. `data-cats`
    carries the filter keys so the chips can work on the same tiles. */
 function homeGrid(all) {
-  return all.slice().reverse().map(a => {
+  const newestFirst = all.slice().reverse();
+  const ordered = [...newestFirst.filter(a => a.pinned), ...newestFirst.filter(a => !a.pinned)];
+  return ordered.map(a => {
     const big   = a.featured === 'big';
     const photo = photosOf(a)[0];
     return `    <!-- ${a.name} -->
