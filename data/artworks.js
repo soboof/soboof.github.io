@@ -443,7 +443,7 @@ module.exports = [
     filters:    'abstract statue',
     featured:   'big',
 
-    dims:   { l: 30, w: 20, h: 35, weight: 2 },
+    dims:   { l: 22, w: 14, h: 30, weight: 2 },
     price:  { regular: '', sale: '' },
 
     metaTitle: 'Mata Hari — Mirrored Sculpture for 150 Years Mata Hari | Soboof',
