@@ -401,4 +401,38 @@ module.exports = [
     manifestPrimitive: 'FIGURE<br>FORM',
   },
 
+  {
+    slug:      'mata-hari',
+    code:      'SBF · 012',
+    name:      'Mata Hari',
+    subtitle:  'Made for 150 years of Mata Hari: a dancer of mirrors above a music box.',
+    imgPrefix: 'mata-hari',
+    photos:    4,
+
+    edition:      'ooak',
+    editionLabel: 'ONE OF A KIND',
+    galleryBadge: 'ONE OF A KIND',
+    editionSpec:  'One of a kind',
+    availability: 'One of a kind · Enquire for availability',
+
+    categories: ['Abstract', 'Statue'],
+    filters:    'abstract statue',
+    featured:   'big',
+
+    dims:   { l: 30, w: 20, h: 35, weight: 2 },
+    price:  { regular: '', sale: '' },
+
+    metaTitle: 'Mata Hari — Mirrored Sculpture for 150 Years Mata Hari | Soboof',
+    metaDesc:  'Mata Hari by Soboof. A one-of-a-kind mirrored sculpture made for 150 years of Mata Hari, poised on a hand-painted music box. Leeuwarden, NL.',
+
+    cardDesc: 'Made for 150 years of Mata Hari: faceted mirror bodies unfolding like a dancer’s arms above a hand-painted music box, a tiny ballerina turning inside.',
+
+    description: `Made for <strong>150 jaar Mata Hari</strong>, the REFRAMED exhibition in Leeuwarden marking 150 years since the dancer was born in the city. Faceted mirror bodies, hand-tiled in Persian <strong>Ayeneh-Kari</strong>, unfold from a single point like arms mid-gesture, each one catching a different angle of the room. They rest on a hand-painted Frisian-red music box, where a small ballerina turns inside. Mata Hari built a self from reflections: the dancer, the courtesan, the spy. The sculpture does the same, never showing <strong>one face twice</strong> as you walk around it.`,
+
+    schemaDesc: 'One-of-a-kind mirrored sculpture made for 150 years of Mata Hari: hand-cut Ayeneh-Kari tiles above a hand-painted music box.',
+
+    formTags: ['Branching growth', 'Faceting', 'Reflection doubling', 'Modular repetition'],
+    manifestPrimitive: 'DANCING<br>FORM',
+  },
+
 ];
