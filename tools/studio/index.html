@@ -180,6 +180,8 @@ pre.out{background:var(--inner);border:1px solid var(--line);border-radius:6px;p
       <div class="hint" id="a-mdesc-n">aim for 120–165 characters</div></label>
     <label><span>Structured-data line — one plain sentence</span>
       <input type="text" id="a-schema" placeholder="One-of-a-kind mirrored sculpture: hand-cut Ayeneh-Kari tiles on a 3D-printed modular body."></label>
+    <label><span>Search keywords — comma separated, most important first</span>
+      <input type="text" id="a-keywords" placeholder="mirror sculpture, chrome decor, geometric fox sculpture, statement art piece"></label>
   </fieldset>
 
   <fieldset>
@@ -379,6 +381,7 @@ $('#a-save').onclick = async () => {
     dims: { l: $('#a-l').value, w: $('#a-w').value, h: $('#a-h').value, weight: $('#a-kg').value },
     metaTitle: $('#a-mtitle').value, metaDesc: $('#a-mdesc').value,
     cardDesc: $('#a-card').value, description: $('#a-desc').value, schemaDesc: $('#a-schema').value,
+    keywords: $('#a-keywords').value.split(',').map(s => s.trim()).filter(Boolean),
     formTags: picked('tag'), manifestPrimitive: $('#a-prim').value,
     photos: artPhotos.map(p => p.url),
   }).catch(e => ({ ok: false, problems: [String(e)] }));
