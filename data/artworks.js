@@ -497,4 +497,40 @@ module.exports = [
     manifestPrimitive: 'COLUMN<br>FORM',
   },
 
+  {
+    slug:      'origami-fox',
+    code:      'SBF · 014',
+    name:      'Origami Fox',
+    subtitle:  'A fox folded from a handful of mirror planes.',
+    imgPrefix: 'origami-fox',
+    photos:    5,
+
+    edition:      'ooak',
+    editionLabel: 'ONE OF A KIND',
+    galleryBadge: 'ONE OF A KIND',
+    editionSpec:  'One of a kind',
+    availability: 'One of a kind · Enquire for availability',
+
+    categories: ['Abstract', 'Animals', 'Statue'],
+    filters:    'abstract animals statue',
+    featured:   'std',
+
+    dims:   { l: 20, w: 15, h: 22, weight: 1 },
+    price:  { regular: '', sale: '' },
+
+    metaTitle: 'Origami Fox — Minimal Mirror Fox Sculpture | Soboof',
+    metaDesc:  'Origami Fox by Soboof. A one-of-a-kind minimal fox sculpture folded from a few large mirror planes, two pointed ears and a leaning neck. Leeuwarden, NL.',
+
+    cardDesc: 'The fewest planes a fox can be made of: two pointed ears, a folded face and a leaning neck, all in plain silver mirror.',
+
+    description: `How few planes does it take to make a fox? Origami Fox answers with a handful: <strong>two pointed ears</strong>, a folded face and a neck that leans as if listening. Where the other Mirbreak foxes are tiled in hundreds of small Ayeneh-Kari shards, this one is built from <strong>large, plain mirror panels</strong>, so each face holds a whole piece of the room instead of a fragment. Seen head-on it is unmistakably a fox; from the side it folds back into pure geometry.`,
+
+    schemaDesc: 'One-of-a-kind minimal fox sculpture folded from large plain mirror panels.',
+
+    keywords: ['origami fox sculpture', 'minimalist fox statue', 'geometric fox decor', 'mirror fox sculpture', 'chrome decor', 'low poly fox art', 'statement shelf decor'],
+
+    formTags: ['Folding', 'Faceting', 'Bilateral symmetry', 'Reflection doubling'],
+    manifestPrimitive: 'FOLDED<br>FORM',
+  },
+
 ];
