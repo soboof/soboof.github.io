@@ -569,4 +569,40 @@ module.exports = [
     manifestPrimitive: 'MAZE<br>FORM',
   },
 
+  {
+    slug:      'ember-fox',
+    code:      'SBF · 016',
+    name:      'Ember Fox',
+    subtitle:  'Copper ears and a mosaic flame in its side.',
+    imgPrefix: 'ember-fox',
+    photos:    9,
+
+    edition:      'ooak',
+    editionLabel: 'ONE OF A KIND',
+    galleryBadge: 'ONE OF A KIND',
+    editionSpec:  'One of a kind',
+    availability: 'One of a kind · Enquire for availability',
+
+    categories: ['Abstract', 'Animals', 'Statue'],
+    filters:    'abstract animals statue',
+    featured:   'std',
+
+    dims:   { l: 20, w: 15, h: 22, weight: 1 },
+    price:  { regular: '', sale: '' },
+
+    metaTitle: 'Ember Fox — Copper Mirror Fox Sculpture | Soboof',
+    metaDesc:  'Ember Fox by Soboof. A one-of-a-kind geometric fox in silver and copper mirror, with a hand-cut mosaic flame of gold and amber glass in its side. Leeuwarden, NL.',
+
+    cardDesc: 'A geometric fox in silver and copper mirror, carrying a small flame of gold and amber glass in a mosaic window on its side.',
+
+    description: `A fox with a fire in it. Ember Fox is folded from silver mirror and lit up with <strong>copper mirror</strong> across its ears and face, the colour of a red fox caught in low sun. On one side a framed panel opens into a <strong>hand-cut mosaic</strong> of broken mirror, and at its centre burns a small flame of gold and amber glass. Below, ribbed strips of mirror run down the chest like fur. Seen from the front it is calm and symmetrical; turn it and the ember appears.`,
+
+    schemaDesc: 'One-of-a-kind geometric fox sculpture in silver and copper mirror with a mosaic flame panel.',
+
+    keywords: ['copper fox sculpture', 'geometric fox statue', 'red fox decor', 'mirror mosaic art', 'chrome and copper decor', 'statement sculpture', 'Ayeneh-Kari mirror mosaic'],
+
+    formTags: ['Folding', 'Faceting', 'Mosaic inlay', 'Reflection doubling'],
+    manifestPrimitive: 'EMBER<br>FORM',
+  },
+
 ];
