@@ -479,7 +479,7 @@ module.exports = [
     filters:    'abstract statue',
     featured:   'std',
 
-    dims:   { l: 40, w: 30, h: 60, weight: 3 },
+    dims:   { l: 35, w: 15, h: 45, weight: 3 },
     price:  { regular: '', sale: '' },
 
     metaTitle: 'Gnomon — Mirrored Sundial Sculpture | Soboof',
@@ -487,7 +487,7 @@ module.exports = [
 
     cardDesc: 'A column of silver and copper mirror that bends, reaches out an arm and straightens again to hold a bronze sundial up to the light.',
 
-    description: `A gnomon is the part of a sundial that casts the shadow. Here the whole sculpture becomes one: a column of faceted mirror, hand-tiled in Persian <strong>Ayeneh-Kari</strong>, that bends, reaches out an arm and straightens again to lift a <strong>bronze sundial</strong> into the light. Silver and copper mirrors alternate up the body, and a few faces carry an engraved triangular spiral. The dial needs sun to tell the time; the mirrors need the same light to show anything at all. Stand still and the piece is a clock. Walk around it and it <strong>turns into a figure</strong>.`,
+    description: `A gnomon is the part of a sundial that casts the shadow. Here the whole sculpture becomes one: a column of faceted mirror, hand-tiled in Persian <strong>Ayeneh-Kari</strong>, that bends, reaches out an arm and straightens again to lift a <strong>bronze sundial</strong> into the light. Silver and copper mirrors alternate up the body, and a few faces carry an engraved triangular spiral. The dial needs sun to tell the time; the mirrors need the same light to show anything at all. The dial itself is a found object, an old promotional sundial whose rim reads <em>Becel gaat met de tijd mee</em>: moving with the times. Stand still and the piece is a clock. Walk around it and it <strong>turns into a figure</strong>.`,
 
     schemaDesc: 'One-of-a-kind mirrored column sculpture in silver and copper Ayeneh-Kari, topped with a bronze sundial.',
 
