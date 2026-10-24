@@ -1,6 +1,6 @@
 
 <canvas id="scene-canvas"></canvas>
-<div id="scene-state-hud"><span class="ssd"></span><span id="scene-state-lbl">SHADED · GOLD</span></div>
+<div id="scene-state-hud" style="opacity:0"><span class="ssd"></span><span id="scene-state-lbl"></span></div>
 
 <!-- Status & Theme toggle -->
 {{> chrome }}
@@ -396,17 +396,31 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+/* The cast: one Pythagoras Engine character per slot, the way the PE landing
+   page has them. Each is a formation rigged in PE's Theater and exported as
+   glTF with its skin, its own module colours and its motions. It stands still
+   in its own slot wherever that slot is on the window, is carried with the
+   page, plays its idle and turns only its head, toward the pointer. */
 (function(){
-  const STATES = [
-    { id:'hero',     color:[0.91,0.77,0.28], wire:0, rotY:0.0028, label:'SHADED · GOLD',   hex:'#e8c547', scale:1.85 },
-    { id:'pythagoras-engine', color:[0.81,0.84,0.86], wire:1, rotY:0.0034, label:'WIRE · MIRROR',  hex:'#cfd6dc', scale:1.30 },
-    { id:'mirbreak',      color:[0.91,0.77,0.28], wire:0, rotY:0.0044, label:'SHADED · GOLD',  hex:'#e8c547', scale:1.10 },
-    { id:'death-culture', color:[0.85,0.28,0.30], wire:1, rotY:0.0062, label:'WIRE · RED',     hex:'#d9484c', scale:1.00 },
-    { id:'superadobe',    color:[0.79,0.54,0.29], wire:0, rotY:0.0069, label:'SHADED · EARTH', hex:'#c98a4b', scale:1.20 },
-    { id:'about',    color:[0.42,0.31,0.64], wire:0, rotY:0.0075, label:'SHADED · PURPLE', hex:'#6b4ea3', scale:1.05 },
-    { id:'more',     color:[0.30,0.69,0.49], wire:1, rotY:0.0100, label:'WIRE · GREEN',    hex:'#4caf7d', scale:1.00 },
-    { id:'contact',  color:[0.30,0.66,0.85], wire:1, rotY:0.0130, label:'WIRE · CYAN',     hex:'#4ca8d8', scale:1.15 }
+  /* slot:  the data-section of the .model-rail it plays.
+     head:  the joint (glTF node name) that turns to look.
+     face:  the way the formation faces in its own file, in degrees about the
+            vertical (0 = +z, 90 = +x). Turn this if a character looks away.
+     scale: its size, against the old per-section scales.
+     The SuperAdobe slot waits for the fifth export. */
+  const CAST = [
+    { slot:'hero',              file:'robot-bird.gltf',     name:'Robot Bird',     head:'triangularhebesphenorotunda_02', face:0,   scale:1.85 },
+    { slot:'pythagoras-engine', file:'tn.gltf',             name:'TN',             head:'sphenomegacorona_06.L',          face:30,  scale:1.30 },
+    { slot:'mirbreak',          file:'the-young-goat.gltf', name:'The Young Goat', head:'bilunabirotunda_16.L',           face:0,   scale:1.10 },
+    { slot:'death-culture',     file:'clown-cow.gltf',      name:'Clown Cow',      head:'icosahedron_00.R',               face:-90, scale:1.00 }
   ];
+  const TILT = 0.38;          /* seen from this far above, radians */
+  const SIZE = 4.6;           /* scene units across a figure at scale 1 */
+  const LOOK_TAU = 0.14;      /* the look eases with this time constant, seconds */
+  const LOOK_MAX = 80, HEAD_MAX = 55, NECK_SHARE = 0.3;   /* degrees, share */
+  const POP_MS = 320;
+  const DEG = Math.PI / 180;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const canvas = document.getElementById('scene-canvas');
   const scene  = new THREE.Scene();
@@ -415,208 +429,351 @@
 
   const cam = new THREE.PerspectiveCamera(35, 1, 0.1, 200);
   cam.position.set(0, 0, 14);
+  cam.updateMatrixWorld();                 /* the pointer ray needs it before the first render */
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.55));
   const key  = new THREE.DirectionalLight(0xfff2c8, 0.9);  key.position.set(4, 6, 8);   scene.add(key);
   const fill = new THREE.DirectionalLight(0x6688aa, 0.45); fill.position.set(-6, -2, 4); scene.add(fill);
   const rim  = new THREE.DirectionalLight(0xe8c547, 0.55); rim.position.set(0, 4, -8);   scene.add(rim);
 
-  const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color(STATES[0].color[0], STATES[0].color[1], STATES[0].color[2]),
-    roughness: 0.45, metalness: 0.35,
-    flatShading: true, transparent: true, opacity: 0.92
+  /* Shared by the whole cast: flat shaded in each module's own colour, with
+     faint dark edges riding the same skin. r128 cannot skin a line, so the
+     edges are a skinned wireframe over degenerate triangles. */
+  const bodyMat = new THREE.MeshStandardMaterial({
+    vertexColors:true, flatShading:true, roughness:0.55, metalness:0.1,
+    side:THREE.DoubleSide, skinning:true,
+    polygonOffset:true, polygonOffsetFactor:1, polygonOffsetUnits:1
   });
-  const root = new THREE.Group();
-  scene.add(root);
+  const edgeMat = new THREE.MeshBasicMaterial({
+    color:0x0a0807, transparent:true, opacity:0.3, depthWrite:false,
+    wireframe:true, skinning:true
+  });
 
-  /* Minimal glTF 2.0 reader — the Pythagoras Engine export is a single mesh with
-     embedded base64 buffers, so no external loader is needed. */
-  function gltfBuffer(uri){
-    const bin = atob(uri.split(',')[1]);
-    const u8 = new Uint8Array(bin.length);
-    for (let i=0;i<bin.length;i++) u8[i] = bin.charCodeAt(i);
-    return u8;
-  }
-  function gltfAccessor(json, bufs, index){
-    const acc = json.accessors[index];
-    const view = json.bufferViews[acc.bufferView];
-    const comps = { SCALAR:1, VEC2:2, VEC3:3, VEC4:4 }[acc.type];
-    const bytes = { 5120:1, 5121:1, 5122:2, 5123:2, 5125:4, 5126:4 }[acc.componentType];
-    const start = (view.byteOffset||0) + (acc.byteOffset||0);
-    /* copy out so the typed array is always correctly aligned */
-    const slice = bufs[view.buffer].slice(start, start + acc.count * comps * bytes);
-    const Ctor  = { 5120:Int8Array, 5121:Uint8Array, 5122:Int16Array,
-                    5123:Uint16Array, 5125:Uint32Array, 5126:Float32Array }[acc.componentType];
-    return new Ctor(slice.buffer, 0, acc.count * comps);
-  }
-  function parseGLTF(json){
-    const bufs = json.buffers.map(b => gltfBuffer(b.uri));
-    const prim = json.meshes[0].primitives[0];
-    const pos  = gltfAccessor(json, bufs, prim.attributes.POSITION);
-    const tris = prim.indices != null
-      ? Array.from(gltfAccessor(json, bufs, prim.indices))
-      : Array.from({ length: pos.length/3 }, (_, i) => i);
-    return { verts: Array.from(pos), tris };
-  }
-  function buildGeometry(parsed){
-    const positions = new Float32Array(parsed.tris.length*3);
-    for (let i=0;i<parsed.tris.length;i++){
-      const vi = parsed.tris[i]*3;
-      positions[i*3]   = parsed.verts[vi];
-      positions[i*3+1] = parsed.verts[vi+1];
-      positions[i*3+2] = parsed.verts[vi+2];
+  /* A small reader for PE's rig export: one skinned mesh, one skin and its
+     clips, with the buffer embedded as base64. */
+  const COMPONENTS = { SCALAR:1, VEC2:2, VEC3:3, VEC4:4, MAT4:16 };
+  const ARRAYS = { 5121:Uint8Array, 5123:Uint16Array, 5125:Uint32Array, 5126:Float32Array };
+  const ATTRS = { POSITION:'position', NORMAL:'normal', COLOR_0:'color', JOINTS_0:'skinIndex', WEIGHTS_0:'skinWeight' };
+  const PATHS = {
+    rotation:    ['quaternion', THREE.QuaternionKeyframeTrack],
+    translation: ['position',   THREE.VectorKeyframeTrack],
+    scale:       ['scale',      THREE.VectorKeyframeTrack]
+  };
+  function readRig(json){
+    const buffers = json.buffers.map(b => {
+      const bin = atob(b.uri.split(',')[1]);
+      const u8 = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+      return u8;
+    });
+    function accessor(index){
+      const acc = json.accessors[index], view = json.bufferViews[acc.bufferView];
+      const n = COMPONENTS[acc.type], Ctor = ARRAYS[acc.componentType];
+      const bytes = n * Ctor.BYTES_PER_ELEMENT, stride = view.byteStride || bytes;
+      const start = (view.byteOffset || 0) + (acc.byteOffset || 0), src = buffers[view.buffer];
+      /* copied out element by element, so stride and alignment never matter */
+      const raw = new Uint8Array(acc.count * bytes);
+      for (let k = 0; k < acc.count; k++){
+        const at = start + k * stride;
+        raw.set(src.subarray(at, at + bytes), k * bytes);
+      }
+      return { array:new Ctor(raw.buffer), size:n, normalized:!!acc.normalized };
     }
+
+    const skin = json.skins[0];
+    const jointSet = new Set(skin.joints);
+    const nodes = json.nodes.map((nd, i) => {
+      const o = jointSet.has(i) ? new THREE.Bone() : new THREE.Group();
+      o.name = 'n' + i;                     /* the clips bind by this */
+      o.userData.rigName = nd.name || '';
+      if (nd.matrix) new THREE.Matrix4().fromArray(nd.matrix).decompose(o.position, o.quaternion, o.scale);
+      if (nd.translation) o.position.fromArray(nd.translation);
+      if (nd.rotation) o.quaternion.fromArray(nd.rotation);
+      if (nd.scale) o.scale.fromArray(nd.scale);
+      return o;
+    });
+    json.nodes.forEach((nd, i) => (nd.children || []).forEach(c => nodes[i].add(nodes[c])));
+    const root = new THREE.Group();
+    json.scenes[json.scene || 0].nodes.forEach(i => root.add(nodes[i]));
+
+    const meshNode = json.nodes.findIndex(nd => nd.mesh != null);
+    const prim = json.meshes[json.nodes[meshNode].mesh].primitives[0];
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.computeVertexNormals();
-    geo.computeBoundingBox();
-    const bb = geo.boundingBox;
-    const cx=(bb.min.x+bb.max.x)/2, cy=(bb.min.y+bb.max.y)/2, cz=(bb.min.z+bb.max.z)/2;
-    geo.translate(-cx,-cy,-cz);
-    const size = Math.max(bb.max.x-bb.min.x, bb.max.y-bb.min.y, bb.max.z-bb.min.z);
-    geo.scale(4.6/size, 4.6/size, 4.6/size);
-    geo.computeVertexNormals();
-    return geo;
+    for (const k in ATTRS){
+      if (prim.attributes[k] == null) continue;
+      const a = accessor(prim.attributes[k]);
+      geo.setAttribute(ATTRS[k], new THREE.BufferAttribute(a.array, a.size, a.normalized));
+    }
+    if (prim.indices != null) geo.setIndex(new THREE.BufferAttribute(accessor(prim.indices).array, 1));
+
+    const bones = skin.joints.map(i => nodes[i]);
+    const ibm = skin.inverseBindMatrices != null ? accessor(skin.inverseBindMatrices).array : null;
+    const skeleton = new THREE.Skeleton(bones,
+      ibm ? bones.map((_, j) => new THREE.Matrix4().fromArray(ibm, j * 16)) : undefined);
+    const mesh  = new THREE.SkinnedMesh(geo, bodyMat);
+    const edges = new THREE.SkinnedMesh(edgeGeometry(geo), edgeMat);
+    nodes[meshNode].add(mesh, edges);
+    root.updateMatrixWorld(true);
+    mesh.bind(skeleton, mesh.matrixWorld);
+    edges.bind(skeleton, mesh.matrixWorld);
+    mesh.frustumCulled = edges.frustumCulled = false;
+
+    const clips = (json.animations || []).map(an => new THREE.AnimationClip(an.name, -1,
+      an.channels.filter(ch => PATHS[ch.target.path]).map(ch => {
+        const s = an.samplers[ch.sampler], p = PATHS[ch.target.path];
+        return new p[1](nodes[ch.target.node].name + '.' + p[0],
+          accessor(s.input).array, accessor(s.output).array,
+          s.interpolation === 'STEP' ? THREE.InterpolateDiscrete : THREE.InterpolateLinear);
+      })));
+    return { root, geo, nodes, clips };
   }
 
-  fetch('/assets/models/pythagoras_m21.gltf')
-    .then(r=>r.json()).then(json=>{
-      const geo = buildGeometry(parseGLTF(json));
-      const mesh = new THREE.Mesh(geo, mat);
-      root.add(mesh);
-      const wireMat = new THREE.LineBasicMaterial({ color: mat.color.clone(), transparent:true, opacity:0 });
-      const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo), wireMat);
-      root.add(wire);
-      root.userData.wireMat = wireMat;
-    }).catch(e=>console.warn('OBJ load failed:', e));
+  /* The formation's own edges: where two faces meet at an angle, or a face has
+     no neighbour. Indexed into the body's vertices, so they share its skin. */
+  function edgeGeometry(geo){
+    const pos = geo.attributes.position.array;
+    const idx = geo.index ? geo.index.array : null;
+    const tris = (idx ? idx.length : pos.length / 3) / 3;
+    const vert = k => idx ? idx[k] : k;
+    const keyOf = v => Math.round(pos[v*3] * 1e3) + ',' + Math.round(pos[v*3+1] * 1e3) + ',' + Math.round(pos[v*3+2] * 1e3);
+    const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+    const normals = [], found = new Map();
+    for (let t = 0; t < tris; t++){
+      const v = [vert(t*3), vert(t*3+1), vert(t*3+2)];
+      a.fromArray(pos, v[0]*3); b.fromArray(pos, v[1]*3); c.fromArray(pos, v[2]*3);
+      normals.push(c.clone().sub(b).cross(a.clone().sub(b)).normalize());
+      const keys = v.map(keyOf);
+      for (let e = 0; e < 3; e++){
+        const k0 = keys[e], k1 = keys[(e + 1) % 3];
+        if (k0 === k1) continue;
+        const k = k0 < k1 ? k0 + '|' + k1 : k1 + '|' + k0;
+        const seen = found.get(k);
+        if (seen) seen.tris.push(t);
+        else found.set(k, { a:v[e], b:v[(e + 1) % 3], tris:[t] });
+      }
+    }
+    const flat = Math.cos(1 * DEG), lines = [];
+    found.forEach(e => {
+      if (e.tris.length === 2 && normals[e.tris[0]].dot(normals[e.tris[1]]) >= flat) return;
+      lines.push(e.a, e.b, e.b);
+    });
+    const g = new THREE.BufferGeometry();
+    ['position', 'skinIndex', 'skinWeight'].forEach(n => g.setAttribute(n, geo.attributes[n]));
+    g.setIndex(lines);
+    return g;
+  }
 
-  function getSections(){
-    return STATES.map(s=>{
-      const sectEl = s.id==='hero' ? document.querySelector('.hero') : document.getElementById(s.id);
-      const railEl = sectEl ? sectEl.querySelector('.model-rail') : null;
-      return { sectEl, railEl };
+  /* Its extent: the taller of its height and its plan's width. */
+  function bounds(geo){
+    geo.computeBoundingBox();
+    const bb = geo.boundingBox, centre = bb.getCenter(new THREE.Vector3());
+    const p = geo.attributes.position.array;
+    let r = 0;
+    for (let i = 0; i < p.length; i += 3) r = Math.max(r, Math.hypot(p[i] - centre.x, p[i+2] - centre.z));
+    return { centre, extent:Math.max(bb.max.y - bb.min.y, 2 * r) };
+  }
+
+  /* Every slot on the page in order. Those named in CAST get a character; the
+     rest only steer the corner label. */
+  const slots = Array.from(document.querySelectorAll('.model-rail[data-section]')).map(rail => ({
+    rail, sect:rail.parentElement,
+    cast:CAST.find(c => c.slot === rail.dataset.section) || null,
+    top:0, x:0, pageY:0, railH:0, inward:0, stacked:false, fig:null
+  }));
+
+  let W = 1, H = 1;
+  const visH = () => 2 * Math.tan(cam.fov * 0.5 * DEG) * cam.position.z;
+
+  /* Where each character stands: the point its rail gives it with the page at
+     the top. It is then carried with the page and never moves on its own. */
+  function layout(){
+    const sy = window.scrollY;
+    slots.forEach(s => {
+      const r = s.rail.getBoundingClientRect();
+      const top = r.top + sy, h = r.height;
+      s.top = s.sect.getBoundingClientRect().top + sy;
+      s.x = r.left + r.width / 2;
+      s.inward = s.x < W / 2 - 1 ? 1 : s.x > W / 2 + 1 ? -1 : 0;
+      s.railH = h;
+      /* the phone layout stacks each slot above its section: stand in its middle */
+      s.stacked = r.width > W * 0.5;
+      const progress = Math.min(1, Math.max(0, (H - top) / (h + H)));
+      s.pageY = s.stacked ? top + h / 2 : top + 24 + (h - 48) * progress;
+      if (s.fig) place(s);
     });
   }
-  let sections = getSections();
 
-  function activeIndex(){
-    const probe = window.scrollY + window.innerHeight*0.45;
-    let idx = 0;
-    for (let i=0;i<sections.length;i++){
-      const el = sections[i].sectEl;
-      if (el && (el.offsetTop || el.getBoundingClientRect().top + window.scrollY) <= probe) idx = i;
+  /* Three quarters to the reader, turned toward the middle of the page. */
+  function place(s){
+    const f = s.fig, c = s.cast;
+    f.turn.rotation.y = Math.atan2(0.8 * s.inward, 1) - c.face * DEG;
+    let size = c.scale * SIZE;
+    if (s.stacked) size = Math.min(size, s.railH / H * visH());
+    f.size = size;
+    f.body.scale.setScalar(size / f.extent);
+    f.body.position.copy(f.centre).multiplyScalar(-size / f.extent);
+  }
+
+  function onScreen(s, screenY){
+    const half = s.fig.size / visH() * H * 0.5;
+    return screenY > -half && screenY < H + half;
+  }
+
+  const outBack = t => 1 + 2.70158 * Math.pow(t - 1, 3) + 1.70158 * Math.pow(t - 1, 2);
+
+  function build(s, json){
+    const rig = readRig(json);
+    const box = bounds(rig.geo);
+    const head = rig.nodes.find(o => o.isBone && o.userData.rigName === s.cast.head) || null;
+    /* up to two neck joints above the head that carry nothing else */
+    const necks = [];
+    for (let o = head && head.parent; o && o.isBone && o.children.length === 1 && necks.length < 2; o = o.parent) necks.push(o);
+    const look = head ? [head].concat(necks) : [];
+    /* the way the head faces, in the head's own frame */
+    const forward = new THREE.Vector3(Math.sin(s.cast.face * DEG), 0, Math.cos(s.cast.face * DEG));
+    if (head) forward.applyQuaternion(head.getWorldQuaternion(new THREE.Quaternion()).invert());
+
+    const slot = new THREE.Group(), turn = new THREE.Group(), body = new THREE.Group();
+    slot.rotation.x = TILT;
+    body.add(rig.root); turn.add(body); slot.add(turn); scene.add(slot);
+
+    const mixer = new THREE.AnimationMixer(rig.root);
+    const idle = rig.clips.find(c => c.name === 'idle') || rig.clips[0];
+    if (idle){
+      const act = mixer.clipAction(idle);
+      act.time = (slots.indexOf(s) * 0.6) % idle.duration;   /* not all breathing in step */
+      act.play();
     }
-    return idx;
+
+    s.fig = { slot, turn, body, mixer, head, necks, look, forward,
+              rest:look.map(o => o.quaternion.clone()), centre:box.centre,
+              extent:box.extent, size:0, dir:null, born:null };
+    place(s);
+    /* pop in only when it arrives in view */
+    if (!reduceMotion && onScreen(s, s.pageY - window.scrollY)){
+      s.fig.born = performance.now();
+      slot.scale.setScalar(0.001);
+    }
   }
 
-  function railWorldPos(railEl){
-    if (!railEl) return null;
-    const rect = railEl.getBoundingClientRect();
-    if (rect.width === 0) return null;
-    const cx = rect.left + rect.width*0.5;
-    const vh = window.innerHeight;
-    const span = Math.max(1, rect.height + vh);
-    const moved = vh - rect.top;
-    const progress = Math.min(1, Math.max(0, moved / span));
-    const railTop = rect.top + 24;
-    const railBottom = rect.bottom - 24;
-    const cy = railTop + (railBottom - railTop) * progress;
-    const ndcX =  (cx / window.innerWidth)  * 2 - 1;
-    const ndcY = -((cy / window.innerHeight) * 2 - 1);
-    const visH = 2 * Math.tan(cam.fov*0.5 * Math.PI/180) * cam.position.z;
-    const visW = visH * cam.aspect;
-    return { x: ndcX * visW * 0.5, y: ndcY * visH * 0.5 };
-  }
-  function fallbackPos(idx){
-    const xs = [0.45,-0.45,0.45,-0.45,0.45,-0.45,0];
-    const visH = 2 * Math.tan(cam.fov*0.5 * Math.PI/180) * cam.position.z;
-    const visW = visH * cam.aspect;
-    return { x: (xs[idx]||0) * visW * 0.5, y: 0 };
+  slots.forEach(s => {
+    if (!s.cast) return;
+    fetch('/assets/models/cast/' + s.cast.file)
+      .then(r => r.json())
+      .then(json => build(s, json))
+      .catch(e => console.warn('cast: ' + s.cast.file + ' failed to load', e));
+  });
+
+  /* The look: the pointer, along the ray through it at the eye's distance from
+     the camera; without one, out of the screen at the reader. */
+  const pointer = { x:0, y:0, on:false };
+  window.addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch') return;
+    pointer.x = e.clientX; pointer.y = e.clientY; pointer.on = true;
+  }, { passive:true });
+  document.addEventListener('mouseout', e => { if (!e.relatedTarget) pointer.on = false; });
+  window.addEventListener('blur', () => { pointer.on = false; });
+
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  const eye = new THREE.Vector3(), want = new THREE.Vector3(), facing = new THREE.Vector3();
+  const axis = new THREE.Vector3(), axisLocal = new THREE.Vector3();
+  const hq = new THREE.Quaternion(), pq = new THREE.Quaternion(), turnQ = new THREE.Quaternion();
+
+  /* Turn a joint about a world axis, its children with it. */
+  function turnJoint(o, ang){
+    if (ang <= 0) return;
+    o.parent.getWorldQuaternion(pq);
+    axisLocal.copy(axis).applyQuaternion(pq.invert());
+    o.quaternion.premultiply(turnQ.setFromAxisAngle(axisLocal, ang));
+    o.updateMatrixWorld(true);
   }
 
-  const cur = {
-    x:0, y:0,
-    r:STATES[0].color[0], g:STATES[0].color[1], b:STATES[0].color[2],
-    wire:0, rotY:STATES[0].rotY, yaw:0, pitch:0, scale:STATES[0].scale
-  };
-  const lerp = (a,b,t) => a+(b-a)*t;
+  function lookAt(f, dt){
+    if (!f.head) return;
+    f.head.getWorldPosition(eye);
+    if (pointer.on){
+      ndc.set(pointer.x / W * 2 - 1, -(pointer.y / H * 2 - 1));
+      ray.setFromCamera(ndc, cam);
+      want.copy(ray.ray.direction).multiplyScalar(eye.distanceTo(cam.position)).add(cam.position);
+    } else {
+      want.copy(cam.position);
+    }
+    want.sub(eye).normalize();
+    if (!f.dir) f.dir = want.clone();
+    else f.dir.lerp(want, 1 - Math.exp(-dt / LOOK_TAU)).normalize();
 
+    facing.copy(f.forward).applyQuaternion(f.head.getWorldQuaternion(hq));
+    let angle = facing.angleTo(f.dir);
+    if (!(angle > 1e-4)) return;
+    axis.crossVectors(facing, f.dir).normalize();
+    /* 80 degrees in all: the head up to 55, each neck 0.3 of what is left */
+    angle = Math.min(angle, LOOK_MAX * DEG);
+    const headShare = Math.min(angle, HEAD_MAX * DEG);
+    let left = angle - headShare;
+    const shares = f.necks.map(() => { const a = left * NECK_SHARE; left -= a; return a; });
+    for (let i = f.necks.length - 1; i >= 0; i--) turnJoint(f.necks[i], shares[i]);
+    turnJoint(f.head, headShare);
+  }
+
+  /* The corner label names the character of the section in view, in its colour. */
   const stateLbl = document.getElementById('scene-state-lbl');
   const stateBox = document.getElementById('scene-state-hud');
-  let lastLabel = '';
-
-  let hasScrolled = false;
-  let autoYaw = 0;
-  window.addEventListener('scroll',    ()=>{ hasScrolled=true; }, { passive:true });
-  window.addEventListener('wheel',     ()=>{ hasScrolled=true; }, { passive:true, once:true });
-  window.addEventListener('touchmove', ()=>{ hasScrolled=true; }, { passive:true, once:true });
-
-  function scrollDrivenYaw(){
-    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    return -Math.min(1, Math.max(0, window.scrollY / max)) * Math.PI * 8;
+  let shown = null, shownDay = null;
+  function label(sy, isDay){
+    const probe = sy + H * 0.45;
+    let active = slots[0];
+    slots.forEach(s => { if (s.top <= probe) active = s; });
+    if (!active || (active === shown && isDay === shownDay)) return;
+    shown = active; shownDay = isDay;
+    if (!active.cast){ stateBox.style.opacity = '0'; return; }
+    const cs = getComputedStyle(active.sect);
+    const hex = (cs.getPropertyValue('--proj').trim() || cs.getPropertyValue('--accent').trim());
+    stateLbl.textContent = active.cast.name;
+    stateBox.style.color = hex;
+    stateBox.style.borderColor = hex + '55';
+    stateBox.style.opacity = '1';
   }
 
   function resize(){
-    const w = window.innerWidth, h = window.innerHeight;
-    renderer.setSize(w, h, false);
-    cam.aspect = w/h;
+    W = canvas.clientWidth || window.innerWidth;
+    H = canvas.clientHeight || window.innerHeight;
+    renderer.setSize(W, H, false);
+    cam.aspect = W / H;
     cam.updateProjectionMatrix();
+    layout();
   }
   resize();
-  window.addEventListener('resize', ()=>{ resize(); sections = getSections(); });
+  window.addEventListener('resize', resize);
+  window.addEventListener('load', layout);
+  if (window.ResizeObserver) new ResizeObserver(() => layout()).observe(document.body);
 
+  const clock = new THREE.Clock();
   function tick(){
+    const dt = Math.min(clock.getDelta(), 0.1), now = performance.now();
+    const sy = window.scrollY;
     const isDay = document.body.classList.contains('day');
-    const idx = activeIndex();
-    const baseTgt = STATES[idx];
-    const tgt = (isDay && idx===0)
-      ? { color:[0.42,0.31,0.64], wire:baseTgt.wire, rotY:baseTgt.rotY, hex:'#6b4ea3', scale:baseTgt.scale, label:'SHADED · PURPLE' }
-      : baseTgt;
     rim.color.set(isDay ? 0x6b4ea3 : 0xe8c547);
+    const vh = visH(), vw = vh * cam.aspect;
 
-    const k = 0.07;
-    cur.r     = lerp(cur.r,     tgt.color[0], k);
-    cur.g     = lerp(cur.g,     tgt.color[1], k);
-    cur.b     = lerp(cur.b,     tgt.color[2], k);
-    cur.wire  = lerp(cur.wire,  tgt.wire,     k);
-    cur.rotY  = lerp(cur.rotY,  tgt.rotY,     k);
-    cur.scale = lerp(cur.scale, tgt.scale,    k);
-    root.scale.setScalar(cur.scale);
+    slots.forEach(s => {
+      const f = s.fig;
+      if (!f) return;
+      const screenY = s.pageY - sy;
+      f.slot.position.set((s.x / W * 2 - 1) * vw * 0.5, -(screenY / H * 2 - 1) * vh * 0.5, 0);
+      f.slot.visible = onScreen(s, screenY);
+      if (!f.slot.visible) return;
+      if (f.born !== null){
+        const t = (now - f.born) / POP_MS;
+        if (t >= 1){ f.born = null; f.slot.scale.setScalar(1); }
+        else f.slot.scale.setScalar(Math.max(0.001, outBack(t)));
+      }
+      f.look.forEach((o, i) => o.quaternion.copy(f.rest[i]));
+      f.mixer.update(dt);
+      f.slot.updateMatrixWorld(true);
+      lookAt(f, dt);
+    });
 
-    let posTarget = railWorldPos(sections[idx].railEl);
-    if (!posTarget) posTarget = fallbackPos(idx);
-    cur.x = lerp(cur.x, posTarget.x, k);
-    cur.y = lerp(cur.y, posTarget.y, k);
-    root.position.x = cur.x;
-    root.position.y = cur.y;
-
-    if (!hasScrolled){
-      autoYaw += cur.rotY;
-      cur.yaw   = lerp(cur.yaw,   autoYaw,        0.2);
-      cur.pitch = lerp(cur.pitch, autoYaw * 0.32, 0.2);
-    } else {
-      const tgtYaw = scrollDrivenYaw();
-      cur.yaw   = lerp(cur.yaw,   tgtYaw,        0.10);
-      cur.pitch = lerp(cur.pitch, tgtYaw * 0.32, 0.10);
-    }
-    root.rotation.y = cur.yaw;
-    root.rotation.x = cur.pitch;
-
-    mat.color.setRGB(cur.r, cur.g, cur.b);
-    mat.opacity   = (1 - cur.wire) * 0.95 + 0.04;
-    mat.depthWrite = cur.wire < 0.5;
-    if (root.userData.wireMat){
-      root.userData.wireMat.color.setRGB(cur.r, cur.g, cur.b);
-      root.userData.wireMat.opacity = cur.wire * 0.85 + 0.06;
-    }
-
-    if (tgt.label !== lastLabel){
-      stateLbl.textContent = tgt.label;
-      stateBox.style.color = tgt.hex;
-      stateBox.style.borderColor = tgt.hex + '55';
-      lastLabel = tgt.label;
-    }
-
+    label(sy, isDay);
     renderer.render(scene, cam);
     requestAnimationFrame(tick);
   }
