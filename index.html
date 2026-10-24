@@ -667,7 +667,7 @@
           accessor(s.input).array, accessor(s.output).array,
           s.interpolation === 'STEP' ? THREE.InterpolateDiscrete : THREE.InterpolateLinear);
       })));
-    return { root, geo, nodes, clips };
+    return { root, geo, mesh, nodes, clips };
   }
 
   /* The formation's own edges: where two faces meet at an angle, or a face has
@@ -706,10 +706,8 @@
   }
 
   /* Its extent: the taller of its height and its plan's width. */
-  function bounds(geo){
-    geo.computeBoundingBox();
-    const bb = geo.boundingBox, centre = bb.getCenter(new THREE.Vector3());
-    const p = geo.attributes.position.array;
+  function bounds(p){
+    const bb = new THREE.Box3().setFromArray(p), centre = bb.getCenter(new THREE.Vector3());
     let r = 0;
     for (let i = 0; i < p.length; i += 3) r = Math.max(r, Math.hypot(p[i] - centre.x, p[i+2] - centre.z));
     return { centre, extent:Math.max(bb.max.y - bb.min.y, 2 * r) };
@@ -781,19 +779,15 @@
 
   function build(s, json){
     const rig = readRig(json);
-    const box = bounds(rig.geo);
     const head = rig.nodes.find(o => o.isBone && o.userData.rigName === s.cast.head) || null;
     /* up to two neck joints above the head that carry nothing else */
     const necks = [];
     for (let o = head && head.parent; o && o.isBone && o.children.length === 1 && necks.length < 2; o = o.parent) necks.push(o);
     const look = head ? [head].concat(necks) : [];
+    const rest = look.map(o => o.quaternion.clone());
     /* the way the head faces, in the head's own frame */
     const forward = new THREE.Vector3(Math.sin(s.cast.face * DEG), 0, Math.cos(s.cast.face * DEG));
     if (head) forward.applyQuaternion(head.getWorldQuaternion(new THREE.Quaternion()).invert());
-
-    const slot = new THREE.Group(), turn = new THREE.Group(), body = new THREE.Group();
-    slot.rotation.x = TILT;
-    body.add(rig.root); turn.add(body); slot.add(turn); scene.add(slot);
 
     const mixer = new THREE.AnimationMixer(rig.root);
     const idle = rig.clips.find(c => c.name === 'idle') || rig.clips[0];
@@ -803,9 +797,19 @@
       act.play();
     }
 
-    s.fig = { slot, turn, body, mixer, head, necks, look, forward,
-              rest:look.map(o => o.quaternion.clone()), centre:box.centre,
-              extent:box.extent, positions:rig.geo.attributes.position.array,
+    /* measured as it stands in its idle, not as the file holds it */
+    mixer.update(0);
+    rig.root.updateMatrixWorld(true);
+    const count = rig.geo.attributes.position.count, posed = new Float32Array(count * 3), v = new THREE.Vector3();
+    for (let i = 0; i < count; i++) rig.mesh.boneTransform(i, v).toArray(posed, i * 3);
+    const box = bounds(posed);
+
+    const slot = new THREE.Group(), turn = new THREE.Group(), body = new THREE.Group();
+    slot.rotation.x = TILT;
+    body.add(rig.root); turn.add(body); slot.add(turn); scene.add(slot);
+
+    s.fig = { slot, turn, body, mixer, head, necks, look, forward, rest,
+              centre:box.centre, extent:box.extent, positions:posed,
               size:0, reach:0, dir:null, born:null };
     place(s);
     /* pop in only when it arrives in view */
