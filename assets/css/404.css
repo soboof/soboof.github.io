@@ -1,5 +1,6 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
+  --accent-night-rgb:232,197,71;--accent-day-rgb:107,78,163; /* the accent's channels: glows and rules mix from them (Studio's theme sets them) */
   --bg:#1a1814; --text:#f0ece4; --muted:#8a8578; --accent:#e8c547; --mirror:#cfd6dc;
   --border:rgba(240,236,228,.12);
   --ff-h:'Syne',sans-serif; --ff-m:'DM Mono',monospace;
@@ -31,7 +32,7 @@ a.btn{
   text-decoration:none; color:var(--text); border:1px solid var(--border);
   padding:13px 20px; transition:border-color .25s, color .25s, background .25s;
 }
-a.btn:hover{border-color:rgba(232,197,71,.55); color:var(--accent)}
+a.btn:hover{border-color:rgba(var(--accent-night-rgb),.55); color:var(--accent)}
 a.btn.primary{background:var(--accent); color:#1a1814; border-color:var(--accent)}
 a.btn.primary:hover{background:transparent; color:var(--accent)}
 .foot{

@@ -37,6 +37,7 @@ const REDIRECTS = require('./data/redirects.js');
 const PROJECTS  = require('./data/projects.js');
 const PAGES     = require('./data/pages.js');
 const BLOCKS    = require('./assets/js/blocks.js');
+const THEME     = require('./assets/js/site-theme.js');
 
 /* ── helpers ───────────────────────────────────────────────────────────── */
 
@@ -130,6 +131,12 @@ const SITE_EDITS = (() => {
 /** A page's edits, keyed as Studio keys them: a page by its data/pages.js name, a piece as work/<slug>. */
 function withSite(html, key) {
   if (!SITE_EDITS) return html;
+  /* The site's theme (Studio's Theme menu, assets/js/site-theme.js): on every page, over its own stylesheet. */
+  const theme = THEME.cleanTheme(SITE_EDITS.theme);
+  if (theme) {
+    html = html.replace('</head>', THEME.headTags(theme) + '</head>');
+    if (theme.night && theme.night.bg) html = html.replace(/(<meta name="theme-color" content=")[^"]*(")/, `$1${theme.night.bg}$2`);
+  }
   const pg = (SITE_EDITS.pages || {})[key];
   const slots = key === 'index' && SITE_EDITS.slots && Object.keys(SITE_EDITS.slots).length ? SITE_EDITS.slots : null;
   if (!pg && !slots) return html;

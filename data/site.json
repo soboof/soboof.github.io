@@ -1,10 +1,49 @@
 {
   "v": 1,
-  "pages": {},
+  "pages": {
+    "index": {
+      "layout": {
+        "order": [
+          "pythagoras-engine",
+          "mirbreak",
+          "death-culture",
+          "superadobe",
+          "about",
+          "more",
+          "contact"
+        ]
+      }
+    }
+  },
   "slots": {
-    "hero": { "kind": "figure", "figure": "robot-bird", "motion": "idle", "interact": "pointer" },
-    "pythagoras-engine": { "kind": "figure", "figure": "tn", "motion": "idle", "interact": "pointer" },
-    "mirbreak": { "kind": "figure", "figure": "the-young-goat", "motion": "idle", "interact": "pointer" },
-    "death-culture": { "kind": "figure", "figure": "clown-cow", "motion": "idle", "interact": "pointer" }
+    "hero": {
+      "kind": "figure",
+      "figure": "tn",
+      "interact": "pointer",
+      "hover": "spin",
+      "size": 0.7,
+      "view": "angle"
+    },
+    "pythagoras-engine": {
+      "kind": "figure",
+      "figure": "tn",
+      "motion": "idle",
+      "interact": "pointer"
+    },
+    "mirbreak": {
+      "kind": "figure",
+      "figure": "the-young-goat",
+      "interact": "reader",
+      "motion": "idle"
+    },
+    "death-culture": {
+      "kind": "figure",
+      "figure": "clown-cow",
+      "motion": "wave"
+    },
+    "superadobe": {
+      "kind": "model",
+      "model": "pythagoras.obj"
+    }
   }
 }

@@ -234,13 +234,19 @@
      sections to auto: the canvas comes first in the page, so everything is
      painted over it as before, and a layer number now counts against the
      canvas wherever the element is. */
+  /* body{isolation:isolate}: the page paints its background on <body>, and an element with a negative layer was
+     drawn under that background and vanished. Made the frame layers count in, the page reads: its background,
+     what is set behind, the 3D models, the rest of the page. */
   let layered = false;
   function layering(on) {
     if (!on || layered) return;
     layered = true;
     const st = document.createElement('style');
     st.id = 'sbf-layers';
-    st.textContent = '#scene-canvas{z-index:0!important}.hero,body>section,section.sbf-block,body>footer{z-index:auto!important}';
+    /* An element behind the canvas sits under its section and the boxes around it, which would take its clicks:
+       those let clicks through to their children (data-sbf-pass, set by applyZ), so it still takes its own. */
+    st.textContent = 'body{isolation:isolate}#scene-canvas{z-index:0!important}.hero,body>section,section.sbf-block,body>footer{z-index:auto!important}'
+      + '[data-sbf-pass]{pointer-events:none}[data-sbf-pass]>:not([data-sbf-pass]){pointer-events:auto}';
     document.head.appendChild(st);
   }
   const KEY_Z = /^(t|i|c|s):[A-Za-z0-9_.:-]{1,80}$/;
@@ -256,6 +262,7 @@
   }
   let zDone = [];
   function applyZ(z) {
+    document.querySelectorAll('[data-sbf-pass]').forEach(el => el.removeAttribute('data-sbf-pass'));
     for (const el of zDone) {
       el.style.removeProperty('z-index');
       if (el.dataset.sbfZpos) { el.style.removeProperty('position'); delete el.dataset.sbfZpos; }
@@ -270,6 +277,7 @@
       if (getComputedStyle(el).position === 'static') { el.style.position = 'relative'; el.dataset.sbfZpos = '1'; }
       el.style.zIndex = String(v);
       zDone.push(el);
+      if (v < 0) for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) p.setAttribute('data-sbf-pass', '');
     }
   }
 
