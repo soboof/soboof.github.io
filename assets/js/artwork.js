@@ -23,7 +23,7 @@ function buildProduct() {
 
   const galleryMain = document.querySelector('.gallery-main');
   const img = document.getElementById('gallery-img');
-  img.alt = P.name + ' — main view';
+  img.alt = (P.alt || P.name) + ', main view';
   if (P.photos && P.photos.length) {
     img.src = P.photos[0];
   } else {
@@ -34,7 +34,7 @@ function buildProduct() {
   document.getElementById('model-tag').textContent = P.id + ' · 3D VIEW';
 
   const thumbItems = (P.photos && P.photos.length)
-    ? P.photos.map((src, i) => `<img src="${src}" loading="lazy" alt="${P.name} view ${i+1}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`)
+    ? P.photos.map((src, i) => `<img src="${src}" loading="lazy" alt="${P.alt || P.name}, view ${i+1}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`)
     : P.thumbSvgs;
   document.getElementById('gallery-thumbs').innerHTML = thumbItems.map((content, i) =>
     `<div class="thumb${i===0?' active':''}">${content}<span class="thumb-n">${String(i+1).padStart(2,"0")}</span></div>`

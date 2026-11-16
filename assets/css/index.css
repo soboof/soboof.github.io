@@ -747,7 +747,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;background:var(--glass
   background:var(--card-inner);border:1px solid var(--border);
   padding:5px 10px;border-radius:4px;backdrop-filter:blur(6px);
   display:flex;align-items:center;gap:8px;
-  transition:color .4s,border-color .4s;
+  transition:color .4s,border-color .4s,opacity .4s;
 }
 #scene-state-hud .ssd{
   width:7px;height:7px;border-radius:50%;background:currentColor;
