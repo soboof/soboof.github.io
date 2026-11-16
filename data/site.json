@@ -1,0 +1,10 @@
+{
+  "v": 1,
+  "pages": {},
+  "slots": {
+    "hero": { "kind": "figure", "figure": "robot-bird", "motion": "idle", "interact": "pointer" },
+    "pythagoras-engine": { "kind": "figure", "figure": "tn", "motion": "idle", "interact": "pointer" },
+    "mirbreak": { "kind": "figure", "figure": "the-young-goat", "motion": "idle", "interact": "pointer" },
+    "death-culture": { "kind": "figure", "figure": "clown-cow", "motion": "idle", "interact": "pointer" }
+  }
+}
