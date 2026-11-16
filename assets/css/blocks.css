@@ -1,0 +1,82 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Sections added in Studio (assets/js/blocks.js): a 12-column grid of rows and
+   columns holding headings, words, cards and pictures. Everything is drawn on
+   the site's own variables, so the theme (and day mode) is their look; a
+   colour or size set in the editor is laid over it. Linked by the build only
+   on pages that have such a section.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.sbf-block{max-width:1280px;margin:0 auto;padding:80px 28px;position:relative;box-sizing:border-box}
+.sbf-block.p-s{padding-top:40px;padding-bottom:40px}
+.sbf-block.p-l{padding-top:130px;padding-bottom:130px}
+.sbf-block.w-narrow{max-width:860px}
+.sbf-block.w-wide{max-width:1600px}
+.sbf-block.w-full{max-width:none}
+/* A background runs the window's full width, whatever the section's width. */
+.sbf-block.has-bg{background:var(--sbf-bg);box-shadow:0 0 0 100vmax var(--sbf-bg);clip-path:inset(0 -100vmax)}
+.sbf-block[data-sbf-hidden]{display:none}
+
+.sbf-row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;align-items:start}
+.sbf-row + .sbf-row{margin-top:32px}
+.sbf-row.g-s{gap:12px}.sbf-row.g-l{gap:44px}
+.sbf-row.a-center{align-items:center}.sbf-row.a-end{align-items:end}.sbf-row.a-stretch{align-items:stretch}
+.sbf-col{grid-column:span 12;display:flex;flex-direction:column;gap:18px;min-width:0}
+@media(min-width:901px){
+  .sbf-col.s-1{grid-column:span 1}.sbf-col.s-2{grid-column:span 2}.sbf-col.s-3{grid-column:span 3}
+  .sbf-col.s-4{grid-column:span 4}.sbf-col.s-5{grid-column:span 5}.sbf-col.s-6{grid-column:span 6}
+  .sbf-col.s-7{grid-column:span 7}.sbf-col.s-8{grid-column:span 8}.sbf-col.s-9{grid-column:span 9}
+  .sbf-col.s-10{grid-column:span 10}.sbf-col.s-11{grid-column:span 11}.sbf-col.s-12{grid-column:span 12}
+}
+@media(max-width:900px){.sbf-block{padding-left:22px;padding-right:22px}}
+
+/* Headings: a section title is the site's .sec-title, smaller ones its card titles. */
+.sbf-kicker{
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);opacity:.75;display:flex;align-items:center;gap:10px;margin-bottom:10px;
+}
+.sbf-kicker::before{content:'';width:24px;height:1px;background:currentColor}
+.sbf-h{font-family:var(--ff-h);font-weight:700;letter-spacing:-.01em;color:var(--text);margin:0}
+.sbf-h.h2{font-size:clamp(34px,5vw,56px);line-height:1}
+.sbf-h.h3{font-size:clamp(22px,2.6vw,30px);line-height:1.1}
+.sbf-h.h4{font-size:17px;line-height:1.15}
+.sbf-h .accent,.sbf-t .accent,.sbf-card .accent{color:var(--accent)}
+.sbf-h .mirror,.sbf-t .mirror,.sbf-card .mirror{color:var(--mirror)}
+.sbf-h .red,.sbf-t .red,.sbf-card .red{color:var(--red)}
+.sbf-h .earth,.sbf-t .earth,.sbf-card .earth{color:var(--earth)}
+.sbf-h .green,.sbf-t .green,.sbf-card .green{color:var(--green)}
+.sbf-h .muted,.sbf-t .muted,.sbf-card .muted{color:var(--muted)}
+
+/* Words: the hero's reading text. */
+.sbf-t{font-family:var(--ff-m);font-size:14px;line-height:1.8;color:var(--text)}
+.sbf-t a,.sbf-card-text a{color:var(--accent)}
+
+/* Cards: the homepage's .ex cards, tinted by --tint (the accent unless set). */
+.sbf-card{
+  --tint:var(--accent);
+  background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--tint);border-radius:10px;
+  overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:var(--text);
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+}
+a.sbf-card:hover{text-decoration:none;transform:translateY(-3px);border-color:var(--tint);box-shadow:0 18px 44px rgba(0,0,0,.5)}
+.sbf-card.is-outline{background:transparent;border:1px solid var(--tint)}
+.sbf-card.is-filled{background:var(--tint);border-color:var(--tint);color:var(--bg)}
+.sbf-card.is-filled .sbf-card-text,.sbf-card.is-filled .sbf-card-kicker{color:var(--bg);opacity:.8}
+.sbf-card.is-plain{background:transparent;border:0;border-radius:0}
+.sbf-card.is-plain .sbf-card-body{padding-left:0;padding-right:0}
+.sbf-card-media{background:var(--bg);overflow:hidden}
+.sbf-card-media img{width:100%;height:100%;object-fit:cover;display:block}
+a.sbf-card:hover .sbf-card-media img{transform:scale(1.04);transition:transform .6s cubic-bezier(.2,.6,.2,1)}
+.sbf-card-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:6px}
+.sbf-card-kicker{font-family:var(--ff-m);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--tint)}
+.sbf-card-title{font-family:var(--ff-h);font-weight:700;font-size:17px;line-height:1.15;letter-spacing:-.01em;margin:0}
+.sbf-card-text{font-family:var(--ff-m);font-size:12px;line-height:1.7;color:var(--muted)}
+
+/* Pictures. */
+.sbf-img{margin:0}
+.sbf-img img{width:100%;display:block;border-radius:10px;background:var(--surface)}
+.sbf-img.r-none img{border-radius:0}
+.sbf-img.r-round img{border-radius:24px}
+.sbf-img figcaption{font-family:var(--ff-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.sbf-img-empty{
+  aspect-ratio:4/3;border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+}

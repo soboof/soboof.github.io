@@ -113,10 +113,10 @@
       <div class="cta-strip">
         <div>
           <h3>Host the <span class="accent">kiosk</span></h3>
-          <p>Death Culture travels. If you programme a festival, gallery, art market or public event and want the press set up on site, with visitors doing the printing, get in touch. Sheets from both collections are also available as originals.</p>
+          <p>Death Culture travels. If you programme a festival, gallery, art market or public event and want the press set up on site, with visitors doing the printing, get in touch. Sheets from every collection are also available as originals.</p>
         </div>
         <div class="acts">
-          <a href="mailto:mirbreak@soboof.com?subject=Death%20Culture%3A%20kiosk%20enquiry" class="btn primary">Enquire about the kiosk →</a>
+          <a href="mailto:support@soboof.com?subject=Death%20Culture%3A%20kiosk%20enquiry" class="btn primary">Enquire about the kiosk →</a>
           <a href="/mirbreak/#work" class="btn">See the sculptures</a>
         </div>
       </div>
@@ -185,7 +185,9 @@
     const p=prints[i];
     img.src=p.dataset.full;
     img.alt=p.dataset.cap;
-    cap.textContent=(i+1)+' / '+prints.length+' · '+p.dataset.cap;
+    /* The viewer counts sheets and nothing else. The written description
+       stays on the image itself, as its alt text. */
+    cap.textContent=(i+1)+' / '+prints.length;
     lb.classList.add('on');
     document.body.style.overflow='hidden';
   }

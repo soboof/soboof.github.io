@@ -30,12 +30,13 @@ const path = require('path');
 
 const ROOT     = __dirname;
 const SITE     = 'https://soboof.com';
-const EMAIL    = 'mirbreak@soboof.com';
+const EMAIL    = 'support@soboof.com';
 const ARTWORKS  = require('./data/artworks.js');
 const PRINTS    = require('./data/prints.js');
 const REDIRECTS = require('./data/redirects.js');
 const PROJECTS  = require('./data/projects.js');
 const PAGES     = require('./data/pages.js');
+const BLOCKS    = require('./assets/js/blocks.js');
 
 /* ── helpers ───────────────────────────────────────────────────────────── */
 
@@ -100,6 +101,37 @@ function include(html, depth = 0) {
       .replace(/\{\{([a-z][\w-]*)\}\}/g, (whole, k) => (k in args ? args[k] : whole));
     return include(body, depth + 1);
   });
+}
+
+/* ── edits made on the page in Studio ─────────────────────────────────────
+   Studio's page editor writes words and pictures back into the sources
+   (tools/studio/edits.js), so they are in the built HTML like any other copy.
+   What has no source to go into is kept in data/site.json: a page's layout
+   (sections moved or hidden, columns), its cards (order, size, hidden), the
+   few words or pictures that could not be found once in a source, and the
+   homepage's 3D slots. A page with any of that carries it as JSON and
+   /assets/js/site-edits.js puts it over the page as it loads; a page with
+   none carries nothing, exactly as before. */
+const SITE_EDITS = (() => {
+  try { const s = JSON.parse(read('data/site.json')); return s && s.v === 1 ? s : null; } catch { return null; }
+})();
+/** A page's edits, keyed as Studio keys them: a page by its data/pages.js name, a piece as work/<slug>. */
+function withSite(html, key) {
+  if (!SITE_EDITS) return html;
+  const pg = (SITE_EDITS.pages || {})[key];
+  const slots = key === 'index' && SITE_EDITS.slots && Object.keys(SITE_EDITS.slots).length ? SITE_EDITS.slots : null;
+  if (!pg && !slots) return html;
+  /* Sections added in Studio are written into the page itself (assets/js/blocks.js), so they are
+     served and indexed like any other copy; their stylesheet comes only with them. */
+  if (pg && Array.isArray(pg.blocks) && pg.blocks.length) {
+    html = BLOCKS.placeInHtml(html, pg.blocks)
+      .replace('</head>', '<link rel="stylesheet" href="/assets/css/blocks.css">\n</head>');
+  }
+  const json = JSON.stringify({ v: 1, page: pg || {}, ...(slots ? { slots } : {}) }).replace(/</g, '\\u003c');
+  const at = html.lastIndexOf('</body>');
+  return html.slice(0, at)
+    .replace(/<body([^>]*)>/, m => `${m}\n<script id="sbf-site" type="application/json">${json}</script>`) +
+    '<script src="/assets/js/site-edits.js"></script>\n' + html.slice(at);
 }
 
 /** Wrap one page's body in the chrome and fill its metadata. */
@@ -464,6 +496,29 @@ const printPath = (set, i) =>
 
 const allPrints = p => p.sets.reduce((n, s) => n + s.prints.length, 0);
 
+/* ── The cast tags for each sheet ──────────────────────────────────────────
+   A card carries its number and the sheet, nothing else, so these tags are
+   not drawn on the page: they stay on the button as data-tags, where a filter
+   or a caption can pick them up. The tags are read out of that sheet's caption
+   in data/prints.js, which goes on serving as the image's alt text: one
+   written record, two jobs. The words that earn a tag and their order are set
+   by the `cast` array in the data file. ──────────────────────────────────── */
+
+const castMatchers = (PRINTS.cast || []).map(c => ({
+  tag: c.tag,
+  /* Plurals and hyphenated compounds come free: \b puts a word boundary either
+     side, so 'tree' catches 'trees' and 'tree-stamp' but not 'treeline'. */
+  re: new RegExp('\\b(' + (c.words || []).join('|') + ')(s|es)?\\b', 'i'),
+}));
+
+/** The tags sheet `i` (0-based) carries, in cast order. Hand-set tags win. */
+function printTags(set, i) {
+  const byHand = set.tags && set.tags[i + 1];
+  if (byHand) return byHand;
+  const cap = String(set.prints[i] || '');
+  return castMatchers.filter(c => c.re.test(cap)).map(c => c.tag);
+}
+
 /** Spell a number out, so headings read "Twenty-five pulls" not "25 pulls". */
 function numberWord(n) {
   const ones = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
@@ -502,17 +557,22 @@ function printSets(p) {
         throw new Error(`prints.js: ${set.name} orient key ${k} is out of range`);
       }
     }
+    for (const k of Object.keys(set.tags || {})) {
+      if (!(k >= 1 && k <= set.prints.length)) {
+        throw new Error(`prints.js: ${set.name} tags key ${k} is out of range`);
+      }
+    }
     const cards = set.prints.map((cap, i) => {
       const n = String(++sheetNo).padStart(2, '0');
       const file = printPath(set, i);
       const orient = set.orient && set.orient[i + 1];
       const cls = orient ? ` ${orient}` : '';
-      return `        <button class="print${cls}" type="button" data-full="${file}" data-cap="${attr(cap)}">\n` +
+      const tags = printTags(set, i);
+      return `        <button class="print${cls}" type="button" data-full="${file}" data-cap="${attr(cap)}" data-tags="${attr(tags.join(' · '))}">\n` +
              `          <div class="print-img">\n` +
              `            <span class="print-n">${n}</span>\n` +
              `            <img src="${file}" alt="${attr(cap)}" loading="lazy">\n` +
              `          </div>\n` +
-             `          <div class="print-cap">${cap}</div>\n` +
              `        </button>`;
     }).join('\n');
 
@@ -1198,6 +1258,12 @@ function check(all) {
 function checkPrints(p) {
   const problems = [];
   if (!p.sets || !p.sets.length) problems.push('prints: no sets defined');
+  if (!p.cast || !p.cast.length) problems.push('prints: no cast defined, so nothing can be tagged');
+  (p.cast || []).forEach((c, i) => {
+    if (!c.tag || !Array.isArray(c.words) || !c.words.length) {
+      problems.push(`prints: cast entry ${i + 1} needs both a "tag" and its "words"`);
+    }
+  });
 
   const prefixes = new Set();
   for (const set of p.sets || []) {
@@ -1212,6 +1278,11 @@ function checkPrints(p) {
       const f = printPath(set, i);
       if (!fs.existsSync(path.join(ROOT, f))) problems.push(`${set.name}: no such sheet ${f}`);
       if (!cap || !String(cap).trim()) problems.push(`${set.name}: sheet ${i + 1} has no caption`);
+      /* An untagged sheet would print a card with nothing under it. */
+      if (!printTags(set, i).length) {
+        problems.push(`${set.name}: sheet ${i + 1} names none of the cast; ` +
+          `name one in its caption or give it a line in this set's tags map`);
+      }
     });
 
     /* An image sitting in the folder with no caption would silently never show. */
@@ -1239,7 +1310,7 @@ function main() {
 
   const template = read('src/templates/artwork.html');
   for (const a of ARTWORKS) {
-    write(artworkFile(a), artworkPage(template, a, ARTWORKS));
+    write(artworkFile(a), withSite(artworkPage(template, a, ARTWORKS), `work/${a.slug}`));
     console.log(`  ✓ ${artworkUrl(a)}`);
   }
 
@@ -1267,7 +1338,7 @@ function main() {
   const built = {};
   for (const [slug, page] of Object.entries(PAGES)) {
     const body = (bodyOf[slug] || (() => read(`src/pages/${slug}.html`)))();
-    built[slug] = renderPage(slug, page, body);
+    built[slug] = withSite(renderPage(slug, page, body), slug);
     write(page.out, built[slug]);
     console.log(`  ✓ ${page.out}`);
   }

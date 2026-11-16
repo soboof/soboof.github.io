@@ -30,9 +30,35 @@ module.exports = {
 
   /* ── Counter-card rows that aren't derived from the sets ── */
   facts: [
-    { label: 'Posters on site', value: '30–40' },
+    { label: 'Posters on site', value: '60–70' },
     { label: 'Technique',       value: 'LINO'  },
     { label: 'Status',          value: 'LIVE'  },
+  ],
+
+  /* ── The cast: what the tag under each sheet names ──
+     A card lists the characters printed on the sheet rather than describing
+     it. Each entry here is one tag; `words` are the words that earn it,
+     matched against that sheet's caption in `sets`, so a poster added later
+     tags itself from its caption. Plurals are matched for you, and a word
+     also catches its hyphenated compounds: 'tree' covers 'trees' and
+     'tree-stamp'. The order below is the order the tags print on the card.
+
+     A caption that names none of them (a proof of the whole set, say) gets
+     its tags by hand: add a `tags` map to that set, keyed by sheet number
+     exactly like `orient`. The build stops if a sheet ends up with no tag.
+
+     'Cedar' rather than 'Cypress' on purpose: the tree is the cedar of the
+     artist statement, the mourning tree carrying the shape of a body bag. ── */
+  cast: [
+    { tag: 'Cedar',        words: ['cypress', 'tree'] },
+    { tag: 'Roots',        words: ['root', 'rootless'] },
+    { tag: 'Circuit',      words: ['circuit', 'circuitry'] },
+    { tag: 'Skull',        words: ['skull'] },
+    { tag: 'Hound',        words: ['hound', 'dog'] },
+    { tag: 'Bird of prey', words: ['bird', 'wing'] },
+    { tag: 'Mountain',     words: ['mountain', 'ridge'] },
+    { tag: 'Flame',        words: ['flame', 'fire'] },
+    { tag: 'Cloud',        words: ['cloud'] },
   ],
 
   /* ── The stamp collection: one carved block per entry ──
@@ -93,6 +119,10 @@ module.exports = {
          the wrong way up — the cypress hangs by its crown and the hounds
          run on their backs. Turned half a circle. */
       orient: { 2: 'turn turn-rev', 6: 'turn', 7: 'flip' },
+      /* Sheet 9 is a proof of the whole stamp set, so its caption names no
+         one character. Tagged by hand; keys are sheet numbers within the
+         set, same as `orient` above. */
+      tags: { 9: ['Full cast'] },
       prints: [
         'The recurring cast laid out as a proof sheet: cypress stamps, a gold field, a running dog.',
         'A mountain range cut in a single block, printed against a gold column.',
@@ -157,6 +187,42 @@ module.exports = {
         'Mountains and cypress, printed dense and dark.',
         'A single hound, printed clean in blue.',
         'Closing sheet. Cypress, cloud and flame, all at low ink.',
+      ],
+    },
+    {
+      name:   'Bodybags A4',
+      prefix: 'bodybags-a4',
+      meta:   'gold, red &amp; black · A4',
+      /* Four sheets here are landscape posters, scanned and stored the right
+         way up. They need no rotation, only a landscape-shaped card, so they
+         carry `wide` rather than the turning classes the other sets use. */
+      orient: { 6: 'wide', 17: 'wide', 18: 'wide', 22: 'wide' },
+      prints: [
+        'A gold cypress and a flame stamp set in black panels, a printed cloud breaking out of the gold field beside them.',
+        'Rootless trees in white with gold flame at their tips, stepping down a yellow band beside an upright cypress.',
+        'A gold cypress in a black panel, gold circuitry growing out of it above and below like a flame.',
+        'Two hounds running through a gold band, crossed by a cypress panel in grey and a second in black beneath it.',
+        'Cypress and flame panels stepping diagonally down the sheet, a gold field with a cloud pressed between them.',
+        'A bank of gold clouds on the left, a single white cypress in a black panel on the right, the paper left open between them.',
+        'A rootless tree in black over a red column, a cypress in red below, grey ink spread across the middle of the sheet.',
+        'A white cypress in black beside a tall gold column of circuitry, a pale offprint of the same block below it.',
+        'A single flame stamp in a black panel, set in a red column on otherwise open paper.',
+        'A white cypress in black meeting a gold band of running hounds, the lower half of the sheet left bare.',
+        'The whole set worked over one another: cypresses, rootless trees and flame stamps in black, gold and grey.',
+        'Gold circuitry rising like fire above two black panels, a rootless tree in one and a flame stamp in the other.',
+        'A black bird crossing a gold column, a gold cypress in the black panel beneath its wing.',
+        'Hounds running across a gold field, boxed in grey and black, a gold cypress in the panel below.',
+        'A dark bird over banked red fields, an ornamented hound printed faintly in red behind them.',
+        'An ornamented hound in red, two black panels crossing its body, a grey wing printed underneath.',
+        'A red mountain range with a black flame-stamp panel cut into it, a hound running along its base.',
+        'Four panels in a row, a flame stamp and three cypresses, the red ink deepening across the line.',
+        'A sheet inked red edge to edge, a red cypress in a black panel, a grey bird descending below it.',
+        'Cypress and flame panels in grey, gold circuitry and a cloud spilling down the right of the sheet.',
+        'A cypress half in black and half in gold, standing on a gold panel with a hound printed faint beneath.',
+        'Mountains in red and black, a hound leaping over the ridge line.',
+        'A black bird across a gold band, a white cypress and a gold cypress in the panels below.',
+        'An ornamented hound in red above three cypress panels, a pack of dogs running along the foot of the sheet.',
+        'A gold cypress and a gold flame stamp stacked in black panels, both set on a gold band.',
       ],
     },
   ],

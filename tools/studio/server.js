@@ -14,6 +14,16 @@
      3. runs build.js so every page, count and sitemap is regenerated
      4. git add / commit / push
 
+   And the site itself: http://localhost:4000 is soboof.com as built here,
+   with the page editor over it (editor.js, injected into every page served,
+   never into the built files). An admin bar across the top, the page under
+   it: type over any words, change a picture, move and size the sections and
+   cards, set what each 3D slot shows and how it moves. Upload puts the words
+   and pictures into the files they came from (edits.js), the rest into
+   data/site.json, builds, commits and pushes. The forms that were this page
+   are at /studio/ now, with a Keys tab for the GitHub token Upload pushes
+   with (keys.js, kept outside the repository).
+
    Zero dependencies — plain Node, nothing to install. It binds to localhost
    only, so nothing outside this machine can reach it.
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -24,6 +34,9 @@ const http = require('http');
 const fs   = require('fs');
 const path = require('path');
 const { execFile, execFileSync } = require('child_process');
+const KEYS  = require('./keys.js');
+const EDITS = require('./edits.js');
+const BLOCKS = require(path.join(path.resolve(__dirname, '..', '..'), 'assets/js/blocks.js'));
 
 const REPO = path.resolve(__dirname, '..', '..');
 const HERE = __dirname;
@@ -66,12 +79,33 @@ function loadData() {
   };
 }
 
+/** git, with the keys from the Keys tab in its environment, and anything it prints cleared of the token. */
 function git(args, opts = {}) {
   return new Promise(resolve => {
-    execFile('git', args, { cwd: REPO, maxBuffer: 1 << 24, ...opts }, (err, stdout, stderr) => {
-      resolve({ ok: !err, code: err ? (err.code ?? 1) : 0, stdout: String(stdout), stderr: String(stderr) });
+    execFile('git', args, { cwd: REPO, maxBuffer: 1 << 24, env: KEYS.gitEnv(), ...opts }, (err, stdout, stderr) => {
+      resolve({ ok: !err, code: err ? (err.code ?? 1) : 0, stdout: KEYS.scrub(stdout), stderr: KEYS.scrub(stderr) });
     });
   });
+}
+
+/* ── the copy that is online ───────────────────────────────────────────────
+   The studio edits the site as it is on GitHub, so before anything it asks
+   GitHub what that is. Behind it, and with nothing of its own waiting to go
+   up, it can bring this copy level (a fast-forward, never a merge). With
+   work of its own here it never touches it: that work goes up with the next
+   Upload, or is put aside by hand. */
+async function onlineState(fetch = true) {
+  const st = await gitState();
+  if (!st.repo) return { repo: false };
+  let fetched = { ok: true, stderr: '' };
+  if (fetch) fetched = await git(['fetch', '--quiet', 'origin']);
+  const ab = await git(['rev-list', '--left-right', '--count', 'HEAD...@{u}']);
+  const [ahead, behind] = ab.ok ? ab.stdout.trim().split(/\s+/).map(Number) : [0, 0];
+  return {
+    repo: true, branch: st.branch, lastCommit: st.lastCommit,
+    reached: fetched.ok, reachNote: fetched.ok ? '' : (fetched.stderr || 'could not reach GitHub').trim().split('\n').pop(),
+    ahead, behind, dirty: st.changedCount, changed: st.changed,
+  };
 }
 
 async function gitState() {
@@ -331,12 +365,56 @@ const routes = {
     return { ok: true, added: { set: set.name, sheet: n, file: dest, kb: Math.round(saved.bytes / 1024) } };
   },
 
+  /* ── keys ── */
+  async 'GET /api/keys'() { return KEYS.keysView(); },
+  async 'POST /api/keys'(req) {
+    const f = await body(req);
+    return KEYS.saveKeys({ token: f.token, name: f.name, email: f.email });
+  },
+  async 'POST /api/keys/test'() {
+    const r = await git(['ls-remote', '--heads', 'origin']);
+    return r.ok
+      ? { ok: true, note: 'GitHub answered: this machine can read the repository' + (KEYS.keysView().tokenSet ? ' with the token' : '') + '.' }
+      : { ok: false, note: (r.stderr || r.stdout || 'no answer').trim().split('\n').slice(-2).join(' ') };
+  },
+
+  /* ── the copy that is online ── */
+  async 'GET /api/online'() { return onlineState(true); },
+  async 'POST /api/online/pull'() {
+    const st = await onlineState(true);
+    if (!st.repo) return { ok: false, note: 'not a git repository' };
+    if (!st.behind) return { ok: true, note: 'Already the copy that is online.', state: st };
+    if (st.dirty) return { ok: false, note: `${st.dirty} file(s) here have changes that are not online yet. Upload them first, so nothing of yours is lost.`, state: st };
+    if (st.ahead) return { ok: false, note: 'This copy and the online one have each moved on. Bring them together by hand (git pull).', state: st };
+    const r = await git(['pull', '--ff-only', '--quiet']);
+    return { ok: r.ok, note: r.ok ? `Brought in ${st.behind} change(s) from online.` : (r.stderr || 'pull failed').trim(), state: await onlineState(false) };
+  },
+
+  /* ── the page editor ── */
+  async 'GET /api/site'() { return readSite(); },
+  async 'POST /api/site/upload'(req) {
+    const f = await body(req);
+    const urlPath = String(f.path || '/');
+    const { page, report, keep } = EDITS.applyEdits(REPO, urlPath, f.texts, f.images, backup);
+    if (f.site && Array.isArray(f.site.blocks)) {
+      f.site.blocks = BLOCKS.cleanBlocks(saveBlockPictures(f.site.blocks));
+      report.push({ key: 'blocks', where: 'data/site.json', ok: true, note: `${f.site.blocks.length} added section(s), written into the page by the build` });
+    }
+    const site = mergeSite(readSite(), f.site, siteKey(page, urlPath), keep);
+    if (fs.existsSync(R('data/site.json'))) backup('data/site.json');
+    writeRepo('data/site.json', JSON.stringify(site, null, 2) + '\n');
+    report.push({ key: 'site', where: 'data/site.json', ok: true, note: 'layout, cards and 3D slots' });
+    if (f.publish === false) return { ok: true, report };
+    const pub = await routes['POST /api/publish']({ __body: { message: f.message || 'Edit the site in Studio', push: f.push !== false } });
+    return { ok: pub.ok, report, log: pub.log, stoppedAt: pub.stoppedAt, pushed: pub.pushed };
+  },
+
   async 'POST /api/build'() {
     return await runBuild();
   },
 
   async 'POST /api/publish'(req) {
-    const f = await body(req);
+    const f = req.__body || await body(req);
     const message = String(f.message || '').trim() || 'Update site content';
     const log = [];
 
@@ -348,7 +426,7 @@ const routes = {
     log.push({ step: 'git add', ok: add.ok, output: add.stdout + add.stderr });
     if (!add.ok) return { ok: false, log, stoppedAt: 'git add' };
 
-    const commit = await git(['commit', '-m', message]);
+    const commit = await git([...KEYS.commitIdentity(), 'commit', '-m', message]);
     const nothing = /nothing to commit/i.test(commit.stdout + commit.stderr);
     log.push({ step: 'git commit', ok: commit.ok || nothing, output: commit.stdout + commit.stderr });
     if (!commit.ok && !nothing) return { ok: false, log, stoppedAt: 'git commit' };
@@ -363,12 +441,102 @@ const routes = {
   },
 };
 
+/* ── data/site.json: what the page editor keeps that is not in a source file ──
+   { v: 1, pages: { <page>: { layout, cards, text, img } }, slots: { <section>: {...} } }
+   The editor sends the whole of it for the page it is on (layout, cards) and
+   the slots; text and img are the edits edits.js could not place in a source. */
+/** The key a page's edits are kept under: a page by its data/pages.js name, a piece as work/<slug> (build.js reads the same). */
+const siteKey = (page, urlPath) => (page ? (page.kind === 'piece' ? `work/${page.slug}` : page.slug) : urlPath);
+
+/**
+ * A picture put into an added section is uploaded as a data URL. It is
+ * written to assets/img/blocks/ under a name made of its own bytes (the same
+ * picture twice is one file) and the section points at that file.
+ */
+function saveBlockPictures(blocks) {
+  const save = v => {
+    const m = /^data:image\/(jpeg|png|webp|gif);base64,([A-Za-z0-9+/=]+)$/.exec(String(v || ''));
+    if (!m) return v;
+    const buf = Buffer.from(m[2], 'base64');
+    const rel = `assets/img/blocks/${require('crypto').createHash('sha1').update(buf).digest('hex').slice(0, 12)}.${m[1] === 'jpeg' ? 'jpg' : m[1]}`;
+    fs.mkdirSync(R('assets/img/blocks'), { recursive: true });
+    if (!fs.existsSync(R(rel))) fs.writeFileSync(R(rel), buf);
+    return '/' + rel;
+  };
+  for (const b of blocks || []) for (const r of (b && b.rows) || []) for (const c of (r && r.cols) || []) for (const it of (c && c.items) || []) {
+    if (!it) continue;
+    if (it.src) it.src = save(it.src);
+    if (it.img) it.img = save(it.img);
+  }
+  return blocks;
+}
+
+function readSite() {
+  try { const s = JSON.parse(readRepo('data/site.json')); if (s && s.v === 1) return s; } catch {}
+  return { v: 1, pages: {}, slots: {} };
+}
+
+function mergeSite(site, draft, pageKey, keep) {
+  const out = { v: 1, pages: { ...(site.pages || {}) }, slots: { ...(site.slots || {}) } };
+  const d = draft && typeof draft === 'object' ? draft : {};
+  const pg = { ...(out.pages[pageKey] || {}) };
+  if (d.layout && typeof d.layout === 'object') pg.layout = d.layout;
+  if (d.cards && typeof d.cards === 'object') pg.cards = d.cards;
+  if (Array.isArray(d.dropText)) for (const k of d.dropText) if (pg.text) delete pg.text[k];
+  if (Array.isArray(d.dropImg)) for (const k of d.dropImg) if (pg.img) delete pg.img[k];
+  if (Array.isArray(d.blocks)) { if (d.blocks.length) pg.blocks = d.blocks; else delete pg.blocks; }
+  pg.text = { ...(pg.text || {}), ...keep.text };
+  pg.img = { ...(pg.img || {}), ...keep.img };
+  for (const k of ['text', 'img', 'cards']) if (pg[k] && !Object.keys(pg[k]).length) delete pg[k];
+  if (pg.layout && !Object.keys(pg.layout).length) delete pg.layout;
+  if (Object.keys(pg).length) out.pages[pageKey] = pg; else delete out.pages[pageKey];
+  if (d.slots && typeof d.slots === 'object') out.slots = d.slots;
+  return out;
+}
+
 function nextCode(artworks) {
   const highest = artworks.reduce((m, a) => {
     const n = Number(String(a.code).replace(/\D/g, ''));
     return Number.isFinite(n) ? Math.max(m, n) : m;
   }, 0);
   return `SBF · ${String(highest + 1).padStart(3, '0')}`;
+}
+
+/* ── the site, served as built, with the editor over it ───────────────── */
+
+const TYPES = {
+  '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.ico': 'image/x-icon', '.obj': 'text/plain; charset=utf-8',
+  '.gltf': 'model/gltf+json', '.glb': 'model/gltf-binary', '.mp4': 'video/mp4', '.webm': 'video/webm', '.woff2': 'font/woff2',
+  '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml; charset=utf-8',
+};
+const EDITOR_TAGS = '\n<link rel="stylesheet" href="/studio/editor.css">\n<script src="/studio/editor.js"></script>\n';
+
+function serveSite(url, res) {
+  let rel = decodeURIComponent(url.pathname).replace(/^\/+/, '');
+  if (!rel || rel.endsWith('/')) rel += 'index.html';
+  let full = R(rel);
+  if (!full.startsWith(REPO) || rel.split('/').some(p => p.startsWith('.')) || rel.startsWith('tools/') || rel.startsWith('node_modules/')) {
+    res.writeHead(404, { 'content-type': 'text/plain' }); return res.end('not found');
+  }
+  if (fs.existsSync(full) && fs.statSync(full).isDirectory()) full = path.join(full, 'index.html');
+  if (!fs.existsSync(full) && fs.existsSync(full + '.html')) full += '.html';
+  if (!fs.existsSync(full)) {
+    const nf = R('404.html');
+    res.writeHead(404, { 'content-type': TYPES['.html'], 'cache-control': 'no-store' });
+    return res.end(fs.existsSync(nf) ? fs.readFileSync(nf) : 'not found');
+  }
+  const ext = path.extname(full).toLowerCase();
+  if (ext === '.html') {
+    let html = fs.readFileSync(full, 'utf8');
+    const at = html.lastIndexOf('</body>');
+    html = at < 0 ? html + EDITOR_TAGS : html.slice(0, at) + EDITOR_TAGS + html.slice(at);
+    res.writeHead(200, { 'content-type': TYPES['.html'], 'cache-control': 'no-store' });
+    return res.end(html);
+  }
+  res.writeHead(200, { 'content-type': TYPES[ext] || 'application/octet-stream', 'cache-control': 'no-store' });
+  return res.end(fs.readFileSync(full));
 }
 
 /* ── server ────────────────────────────────────────────────────────────── */
@@ -382,22 +550,51 @@ const server = http.createServer(async (req, res) => {
     catch (e) { return json(res, 500, { ok: false, problems: [e.message] }); }
   }
 
-  if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
+  /* The forms (sculpture, poster, publish, keys) are /studio/ now. */
+  if (req.method === 'GET' && (url.pathname === '/studio' || url.pathname === '/studio/' || url.pathname === '/studio/index.html')) {
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
     return res.end(fs.readFileSync(path.join(HERE, 'index.html')));
   }
-
-  /* Let the desk preview the real site's images. */
-  if (req.method === 'GET' && url.pathname.startsWith('/assets/')) {
-    const f = R(decodeURIComponent(url.pathname).replace(/^\//, ''));
-    if (f.startsWith(R('assets')) && fs.existsSync(f)) {
-      res.writeHead(200, { 'content-type': 'image/jpeg' });
-      return res.end(fs.readFileSync(f));
-    }
+  if (req.method === 'GET' && /^\/studio\/(editor\.js|editor\.css)$/.test(url.pathname)) {
+    const name = url.pathname.slice('/studio/'.length);
+    res.writeHead(200, { 'content-type': TYPES[path.extname(name)], 'cache-control': 'no-store' });
+    return res.end(fs.readFileSync(path.join(HERE, name)));
   }
+
+  /* Everything else is the site as built here, with the editor put over every page. */
+  if (req.method === 'GET') return serveSite(url, res);
 
   res.writeHead(404, { 'content-type': 'text/plain' });
   res.end('not found');
+});
+
+/* ── starting: the desktop icon and studio.cmd run `server.js --open` ──────
+   With --open the browser is opened once the server is listening, so the
+   first page never meets a server that is not up yet. If Studio is already
+   running (the icon clicked twice), the port is taken: this asks that Studio
+   whether it is one, opens the browser on it, and leaves quietly (exit 0,
+   which studio.cmd closes on). Anything else on the port is an error. */
+const OPEN = process.argv.includes('--open');
+const HOME = `http://localhost:${PORT}/`;
+
+function openBrowser(url) {
+  const cmd = process.platform === 'win32' ? ['cmd', ['/c', 'start', '', url]]
+    : process.platform === 'darwin' ? ['open', [url]] : ['xdg-open', [url]];
+  try { execFile(cmd[0], cmd[1], { windowsHide: true }, () => {}); } catch { /* the address is printed anyway */ }
+}
+
+server.on('error', async e => {
+  if (e.code !== 'EADDRINUSE') { console.error(`\n  Studio could not start: ${e.message}\n`); process.exit(1); }
+  let studio = false;
+  try { studio = (await fetch(`http://127.0.0.1:${PORT}/api/keys`)).ok; } catch {}
+  if (studio) {
+    console.log(`\n  Soboof Studio is already running: opening ${HOME}\n`);
+    if (OPEN) openBrowser(HOME);
+    process.exit(0);
+  }
+  console.error(`\n  Port ${PORT} is taken by another program, so Studio cannot start.` +
+    `\n  Close that program, or start Studio on another port: set PORT=4001 and run studio.cmd again.\n`);
+  process.exit(1);
 });
 
 server.listen(PORT, '127.0.0.1', () => {
@@ -407,8 +604,10 @@ server.listen(PORT, '127.0.0.1', () => {
   Soboof Studio
   ─────────────
   repo    ${where}
-  open    http://localhost:${PORT}
+  open    http://localhost:${PORT}          the site, with the editor
+          http://localhost:${PORT}/studio/   add work, publish, keys
 
   Leave this window open while you work. Ctrl+C to stop.
 `);
+  if (OPEN) openBrowser(HOME);
 });

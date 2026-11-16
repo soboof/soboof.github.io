@@ -1,0 +1,161 @@
+/* Soboof Studio's page editor (editor.js): Pythagoras Engine's on-page editor,
+   in its own theme, over soboof.com as Studio serves it on this computer.
+   Never part of the published site: Studio adds it to the pages it serves. */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700&display=swap');
+
+.sbf-ui{
+  --bg:#1a1814;--accent:#e8c547;--accent-rgb:232,197,71;--surface:#1f1d1a;--surface-2:#252320;
+  --border:#2e2b28;--text:#e8e4dc;--muted:#7a7368;--green:#4caf7d;--red:#c44444;
+  --glass:rgba(20,18,15,.92);--ff-h:'Syne',sans-serif;--ff-m:'DM Mono',monospace;
+  box-sizing:border-box;
+}
+.sbf-ui *,.sbf-ui *::before,.sbf-ui *::after{box-sizing:border-box}
+
+/* The admin bar, WordPress's way: fixed across the top, and the page below it. */
+html.sbf-adminbar{--le-bar:40px}
+html.sbf-adminbar body{margin-top:var(--le-bar)}
+html.sbf-adminbar body > header{top:var(--le-bar) !important}
+.le-bar{
+  position:fixed;left:0;right:0;top:0;z-index:10000;height:var(--le-bar, 40px);
+  display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;
+  padding:0 12px;background:#16140f;border-bottom:1px solid rgba(var(--accent-rgb),.45);
+  font-family:var(--ff-m);font-size:11px;color:#e8e4dc;white-space:nowrap;
+}
+.le-bar .le-btn{padding:5px 9px}
+.le-bar-item{
+  font-family:var(--ff-m);font-size:11px;padding:6px 10px;border-radius:5px;cursor:pointer;
+  color:#e8e4dc;background:transparent;border:1px solid transparent;text-decoration:none;
+}
+.le-bar-item:hover,.le-bar-item.on{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12)}
+.le-bar-item.accent{color:#16140f;background:var(--accent)}
+.le-menu{
+  position:fixed;top:var(--le-bar, 40px);z-index:10003;min-width:190px;
+  display:flex;flex-direction:column;padding:6px;border-radius:0 0 8px 8px;
+  background:#16140f;border:1px solid rgba(var(--accent-rgb),.35);border-top:0;box-shadow:0 10px 30px rgba(0,0,0,.45);
+}
+.le-menu-item{
+  text-align:left;font-family:var(--ff-m);font-size:11px;padding:7px 10px;border-radius:5px;cursor:pointer;
+  color:#e8e4dc;background:none;border:0;text-decoration:none;
+}
+.le-menu-item:hover{background:rgba(var(--accent-rgb),.16);color:var(--accent)}
+.le-item{display:flex;align-items:center;gap:4px;padding:4px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface)}
+.le-item.off{opacity:.5}
+.le-item-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.le-mini{
+  font-family:var(--ff-m);font-size:10px;padding:3px 6px;border-radius:4px;cursor:pointer;
+  color:var(--text);background:var(--surface-2);border:1px solid var(--border);
+}
+.le-mini:disabled{opacity:.35;cursor:default}
+.le-mini.on{border-color:var(--accent);color:var(--accent)}
+.le-bar-title{font-family:var(--ff-h);font-weight:700;letter-spacing:.06em;color:var(--accent)}
+.le-bar-note{color:var(--muted)}
+.le-bar-note.warn{color:var(--accent)}
+.le-bar-note.bad{color:var(--red)}
+.le-spacer{flex:1}
+.le-count{color:var(--muted)}
+
+.le-btn{
+  font-family:var(--ff-m);font-size:11px;padding:6px 10px;border-radius:6px;cursor:pointer;
+  color:var(--text);background:var(--surface);border:1px solid var(--border);
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;line-height:1.3;
+}
+.le-btn:hover:not(:disabled){border-color:rgba(var(--accent-rgb),.6)}
+.le-btn:disabled{opacity:.45;cursor:default}
+.le-btn.on{border-color:var(--accent);color:var(--accent);background:rgba(var(--accent-rgb),.12)}
+.le-btn.accent{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.le-btn.warn{border-color:var(--red);color:var(--red)}
+.le-dim{color:var(--muted);font-size:10px}
+
+.le-toast{
+  position:fixed;top:calc(var(--le-bar, 40px) + 10px);left:50%;transform:translateX(-50%);z-index:10002;max-width:min(640px, 90vw);
+  font-family:var(--ff-m);font-size:11px;line-height:1.5;padding:8px 14px;border-radius:6px;cursor:pointer;white-space:pre-line;
+  background:var(--surface);border:1px solid var(--green);color:var(--green);
+}
+.le-toast.bad{border-color:var(--red);color:var(--red)}
+
+.le-panel{
+  position:fixed;right:14px;top:calc(var(--le-bar, 40px) + 12px);bottom:14px;z-index:10001;width:330px;overflow-y:auto;
+  padding:16px 16px 20px;border-radius:10px;
+  background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,.4);
+  font-family:var(--ff-m);font-size:11px;color:var(--text);
+  display:flex;flex-direction:column;gap:10px;
+}
+.le-panel h3{margin:0;font-family:var(--ff-h);font-size:15px;letter-spacing:.04em;color:var(--accent);font-weight:700}
+.le-x{position:absolute;right:10px;top:8px;background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer}
+.le-hint{margin:0;color:var(--muted);line-height:1.5}
+.le-hint.bad{color:var(--red)}
+.le-hint.good{color:var(--green)}
+.le-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.le-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.le-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.le-seg{display:flex;flex-direction:column;gap:4px}
+.le-seg .le-btn{justify-content:flex-start}
+.le-field{display:flex;flex-direction:column;gap:4px}
+.le-field > span{color:var(--muted)}
+.le-field b{color:var(--text);font-weight:500;float:right}
+.le-field input[type=range]{width:100%;accent-color:var(--accent)}
+.le-inline{flex-direction:row;align-items:center;gap:8px}
+.le-inline input[type=color]{width:34px;height:24px;border:0;background:none;padding:0}
+.le-check{display:flex;align-items:center;gap:6px;cursor:pointer}
+.le-input,.le-select{
+  flex:1;min-width:0;font-family:var(--ff-m);font-size:11px;padding:6px 8px;border-radius:6px;
+  color:var(--text);background:var(--surface);border:1px solid var(--border);
+}
+.le-preview{max-width:100%;max-height:160px;object-fit:contain;border-radius:6px;border:1px solid var(--border);align-self:flex-start}
+.le-report{margin:0;padding-left:16px;color:var(--muted);line-height:1.6}
+.le-report b{color:var(--text);font-weight:500}
+
+/* On the page while editing: what can be edited shows itself. */
+html.sbf-editing [data-sbf-t]{outline:1px dashed rgba(232,197,71,.28);outline-offset:2px;cursor:text}
+html.sbf-editing [data-sbf-t]:hover{outline-color:rgba(232,197,71,.8)}
+html.sbf-editing [data-sbf-t][contenteditable="true"]{outline:2px solid #e8c547;background:rgba(232,197,71,.06)}
+html.sbf-editing [data-sbf-i]{outline:2px dashed rgba(232,197,71,.45);outline-offset:-2px;cursor:pointer}
+html.sbf-editing [data-sbf-i]:hover{outline-color:#e8c547}
+html.sbf-editing .model-rail{outline:1px dashed rgba(232,197,71,.35)}
+html.sbf-editing .le-sel{outline:2px solid #e8c547 !important;outline-offset:3px}
+html.sbf-editing [data-sbf-hidden]{display:revert !important;opacity:.28;outline:1px dashed #c44444}
+html.sbf-picking *{cursor:crosshair !important}
+html.sbf-picking .sbf-pick-hover{outline:2px solid #4caf7d !important;outline-offset:2px}
+.sbf-ui.le-chip{
+  position:absolute;z-index:5;pointer-events:auto;cursor:pointer;
+  font-family:var(--ff-m);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 9px;border-radius:999px;line-height:1.2;
+  color:var(--bg);background:var(--accent);border:0;box-shadow:0 3px 12px rgba(0,0,0,.35);
+}
+.sbf-ui.le-card-chip{top:10px;right:10px}
+.sbf-ui.le-slot-chip{top:30px;left:50%;transform:translateX(-50%);white-space:nowrap}
+html.sbf-editing .model-rail{pointer-events:auto}
+
+@media(max-width:700px){
+  .le-panel{left:10px;right:10px;width:auto;top:auto;max-height:55vh}
+  .le-bar-note{display:none}
+}
+
+/* Posing a slot's figure by its skeleton: a handle over each joint, above the page. */
+.le-handles{position:fixed;inset:0;z-index:9999;pointer-events:none}
+.le-handle{
+  position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;pointer-events:auto;cursor:grab;
+  background:#5aa0ff;border:2px solid #0b1a33;box-shadow:0 0 0 1px rgba(255,255,255,.5);padding:0;
+}
+.le-handle:hover{background:#9cc6ff}
+.le-handle.root{width:20px;height:20px;margin:-10px 0 0 -10px;background:#e8e4dc;cursor:default}
+.le-handle.on{background:var(--accent);border-color:#16140f}
+.le-handle:active{cursor:grabbing}
+.le-timeline{display:flex;flex-direction:column;gap:8px;padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.le-track{position:relative;padding-top:10px}
+.le-track input[type=range]{width:100%;accent-color:var(--accent)}
+.le-key{position:absolute;top:0;width:8px;height:8px;margin-left:-4px;transform:rotate(45deg);background:var(--accent);cursor:pointer}
+
+/* Sections added here (assets/js/blocks.js): the grid shows itself while editing. */
+html.sbf-editing section.sbf-block{outline:1px dashed rgba(232,197,71,.4);outline-offset:-1px;cursor:pointer}
+html.sbf-editing .sbf-block .sbf-row{outline:1px dashed rgba(90,160,255,.28)}
+html.sbf-editing .sbf-block .sbf-col{outline:1px dotted rgba(90,160,255,.45);min-height:56px}
+html.sbf-editing .sbf-block .sbf-col:empty::after{
+  content:'Empty column: click it, then Add';display:flex;align-items:center;justify-content:center;height:56px;
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(90,160,255,.8);
+}
+html.sbf-editing .sbf-block [data-bi]:hover{outline:1px solid rgba(232,197,71,.7);outline-offset:2px}
+html.sbf-editing .sbf-block [data-bf]{cursor:text}
+html.sbf-editing .sbf-block [data-bf][contenteditable="true"]{outline:2px solid #e8c547;outline-offset:2px;background:rgba(232,197,71,.06)}
+.sbf-ui .le-item.on{border-color:#e8c547}

@@ -108,10 +108,9 @@ module.exports = [
     status: 'ONGOING',
     name:   'Death Culture',
     role:   'Hand-printing kiosk · with Ju Bergman',
-    body:   'Death Culture traces the line from intolerance to a culture of death: stories ' +
-            'of dying, carved into six lino stamps and printed live while visitors help ' +
-            'place the body bags themselves. Making people part of the story, not an ' +
-            'audience to it, is the project\'s way out of totalitarianism.',
+    body:   'This project is about how intolerance leads to death culture. It tells ' +
+            'stories of death, and this collection of lino stamps also tries to engage ' +
+            'people in the story and make conversations a way out of totalitarianism.',
     meta:   ['LINO', 'A4', 'LIVE'],
     href:   'printing-lab.html',
     cta:    'See the prints',

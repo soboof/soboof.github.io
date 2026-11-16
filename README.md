@@ -90,15 +90,113 @@ What stays inline, deliberately:
   unique per page, so moving it would buy structure but no caching, and it sits in
   ordered blocks alongside the theme toggle where a careless move changes behaviour.
 
-## Soboof Studio — adding work without the terminal
+## Soboof Studio — editing the site without the terminal
 
-Double-click **`studio.cmd`**. A page opens at `http://localhost:4000` with three tabs:
+Double-click **`studio.cmd`**. Your browser opens **the site itself** at `http://localhost:4000`,
+as it is built, with an admin bar across the top (WordPress's way: the page renders below it). It is
+Pythagoras Engine's page editor, in the same theme, for soboof.com.
+
+**On the desktop:** right-click `tools/studio/desktop-shortcut.ps1` > *Run with PowerShell* and a
+**Soboof Studio** icon appears on the desktop (the owl on the editor's dark tile, `tools/studio/studio.ico`,
+drawn by `node tools/studio/make-icon.js`). It starts Studio with its black window minimised to the
+taskbar: close it there to stop Studio. Run the script again if the folder moves.
+
+| In the bar | What it does |
+|---|---|
+| **◫ Studio ▾** | The forms that were Studio's only page, now at `/studio/`: **Add a sculpture**, **Add a poster**, **Build and publish**, **Keys**. |
+| **✎ Edit page** | Edit the page you are on (below). |
+| the copy note | Whether this copy is the one online: `✓ the copy online`, or how many changes are here and not online, or online and not here. |
+| **View it online ↗** | The same page on soboof.com. |
+
+**It edits what is online.** Opening the editor first asks GitHub what is there. If the copy online
+has moved on and nothing here is unuploaded, Studio brings it in (`git pull --ff-only`) and reloads,
+so every edit is made on the published site. If there is work here that is not online it does not
+pull (nothing of yours is lost) and says so; upload or commit that first.
+
+**Editing.** What can be edited outlines itself:
+
+- **Words**: click any words and type. Enter is a new line, Esc undoes the edit, pasted text comes in
+  plain; the panel has Bold, Italic, Link and *Put back the original*.
+- **Pictures**: click one. Upload (made at most 1600 px across) or give an address. A picture of the
+  site's own (`/assets/…`) is written over that very file, in its own format, so every page that
+  shows it shows the new one.
+- **+ Section**: add a section of your own, built on a **12-column grid**: rows, columns in them, and
+  in each column **headings, words, cards and pictures**. Start from *Heading and words*, *Two
+  columns*, *Three cards*, *Picture and words* or *Empty row*, placed after the section you are
+  looking at (or any other). Click anything in it to select it, the deepest first (item, then
+  column, row, section); the panel's breadcrumb goes back up.
+  - *Section*: its rows (add one with a column layout: 1, ½+½, ⅓×3, ¼×4, ⅔+⅓, ⅓+⅔, ¼+½+¼),
+    background, width, space above and below, up and down the page, duplicate, hide, delete.
+  - *Row*: its column layout (fewer columns put the taken ones' items into the last), add a column,
+    the space between columns, and where they stand (top, middle, bottom, full height).
+  - *Column*: its width out of 12, and add a heading, words, a card or a picture.
+  - *Heading*: typed on the page; title, subtitle or small; size (theme, S to XL, or exact px);
+    colour; alignment; a small line above it, as the site's section titles have.
+  - *Words*: typed on the page, with bold, italic, links and the accent colour; size, colour,
+    alignment.
+  - *Card*: title and words typed on the page; a picture (upload or address, square, wide or tall),
+    a link, the theme's card or outline, filled or plain, and its tint.
+  - *Picture*: upload or address, description, caption, shape, corners, link.
+
+  **Everything starts in the theme**: a heading is the site's section title, words its reading
+  text, a card its `.ex` card, in its colours and type, day mode included (`assets/css/blocks.css`,
+  on the site's own CSS variables). A colour chosen from the theme (Accent, Mirror, Red, Earth,
+  Green, Text, Quiet) is kept by name, so it follows the theme and day mode; only *Pick* is a
+  fixed colour. The sections are kept in `data/site.json` and **written into the page by the
+  build** (`assets/js/blocks.js`, the one renderer the build, the server and the editor share), so
+  they are in the published HTML like any other copy. Uploaded pictures are saved to
+  `assets/img/blocks/`, named by their bytes.
+- **Cards** (the `▭ Card` chip on anything in a grid of cards): size (as built, wide, full width),
+  earlier or later in the grid, hide.
+- **▦ Layout**: move sections up and down and hide them, put a section's 3D slot on the left or
+  right, set how many columns a grid has, bring hidden cards back.
+- **3D slots** (the homepage, the `◈ 3D slot` chip on each rail): what plays there (as built, one of
+  the three models, one of the five figures rigged in Pythagoras Engine's Theater with its Theater
+  motion, or nothing), its look and colour, size and speed, which way it is seen, how it answers the
+  visitor (turns with the scroll, tips towards the pointer, faces the reader, spins on its own), what
+  it does when the pointer comes near, whether it ends at the slot's border, and up to four
+  **elements of the page** (a button, a link, a card) that set it off when hovered or clicked.
+  A figure can have **a motion of its own**: *✋ Pose its skeleton…* puts a handle on every joint,
+  a drag swings that bone (the Theater's Pose Mode), and a timeline keeps poses as keys on a loop
+  (Set / Update key, ‹ Key ›, Play, Rest pose, Clear, length, ease). It plays round its loop, with
+  the scroll through its section, or once when something sets it off, laid over the figure's Theater
+  motion (a bone no key turns keeps the clip).
+
+**⇪ Upload** builds the site, commits and pushes, then reloads the page as built. Where each edit
+goes is chosen so that later builds keep it:
+
+- **words go into the site's own files**, the one they were built from: the page's source in
+  `src/pages/` (outside its `BUILD` regions), a string in `data/*.js` (literals joined by `+` are
+  read as one), or a partial or template shared by every page. So the published HTML carries them,
+  search engines read them, and the next build writes them again (`tools/studio/edits.js`);
+- what has no source to go into is kept in **`data/site.json`**: layout, cards, the 3D slots, and
+  any words or picture that could not be found exactly once (those are put over the page as it
+  loads). `build.js` hands a page its part of it as `<script id="sbf-site">` and adds
+  `/assets/js/site-edits.js`; a page with nothing there carries nothing, as before.
+
+Every file is backed up to `tools/studio/backups/` before it is changed. *Discard* drops what has not
+been uploaded.
+
+**Keys** (`/studio/#keys`): a GitHub access token, and the name and e-mail commits are made under.
+Make a fine-grained token for the site's repository only, with *Contents: Read and write*. The keys
+are kept on this computer in `~/.soboof-studio/keys.json` (`SOBOOF_STUDIO_HOME` to move it), never in
+the repository (Upload runs `git add -A`), and the token is never shown back, never put on a command
+line (git gets it through its environment) and taken out of any message git prints. *Test with
+GitHub* checks it. With no token kept, git pushes with what the machine already has, as before.
+
+The homepage's 3D scene is `assets/js/home-scene.js` (it was an inline script in
+`src/pages/index.html`); with no slot set it plays exactly as before. The five figures are
+`assets/models/cast/`, copied from Pythagoras Engine's `soboof-cast/` with their `cast.json`.
+
+The forms at `/studio/`:
+
 
 | Tab | What it does |
 |---|---|
 | **Add a sculpture** | The whole `data/artworks.js` entry as a form. Photos are resized to 2560px in the browser and saved as `<slug>-01.jpg`, `-02.jpg`, … |
 | **Add a poster** | Pick the collection, drop the scan, write the caption. Numbered and resized (1600px) automatically. |
 | **Publish** | Runs the build, then `git add`, `commit` and `push`. Shows exactly what each step said. |
+| **Keys** | The GitHub token and commit name and e-mail Upload and Publish push with (above). |
 
 It needs [Node.js](https://nodejs.org) and nothing else — no `npm install`, no dependencies. The
 server binds to localhost, so nothing outside the machine can reach it. Leave the black window open
@@ -498,7 +596,7 @@ journal entries because the journal has no individual post pages yet.
 ## Notes
 
 - This is a **portfolio**, not a shop: no prices, cart, or checkout. Artwork pages invite an
-  enquiry by email (`mirbreak@soboof.com`). Each piece does carry its WooCommerce `price`
+  enquiry by email (`support@soboof.com`). Each piece does carry its WooCommerce `price`
   in `data/artworks.js` so the catalogue matches soboof.com, but nothing renders it — the
   only thing derived from price is which pieces answer the *On sale* filter in the Work grid.
 - The catalogue mirrors the 11 published WooCommerce products on soboof.com as of

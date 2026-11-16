@@ -1,10 +1,14 @@
 @echo off
 REM ═══════════════════════════════════════════════════════════════════════
-REM  Soboof Studio — double-click this file to add work to the site.
-REM  Opens a page in your browser. Close this window when you are done.
+REM  Soboof Studio — double-click this file (or the desktop icon) to edit
+REM  the site and add work to it. It starts Studio's server and opens the
+REM  site in your browser as soon as the server is up. Clicked again while
+REM  Studio is running, it only opens the browser. Close this window when
+REM  you are done: that stops Studio.
 REM ═══════════════════════════════════════════════════════════════════════
 
 cd /d "%~dp0"
+title Soboof Studio
 
 where node >nul 2>nul
 if errorlevel 1 (
@@ -16,8 +20,8 @@ if errorlevel 1 (
   exit /b 1
 )
 
-start "" http://localhost:4000
-node tools\studio\server.js
+node tools\studio\server.js --open
+if not errorlevel 1 exit /b 0
 
 echo.
 echo   The studio has stopped.

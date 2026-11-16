@@ -37,7 +37,7 @@ legend{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--g
 .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
 label{display:block;margin-bottom:12px}
 label>span{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-input[type=text],input[type=number],textarea,select{
+input[type=text],input[type=password],input[type=number],textarea,select{
   width:100%;background:var(--inner);border:1px solid var(--line);border-radius:5px;
   color:var(--text);font:inherit;font-size:13px;padding:9px 11px}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold)}
@@ -101,6 +101,8 @@ pre.out{background:var(--inner);border:1px solid var(--line);border-radius:6px;p
   <button data-tab="art" class="on">Add a sculpture</button>
   <button data-tab="print">Add a poster</button>
   <button data-tab="pub">Publish</button>
+  <button data-tab="keys">Keys</button>
+  <a class="ghost" href="/" style="margin-left:auto;text-decoration:none;padding:7px 12px">✎ Edit the site →</a>
 </nav>
 
 <!-- ══ SCULPTURE ══════════════════════════════════════════════════════ -->
@@ -207,6 +209,7 @@ pre.out{background:var(--inner);border:1px solid var(--line);border-radius:6px;p
     <div class="thumbs" id="p-thumbs"></div>
     <label style="margin-top:14px"><span>Caption — what is on the sheet</span>
       <textarea id="p-cap" placeholder="Cypress panels repeated in a column, ink thinning with each pull."></textarea></label>
+    <span class="hint" style="display:block;margin-top:6px">The card under the sheet shows tags, not this text, and the words here choose them: cypress or tree gives Cedar, root gives Roots, then circuit, skull, hound or dog, bird or wing, mountain or ridge, flame, cloud. Name at least one, or the build will stop and say so. The caption itself stays on as the sheet's alt text.</span>
   </fieldset>
   <div class="msg" id="p-msg"></div>
   <div class="actions"><button class="go" id="p-save">Add the poster</button>
@@ -230,6 +233,26 @@ pre.out{background:var(--inner);border:1px solid var(--line);border-radius:6px;p
   </fieldset>
   <div class="msg" id="pub-msg-box"></div>
   <pre class="out" id="pub-out" style="display:none"></pre>
+</section>
+
+<!-- ══ KEYS ═══════════════════════════════════════════════════════════ -->
+<section class="tab" id="tab-keys">
+  <fieldset>
+    <legend>GitHub</legend>
+    <p class="hint" style="margin-top:0">Upload and Publish push to GitHub with this token. Make a fine-grained personal access token at
+      <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a>,
+      for the site's repository only, with <b>Contents: Read and write</b>. It is kept on this computer (<span id="k-where">…</span>), never in the site, and never shown here again.</p>
+    <label><span>Access token</span><input type="password" id="k-token" autocomplete="off" placeholder="github_pat_…"></label>
+    <div class="hint" id="k-token-state">reading…</div>
+    <label><span>Name commits are made under</span><input type="text" id="k-name" placeholder="Soboof"></label>
+    <label><span>E-mail commits are made under</span><input type="text" id="k-email" placeholder="the e-mail on your GitHub account"></label>
+    <div class="actions" style="margin-top:14px">
+      <button class="go" id="k-save">Keep these</button>
+      <button class="ghost" id="k-test">Test with GitHub</button>
+      <button class="ghost" id="k-forget">Forget the token</button>
+    </div>
+  </fieldset>
+  <div class="msg" id="k-msg"></div>
 </section>
 
 <fieldset style="margin-top:26px">
@@ -259,6 +282,8 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('.tab').forEach(s => s.classList.toggle('on', s.id === 'tab-' + b.dataset.tab));
   if (b.dataset.tab === 'pub') refresh();
+  if (b.dataset.tab === 'keys') loadKeys();
+  history.replaceState(null, '', '#' + b.dataset.tab);
 });
 
 /* ── message helper ── */
@@ -474,6 +499,38 @@ async function refresh() {
 }
 refresh();
 counter('#a-mdesc', '#a-mdesc-n', 120, 165);
+/* ── keys ── */
+async function loadKeys() {
+  const k = await api('/api/keys');
+  $('#k-where').textContent = k.where;
+  $('#k-name').value = k.name || '';
+  $('#k-email').value = k.email || '';
+  $('#k-token').value = '';
+  $('#k-token-state').textContent = k.tokenSet
+    ? `A token is kept, ending in …${k.tokenEnd}. Type a new one to replace it.`
+    : 'No token kept: git pushes with what this computer already has (a credential manager, an SSH key).';
+}
+$('#k-save').onclick = async () => {
+  const t = $('#k-token').value.trim();
+  await api('/api/keys', { ...(t ? { token: t } : {}), name: $('#k-name').value, email: $('#k-email').value });
+  await loadKeys();
+  say('#k-msg', 'ok', 'Kept.');
+};
+$('#k-forget').onclick = async () => { await api('/api/keys', { token: '' }); await loadKeys(); say('#k-msg', 'ok', 'The token is forgotten.'); };
+$('#k-test').onclick = async () => {
+  say('#k-msg', 'busy', 'Asking GitHub…');
+  const r = await api('/api/keys/test', {});
+  say('#k-msg', r.ok ? 'ok' : 'bad', r.note);
+};
+
+/* ── a tab by its address (/studio/#keys), so the page editor's menu can open one ── */
+function openTab(name) {
+  const b = document.querySelector(`nav button[data-tab="${name}"]`);
+  if (b) b.click();
+}
+window.addEventListener('hashchange', () => openTab(location.hash.slice(1)));
+if (location.hash) openTab(location.hash.slice(1));
+loadKeys();
 </script>
 </body>
 </html>

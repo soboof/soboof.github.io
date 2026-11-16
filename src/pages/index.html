@@ -279,15 +279,16 @@
       <h2 class="sec-title">About <span class="accent">Soboof</span></h2>
     </div>
     <div class="sec-sub">
-      A design studio working across 3D form, 2D graphics and fabrication: built on sustainability and hands-on social engagement.
+      A humanity-centered design studio working across 3D form, 2D graphics, software and fabrication, built on sustainability and hands-on social engagement.
     </div>
   </div>
 
   <div class="dossier">
     <div class="dossier-body">
-      <p class="lead">Soboof is a design studio working in 3D and 2D graphics and fabrication: procedural software, mirrored sculpture, and hand-pulled print. The work is made to be built with, not simply bought.</p>
-      <p>The work spans <strong style="color:var(--accent)">procedural software, 3D-printed sculpture and hand-pulled print</strong>, but the method stays constant: set a rule, then let material or maker fill it in. A single modular logic, or a single carved block, is repeated and varied until each result is particular rather than a copy of the last.</p>
-      <p>Making happens in public as often as it happens alone. A hand-printing kiosk invites visitors to pull their own poster; a workshop teaches the <a href="https://en.wikipedia.org/wiki/Ayeneh-kari" target="_blank" rel="noopener">Ayeneh-Kari</a> mirror-tiling technique behind the sculptures. Sustainability and hands-on social engagement run through both: materials are chosen to last, and the tools are handed to whoever wants to use them.</p>
+      <p class="lead">Soboof is a humanity-centered design studio in Leeuwarden, founded and run by Soby Farahat. It works across 3D form, graphics, software and fabrication, and it starts every project from a person rather than a product: the work is made to be built with, not simply bought.</p>
+      <p>Four outputs so far, and they <strong style="color:var(--accent)">do not share a technique</strong>. <a href="#mirbreak">Mirbreak</a> is mirrored sculpture: hand-cut glass laid over 3D-printed bodies in the <a href="https://en.wikipedia.org/wiki/Ayeneh-kari" target="_blank" rel="noopener">Ayeneh-Kari</a> tradition. <a href="#death-culture">Death Culture</a> is hand-printed political work, carved and pulled with Ju Bergman. The <a href="#pythagoras-engine">Pythagoras Engine</a> and the <a href="#superadobe">SuperAdobe Generator</a> are free web tools, built to be given away rather than sold.</p>
+      <p>What the four share is who they are aimed at: the person holding the piece, printing it, or building with it. Eleven sculptures have been made so far, sixty-eight hand-printed sheets across four sets, and both tools run in a browser for nothing.</p>
+      <p>Making happens in public as often as it happens alone. The hand-printing kiosk travels, and visitors pull their own sheets on site; the workshop teaches the mirror-tiling behind the sculptures. Sustainability and hands-on social engagement run through both: materials are chosen to last, and the tools are handed to whoever wants to use them.</p>
     </div>
     <div class="dossier-meta">
       <dl>
@@ -295,8 +296,10 @@
         <dt>Founded</dt><dd>2024</dd>
         <dt>Location</dt><dd>Leeuwarden, NL</dd>
         <dt>Status</dt><dd class="accent">Taking commissions</dd>
-        <dt>Method</dt><dd>Parametric Design · 3D Print · Relief Print</dd>
-        <dt>Materials</dt><dd>Mirror · Recycled PLA · Hand-Cut Lino</dd>
+        <dt>Method</dt><dd>Ayeneh-Kari · 3D Print · Relief Print · Parametric Design</dd>
+        <dt>Materials</dt><dd>Mirror · 3D-Printed PLA · Marble · Hand-Cut Lino</dd>
+        <dt>Work to date</dt><dd>11 sculptures · 68 sheets · 2 free tools</dd>
+        <dt>With</dt><dd>Ju Bergman · Death Culture</dd>
       </dl>
       <hr class="dossier-divider">
       <div style="font-family:var(--ff-m);font-size:9px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Disciplines</div>
@@ -351,9 +354,9 @@
       <p>Commissions, gallery enquiries, press, and workshop bookings. If the brief is honest and the geometry is interesting, you'll hear back within a week.</p>
     </div>
     <div class="contact-channels">
-      <a href="mailto:mirbreak@soboof.com" class="channel">
+      <a href="mailto:support@soboof.com" class="channel">
         <span class="channel-key">Email</span>
-        <span class="channel-val">mirbreak@soboof.com</span>
+        <span class="channel-val">support@soboof.com</span>
       </a>
       <a href="https://www.instagram.com/soboof/" class="channel" target="_blank" rel="noopener">
         <span class="channel-key">Instagram</span>
@@ -395,234 +398,8 @@
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-(function(){
-  const STATES = [
-    { id:'hero',     color:[0.91,0.77,0.28], wire:0, rotY:0.0028, label:'SHADED · GOLD',   hex:'#e8c547', scale:1.85 },
-    { id:'pythagoras-engine', color:[0.81,0.84,0.86], wire:1, rotY:0.0034, label:'WIRE · MIRROR',  hex:'#cfd6dc', scale:1.30 },
-    { id:'mirbreak',      color:[0.91,0.77,0.28], wire:0, rotY:0.0044, label:'SHADED · GOLD',  hex:'#e8c547', scale:1.10 },
-    { id:'death-culture', color:[0.85,0.28,0.30], wire:1, rotY:0.0062, label:'WIRE · RED',     hex:'#d9484c', scale:1.00 },
-    { id:'superadobe',    color:[0.79,0.54,0.29], wire:0, rotY:0.0069, label:'SHADED · EARTH', hex:'#c98a4b', scale:1.20 },
-    { id:'about',    color:[0.42,0.31,0.64], wire:0, rotY:0.0075, label:'SHADED · PURPLE', hex:'#6b4ea3', scale:1.05 },
-    { id:'more',     color:[0.30,0.69,0.49], wire:1, rotY:0.0100, label:'WIRE · GREEN',    hex:'#4caf7d', scale:1.00 },
-    { id:'contact',  color:[0.30,0.66,0.85], wire:1, rotY:0.0130, label:'WIRE · CYAN',     hex:'#4ca8d8', scale:1.15 }
-  ];
-
-  const canvas = document.getElementById('scene-canvas');
-  const scene  = new THREE.Scene();
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-  const cam = new THREE.PerspectiveCamera(35, 1, 0.1, 200);
-  cam.position.set(0, 0, 14);
-
-  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-  const key  = new THREE.DirectionalLight(0xfff2c8, 0.9);  key.position.set(4, 6, 8);   scene.add(key);
-  const fill = new THREE.DirectionalLight(0x6688aa, 0.45); fill.position.set(-6, -2, 4); scene.add(fill);
-  const rim  = new THREE.DirectionalLight(0xe8c547, 0.55); rim.position.set(0, 4, -8);   scene.add(rim);
-
-  const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color(STATES[0].color[0], STATES[0].color[1], STATES[0].color[2]),
-    roughness: 0.45, metalness: 0.35,
-    flatShading: true, transparent: true, opacity: 0.92
-  });
-  const root = new THREE.Group();
-  scene.add(root);
-
-  /* Minimal glTF 2.0 reader — the Pythagoras Engine export is a single mesh with
-     embedded base64 buffers, so no external loader is needed. */
-  function gltfBuffer(uri){
-    const bin = atob(uri.split(',')[1]);
-    const u8 = new Uint8Array(bin.length);
-    for (let i=0;i<bin.length;i++) u8[i] = bin.charCodeAt(i);
-    return u8;
-  }
-  function gltfAccessor(json, bufs, index){
-    const acc = json.accessors[index];
-    const view = json.bufferViews[acc.bufferView];
-    const comps = { SCALAR:1, VEC2:2, VEC3:3, VEC4:4 }[acc.type];
-    const bytes = { 5120:1, 5121:1, 5122:2, 5123:2, 5125:4, 5126:4 }[acc.componentType];
-    const start = (view.byteOffset||0) + (acc.byteOffset||0);
-    /* copy out so the typed array is always correctly aligned */
-    const slice = bufs[view.buffer].slice(start, start + acc.count * comps * bytes);
-    const Ctor  = { 5120:Int8Array, 5121:Uint8Array, 5122:Int16Array,
-                    5123:Uint16Array, 5125:Uint32Array, 5126:Float32Array }[acc.componentType];
-    return new Ctor(slice.buffer, 0, acc.count * comps);
-  }
-  function parseGLTF(json){
-    const bufs = json.buffers.map(b => gltfBuffer(b.uri));
-    const prim = json.meshes[0].primitives[0];
-    const pos  = gltfAccessor(json, bufs, prim.attributes.POSITION);
-    const tris = prim.indices != null
-      ? Array.from(gltfAccessor(json, bufs, prim.indices))
-      : Array.from({ length: pos.length/3 }, (_, i) => i);
-    return { verts: Array.from(pos), tris };
-  }
-  function buildGeometry(parsed){
-    const positions = new Float32Array(parsed.tris.length*3);
-    for (let i=0;i<parsed.tris.length;i++){
-      const vi = parsed.tris[i]*3;
-      positions[i*3]   = parsed.verts[vi];
-      positions[i*3+1] = parsed.verts[vi+1];
-      positions[i*3+2] = parsed.verts[vi+2];
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.computeVertexNormals();
-    geo.computeBoundingBox();
-    const bb = geo.boundingBox;
-    const cx=(bb.min.x+bb.max.x)/2, cy=(bb.min.y+bb.max.y)/2, cz=(bb.min.z+bb.max.z)/2;
-    geo.translate(-cx,-cy,-cz);
-    const size = Math.max(bb.max.x-bb.min.x, bb.max.y-bb.min.y, bb.max.z-bb.min.z);
-    geo.scale(4.6/size, 4.6/size, 4.6/size);
-    geo.computeVertexNormals();
-    return geo;
-  }
-
-  fetch('/assets/models/pythagoras_m21.gltf')
-    .then(r=>r.json()).then(json=>{
-      const geo = buildGeometry(parseGLTF(json));
-      const mesh = new THREE.Mesh(geo, mat);
-      root.add(mesh);
-      const wireMat = new THREE.LineBasicMaterial({ color: mat.color.clone(), transparent:true, opacity:0 });
-      const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo), wireMat);
-      root.add(wire);
-      root.userData.wireMat = wireMat;
-    }).catch(e=>console.warn('OBJ load failed:', e));
-
-  function getSections(){
-    return STATES.map(s=>{
-      const sectEl = s.id==='hero' ? document.querySelector('.hero') : document.getElementById(s.id);
-      const railEl = sectEl ? sectEl.querySelector('.model-rail') : null;
-      return { sectEl, railEl };
-    });
-  }
-  let sections = getSections();
-
-  function activeIndex(){
-    const probe = window.scrollY + window.innerHeight*0.45;
-    let idx = 0;
-    for (let i=0;i<sections.length;i++){
-      const el = sections[i].sectEl;
-      if (el && (el.offsetTop || el.getBoundingClientRect().top + window.scrollY) <= probe) idx = i;
-    }
-    return idx;
-  }
-
-  function railWorldPos(railEl){
-    if (!railEl) return null;
-    const rect = railEl.getBoundingClientRect();
-    if (rect.width === 0) return null;
-    const cx = rect.left + rect.width*0.5;
-    const vh = window.innerHeight;
-    const span = Math.max(1, rect.height + vh);
-    const moved = vh - rect.top;
-    const progress = Math.min(1, Math.max(0, moved / span));
-    const railTop = rect.top + 24;
-    const railBottom = rect.bottom - 24;
-    const cy = railTop + (railBottom - railTop) * progress;
-    const ndcX =  (cx / window.innerWidth)  * 2 - 1;
-    const ndcY = -((cy / window.innerHeight) * 2 - 1);
-    const visH = 2 * Math.tan(cam.fov*0.5 * Math.PI/180) * cam.position.z;
-    const visW = visH * cam.aspect;
-    return { x: ndcX * visW * 0.5, y: ndcY * visH * 0.5 };
-  }
-  function fallbackPos(idx){
-    const xs = [0.45,-0.45,0.45,-0.45,0.45,-0.45,0];
-    const visH = 2 * Math.tan(cam.fov*0.5 * Math.PI/180) * cam.position.z;
-    const visW = visH * cam.aspect;
-    return { x: (xs[idx]||0) * visW * 0.5, y: 0 };
-  }
-
-  const cur = {
-    x:0, y:0,
-    r:STATES[0].color[0], g:STATES[0].color[1], b:STATES[0].color[2],
-    wire:0, rotY:STATES[0].rotY, yaw:0, pitch:0, scale:STATES[0].scale
-  };
-  const lerp = (a,b,t) => a+(b-a)*t;
-
-  const stateLbl = document.getElementById('scene-state-lbl');
-  const stateBox = document.getElementById('scene-state-hud');
-  let lastLabel = '';
-
-  let hasScrolled = false;
-  let autoYaw = 0;
-  window.addEventListener('scroll',    ()=>{ hasScrolled=true; }, { passive:true });
-  window.addEventListener('wheel',     ()=>{ hasScrolled=true; }, { passive:true, once:true });
-  window.addEventListener('touchmove', ()=>{ hasScrolled=true; }, { passive:true, once:true });
-
-  function scrollDrivenYaw(){
-    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    return -Math.min(1, Math.max(0, window.scrollY / max)) * Math.PI * 8;
-  }
-
-  function resize(){
-    const w = window.innerWidth, h = window.innerHeight;
-    renderer.setSize(w, h, false);
-    cam.aspect = w/h;
-    cam.updateProjectionMatrix();
-  }
-  resize();
-  window.addEventListener('resize', ()=>{ resize(); sections = getSections(); });
-
-  function tick(){
-    const isDay = document.body.classList.contains('day');
-    const idx = activeIndex();
-    const baseTgt = STATES[idx];
-    const tgt = (isDay && idx===0)
-      ? { color:[0.42,0.31,0.64], wire:baseTgt.wire, rotY:baseTgt.rotY, hex:'#6b4ea3', scale:baseTgt.scale, label:'SHADED · PURPLE' }
-      : baseTgt;
-    rim.color.set(isDay ? 0x6b4ea3 : 0xe8c547);
-
-    const k = 0.07;
-    cur.r     = lerp(cur.r,     tgt.color[0], k);
-    cur.g     = lerp(cur.g,     tgt.color[1], k);
-    cur.b     = lerp(cur.b,     tgt.color[2], k);
-    cur.wire  = lerp(cur.wire,  tgt.wire,     k);
-    cur.rotY  = lerp(cur.rotY,  tgt.rotY,     k);
-    cur.scale = lerp(cur.scale, tgt.scale,    k);
-    root.scale.setScalar(cur.scale);
-
-    let posTarget = railWorldPos(sections[idx].railEl);
-    if (!posTarget) posTarget = fallbackPos(idx);
-    cur.x = lerp(cur.x, posTarget.x, k);
-    cur.y = lerp(cur.y, posTarget.y, k);
-    root.position.x = cur.x;
-    root.position.y = cur.y;
-
-    if (!hasScrolled){
-      autoYaw += cur.rotY;
-      cur.yaw   = lerp(cur.yaw,   autoYaw,        0.2);
-      cur.pitch = lerp(cur.pitch, autoYaw * 0.32, 0.2);
-    } else {
-      const tgtYaw = scrollDrivenYaw();
-      cur.yaw   = lerp(cur.yaw,   tgtYaw,        0.10);
-      cur.pitch = lerp(cur.pitch, tgtYaw * 0.32, 0.10);
-    }
-    root.rotation.y = cur.yaw;
-    root.rotation.x = cur.pitch;
-
-    mat.color.setRGB(cur.r, cur.g, cur.b);
-    mat.opacity   = (1 - cur.wire) * 0.95 + 0.04;
-    mat.depthWrite = cur.wire < 0.5;
-    if (root.userData.wireMat){
-      root.userData.wireMat.color.setRGB(cur.r, cur.g, cur.b);
-      root.userData.wireMat.opacity = cur.wire * 0.85 + 0.06;
-    }
-
-    if (tgt.label !== lastLabel){
-      stateLbl.textContent = tgt.label;
-      stateBox.style.color = tgt.hex;
-      stateBox.style.borderColor = tgt.hex + '55';
-      lastLabel = tgt.label;
-    }
-
-    renderer.render(scene, cam);
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-})();
-</script>
+<!-- The travelling model, and what each section's 3D slot makes of it (data/site.json, set in Studio). -->
+<script src="/assets/js/home-scene.js"></script>
 
 </body>
 </html>

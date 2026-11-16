@@ -589,8 +589,12 @@ body.day .cta-strip::before{background:linear-gradient(90deg,transparent,rgba(10
 /* A sheet that went through the scanner the wrong way up. Half a turn keeps
    the card's proportions, so no resizing is needed here. */
 .print.flip .print-img img{transform:rotate(180deg)}
+/* A sheet that is landscape in the file already, scanned and stored the right
+   way up (Bodybags A4 06/17/18/22). Nothing turns; only the card goes
+   landscape-shaped so the poster fills it edge to edge instead of sitting
+   letterboxed inside a portrait card. */
+.print.wide .print-img{aspect-ratio:1.414/1}
 .print-n{position:absolute;top:0;left:0;font-family:var(--ff-m);font-size:8.5px;letter-spacing:.18em;color:#15140f;background:rgba(255,255,255,.82);padding:3px 7px;z-index:2}
-.print-cap{font-family:var(--ff-m);font-size:10.5px;line-height:1.55;color:var(--muted);padding:9px 2px 2px}
 
 /* lightbox */
 #lb{position:fixed;inset:0;z-index:9500;background:rgba(6,5,3,.94);display:none;align-items:center;justify-content:center;padding:44px 20px;backdrop-filter:blur(4px)}
