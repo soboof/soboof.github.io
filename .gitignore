@@ -17,5 +17,7 @@ Desktop.ini
 *.ai
 node_modules/
 
-# Safety copies the studio takes before it edits a data file
-tools/studio/backups/
+# The admin (Soboof Studio) lives on this computer only: never in the public
+# repository, never served on soboof.com. Its backups are inside it.
+tools/studio/
+studio.cmd
