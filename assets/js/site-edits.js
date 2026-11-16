@@ -218,6 +218,59 @@
     applyText(p.text, p.img);
     applyCards(p.cards);
     applyLayout(p.layout);
+    applyZ(p.z);
+    /* An added section, or something in one, may carry a layer of its own (assets/js/blocks.js). */
+    if (document.querySelector('section.sbf-block[style*="z-index"], .sbf-block [style*="z-index"]')) layering(true);
+  }
+
+  /* ── layers ───────────────────────────────────────────────────────────────
+     Any edited element can be given a layer (`z`, by its key: words, a
+     picture, a card, or a section as `s:<id>`, the hero as `s:hero`): below 0
+     it stands behind the 3D models, above 0 in front of them, and a higher
+     number in front of a lower one where they overlap.
+     The page as built made every section a layer of its own at 2 over the
+     3D canvas at 1, which kept anything inside a section from ever going
+     behind the models. With a layer set, the canvas goes to 0 and the
+     sections to auto: the canvas comes first in the page, so everything is
+     painted over it as before, and a layer number now counts against the
+     canvas wherever the element is. */
+  let layered = false;
+  function layering(on) {
+    if (!on || layered) return;
+    layered = true;
+    const st = document.createElement('style');
+    st.id = 'sbf-layers';
+    st.textContent = '#scene-canvas{z-index:0!important}.hero,body>section,section.sbf-block,body>footer{z-index:auto!important}';
+    document.head.appendChild(st);
+  }
+  const KEY_Z = /^(t|i|c|s):[A-Za-z0-9_.:-]{1,80}$/;
+  /** The element a layer key names, or null. */
+  function layerEl(key) {
+    const ix = index();
+    if (key.startsWith('s:')) {
+      const id = key.slice(2);
+      return id === 'hero' ? document.querySelector('.hero') : document.getElementById(id);
+    }
+    const hit = ix.texts.find(t => t.key === key) || ix.imgs.find(t => t.key === key) || ix.cards.find(t => t.key === key);
+    return hit ? hit.el : null;
+  }
+  let zDone = [];
+  function applyZ(z) {
+    for (const el of zDone) {
+      el.style.removeProperty('z-index');
+      if (el.dataset.sbfZpos) { el.style.removeProperty('position'); delete el.dataset.sbfZpos; }
+    }
+    zDone = [];
+    const list = Object.entries(z || {}).filter(([k, v]) => KEY_Z.test(k) && Number.isInteger(v) && v >= -10 && v <= 10);
+    if (!list.length) return;
+    layering(true);
+    for (const [k, v] of list) {
+      const el = layerEl(k);
+      if (!el) continue;
+      if (getComputedStyle(el).position === 'static') { el.style.position = 'relative'; el.dataset.sbfZpos = '1'; }
+      el.style.zIndex = String(v);
+      zDone.push(el);
+    }
   }
 
   function read() {
@@ -227,5 +280,5 @@
   index();
   if (site.page && Object.keys(site.page).length) apply(site.page);
 
-  window.SBF = { hash, cleanHtml, cleanSrc, index, apply, applyText, applyCards, applyLayout, placeBlocks, site };
+  window.SBF = { hash, cleanHtml, cleanSrc, index, apply, applyText, applyCards, applyLayout, applyZ, layering, layerEl, placeBlocks, site };
 })();

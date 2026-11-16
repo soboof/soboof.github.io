@@ -40,6 +40,8 @@
   const str = (v, max) => String(v == null ? '' : v).slice(0, max || LIMITS.line);
 
   /** A colour: '' (the theme's), a theme colour by name, or a #rrggbb picked by hand. */
+  /** A layer: a whole number from -10 (behind the 3D models) to 10 (in front), or none (as built). */
+  const cleanZ = v => (Number.isInteger(v) && v >= -10 && v <= 10 ? v : null);
   const cleanColor = c => (TOKENS.includes(c) ? c : /^#[0-9a-f]{6}$/i.test(String(c || '')) ? String(c).toLowerCase() : '');
   const colorCss = c => (TOKENS.includes(c) ? `var(--${c})` : /^#[0-9a-f]{6}$/i.test(c || '') ? c : '');
 
@@ -98,7 +100,7 @@
 
   function cleanItem(it) {
     if (!it || typeof it !== 'object') return null;
-    const base = { align: pick(it.align, ['', 'left', 'center', 'right'], ''), color: cleanColor(it.color) };
+    const base = { align: pick(it.align, ['', 'left', 'center', 'right'], ''), color: cleanColor(it.color), ...(cleanZ(it.z) != null ? { z: it.z } : {}) };
     switch (it.t) {
       case 'heading': {
         const size = typeof it.size === 'number' && it.size >= 10 && it.size <= 160 ? Math.round(it.size) : pick(it.size, ['', 's', 'm', 'l', 'xl'], '');
@@ -133,6 +135,7 @@
       after: /^(top|end|[A-Za-z][\w-]{0,60})$/.test(String(b.after || '')) ? String(b.after) : 'end',
       bg, width: pick(b.width, ['site', 'narrow', 'wide', 'full'], 'site'), pad: pick(b.pad, ['s', 'm', 'l'], 'm'),
       ...(b.hidden ? { hidden: true } : {}),
+      ...(cleanZ(b.z) != null ? { z: b.z } : {}),
       rows,
     };
   }
@@ -154,28 +157,29 @@
   /** One item. `at` is [row, column, item], written on it so the editor can find it in the model. A picture not chosen yet is a placeholder while editing and nothing on the published page. */
   function renderItem(it, at, edit) {
     const pos = ` data-bi="${at.join('.')}"`;
+    const zs = it.z != null ? [['position', 'relative'], ['z-index', String(it.z)]] : [];
     const align = it.align ? ['text-align', it.align] : null;
     if (it.t === 'heading') {
       const fs = typeof it.size === 'number' ? it.size + 'px' : HEAD_SIZE[it.size] || '';
       const kick = it.kicker ? `<div class="sbf-kicker" data-bf="kicker">${esc(it.kicker)}</div>` : '';
-      return `<div class="sbf-item sbf-heading"${pos}${style([align || ['', '']])}>${kick}<h${it.level} class="sbf-h h${it.level}" data-bf="html"${style([['font-size', fs], ['color', colorCss(it.color)]])}>${it.html}</h${it.level}></div>`;
+      return `<div class="sbf-item sbf-heading"${pos}${style([align || ['', ''], ...zs])}>${kick}<h${it.level} class="sbf-h h${it.level}" data-bf="html"${style([['font-size', fs], ['color', colorCss(it.color)]])}>${it.html}</h${it.level}></div>`;
     }
     if (it.t === 'text') {
-      return `<div class="sbf-item sbf-t" data-bf="html"${pos}${style([align || ['', ''], ['font-size', TEXT_SIZE[it.size] || ''], ['color', colorCss(it.color)]])}>${it.html || ''}</div>`;
+      return `<div class="sbf-item sbf-t" data-bf="html"${pos}${style([align || ['', ''], ['font-size', TEXT_SIZE[it.size] || ''], ['color', colorCss(it.color)], ...zs])}>${it.html || ''}</div>`;
     }
     if (it.t === 'card') {
       const tag = it.href ? 'a' : 'div';
       const href = it.href ? ` href="${esc(it.href)}"${/^https?:/i.test(it.href) ? ' target="_blank" rel="noopener"' : ''}` : '';
       const media = it.img ? `<div class="sbf-card-media" style="aspect-ratio:${RATIO[it.shape]}"><img src="${esc(it.img)}" alt="${esc(it.alt)}" loading="lazy"></div>` : '';
       const kick = it.kicker ? `<div class="sbf-card-kicker" data-bf="kicker">${esc(it.kicker)}</div>` : '';
-      return `<${tag} class="sbf-item sbf-card${it.style ? ' is-' + it.style : ''}"${pos}${href}${style([['--tint', colorCss(it.color)], align || ['', '']])}>` +
+      return `<${tag} class="sbf-item sbf-card${it.style ? ' is-' + it.style : ''}"${pos}${href}${style([['--tint', colorCss(it.color)], align || ['', ''], ...zs])}>` +
         `${media}<div class="sbf-card-body">${kick}<h3 class="sbf-card-title" data-bf="title">${it.title || ''}</h3><div class="sbf-card-text" data-bf="html">${it.html || ''}</div></div></${tag}>`;
     }
     if (it.t === 'image') {
       if (!it.src && !edit) return '';
       const img = it.src ? `<img src="${esc(it.src)}" alt="${esc(it.alt)}" loading="lazy"${style([['object-fit', it.fit], ['aspect-ratio', it.ratio]])}>` : '<div class="sbf-img-empty">Picture</div>';
       const inner = it.href ? `<a href="${esc(it.href)}"${/^https?:/i.test(it.href) ? ' target="_blank" rel="noopener"' : ''}>${img}</a>` : img;
-      return `<figure class="sbf-item sbf-img${it.radius ? ' r-' + it.radius : ''}"${pos}${style([align || ['', '']])}>${inner}${it.caption ? `<figcaption data-bf="caption">${esc(it.caption)}</figcaption>` : ''}</figure>`;
+      return `<figure class="sbf-item sbf-img${it.radius ? ' r-' + it.radius : ''}"${pos}${style([align || ['', ''], ...zs])}>${inner}${it.caption ? `<figcaption data-bf="caption">${esc(it.caption)}</figcaption>` : ''}</figure>`;
     }
     return '';
   }
@@ -188,7 +192,8 @@
   }
   function sectionAttrs(b) {
     const bg = b.bg === 'surface' || b.bg === 'panel' ? `var(--${b.bg})` : colorCss(b.bg);
-    return { cls: `sbf-block w-${b.width} p-${b.pad}${bg ? ' has-bg' : ''}`, style: bg ? `--sbf-bg:${bg}` : '' };
+    const st = [bg ? `--sbf-bg:${bg}` : '', b.z != null ? `z-index:${b.z}` : ''].filter(Boolean).join(';');
+    return { cls: `sbf-block w-${b.width} p-${b.pad}${bg ? ' has-bg' : ''}`, style: st };
   }
   /** A whole section, as it is written into the page. */
   function render(b, edit) {
@@ -262,6 +267,6 @@
     return { id: newId(), after: after || 'end', bg: '', width: 'site', pad: 'm', rows: [{ gap: 'm', align: 'start', cols: cols.map(([span, items]) => ({ span, items })) }] };
   }
 
-  return { TOKENS, TOKEN_NAMES, LAYOUTS, STARTERS, NEW, LIMITS, cleanHtml, cleanSrc, cleanHref, cleanColor, colorCss, cleanItem, cleanBlock, cleanBlocks,
+  return { cleanZ, TOKENS, TOKEN_NAMES, LAYOUTS, STARTERS, NEW, LIMITS, cleanHtml, cleanSrc, cleanHref, cleanColor, colorCss, cleanItem, cleanBlock, cleanBlocks,
     render, renderRows, renderItem, sectionAttrs, sectionSpan, placeInHtml, newBlock, newId };
 });

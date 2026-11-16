@@ -377,11 +377,7 @@
   const stateBox = document.getElementById('scene-state-hud');
   let lastLabel = '';
 
-  let hasScrolled = false;
-  let autoYaw = 0;
-  window.addEventListener('scroll',    ()=>{ hasScrolled=true; }, { passive:true });
-  window.addEventListener('wheel',     ()=>{ hasScrolled=true; }, { passive:true, once:true });
-  window.addEventListener('touchmove', ()=>{ hasScrolled=true; }, { passive:true, once:true });
+  let autoYaw = 0;   // only a slot set to spin on its own turns this
 
   function scrollDrivenYaw(){
     const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
@@ -466,24 +462,32 @@
     root.position.x = cur.x;
     root.position.y = cur.y + (rk === 'hop' ? cur.scale * 0.6 * bump : 0);
 
-    /* How it turns: the scene's own way (spinning, then with the scroll), or the slot's. */
+    /* How it turns. Nothing turns by itself unless its slot says "Spins on its
+       own" (interact 'none'): a slot with nothing set turns with the scroll, a
+       figure stands three quarters to the reader and tips towards the pointer
+       or faces the reader as its slot says. It used to keep spinning in every
+       mode but "faces the reader", and before the first scroll in the scene's
+       own, which turned figures round and round on their own. */
     const interact = (s && s.interact) || 'scroll';
     const view = (s && s.view) || 'auto';
     const figure = shown.kind === 'figure';
+    /* At rest a figure looks three quarters out of the page, towards its middle; a model faces it. */
+    const rest = figure ? (cur.x < 0 ? 0.45 : -0.45) : 0;
     let yawT, pitchT, rate = 0.10;
     if (interact === 'scroll') {
-      if (!hasScrolled) { if (!still) autoYaw += cur.rotY; yawT = autoYaw; rate = 0.2; }
-      else yawT = scrollDrivenYaw();
-      pitchT = view === 'auto' ? (figure ? 0.12 : yawT * 0.32) : VIEW_PITCH[view];
+      yawT = rest + scrollDrivenYaw();
+      pitchT = view === 'auto' ? (figure ? 0.12 : (yawT - rest) * 0.32) : VIEW_PITCH[view];
     } else {
-      if (!still && interact !== 'reader') autoYaw += cur.rotY * (s && s.spin != null ? s.spin / 0.17 : 1);
-      yawT = interact === 'reader' ? 0 : autoYaw;
+      if (interact === 'none' && !still) autoYaw += cur.rotY * (s && s.spin != null ? s.spin / 0.17 : 1);
+      yawT = interact === 'none' ? autoYaw : rest;
       pitchT = view === 'auto' ? (figure ? 0.12 : 0.3) : VIEW_PITCH[view];
       const toward = focus.until > performance.now() ? { x: focus.x, y: focus.y } : (interact === 'pointer' && pointer ? toWorld(pointer.x, pointer.y) : null);
       if (toward) { yawT += Math.max(-0.7, Math.min(0.7, (toward.x - cur.x) * 0.12)); pitchT += Math.max(-0.6, Math.min(0.6, -(toward.y - cur.y) * 0.12)); }
     }
     if (view === 'side') yawT += Math.PI / 2;
-    cur.yaw   = lerp(cur.yaw,   yawT,   rate);
+    /* The short way round: a figure arriving from a slot that turned it with the scroll does not unwind its turns. */
+    const dYaw = ((yawT - cur.yaw) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI;
+    cur.yaw   = interact === 'scroll' || interact === 'none' ? lerp(cur.yaw, yawT, rate) : cur.yaw + dYaw * rate;
     cur.pitch = lerp(cur.pitch, pitchT, rate);
     root.rotation.y = cur.yaw + (rk === 'spin' ? Math.PI * 2 * (rt * rt * (3 - 2 * rt)) : 0);
     root.rotation.x = cur.pitch + (rk === 'nod' ? 0.35 * Math.sin(Math.PI * 2 * rt) * (1 - rt) : 0);
